@@ -1,3 +1,5 @@
+import "../css/auth.css"
+
 function Login() {
     return (
             <form>
