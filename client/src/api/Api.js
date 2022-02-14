@@ -27,7 +27,9 @@ export default class Api {
 
     async apiCall(method, body, contentType) {
         try {
+            // will call refresh token on every hit api call
             let tokenRes = await this.generateRequest("", method, body, contentType, this.tokenManager.getCookie("refresh"))
+            this.tokenManager.setCookie("access", tokenRes.refresh)
             this.tokenManager.setCookie("access", tokenRes.access)
             return await this.generateRequest(this.endpoint, method, body, contentType, tokenRes.access)
         } catch (er) {
