@@ -11,7 +11,6 @@ import {
 
 import {FaList} from "react-icons/fa";
 import {
-    FiHome,
     FiLogOut,
     FiArrowLeftCircle,
     FiArrowRightCircle

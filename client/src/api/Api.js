@@ -1,4 +1,4 @@
-class Api {
+export default class Api {
     constructor(endpoint) {
         this.endpoint = endpoint
         this.tokenManager = TokenManager()
@@ -10,11 +10,14 @@ class Api {
         if (body) {
             init.body = body
         }
-
-        init.headers = {
+        let headers = {
             "content/type": contentType,
-            "authorization": `Bearer ${token}`
+            method
         }
+        if (token) {
+            headers.authorization = token
+        }
+        init.headers = headers
         const response = await fetch(endpoint, init)
         if (response.status === 400) {
             throw new Error("Something went wrong")
@@ -25,23 +28,17 @@ class Api {
     async apiCall(method, body, contentType) {
         try {
             let tokenRes = await this.generateRequest("", method, body, contentType, this.tokenManager.getCookie("refresh"))
-            this.tokenManager.setCookie("access_token", tokenRes.access)
-            return await this.generateRequest(this.endpoint, method, body, contentType, this.tokenManager.getCookie("access"))
+            this.tokenManager.setCookie("access", tokenRes.access)
+            return await this.generateRequest(this.endpoint, method, body, contentType, tokenRes.access)
         } catch (er) {
             // here will apply logic for redirect or modal toggle [not sure yet]
             console.log(er.message)
         }
     }
-
 }
 
 
 class TokenManager {
-
-    updateCurrentToken(){
-
-    }
-
     setCookie(name, value) {
         const date = new Date();
         date.setTime(date.getTime() + (60 * 1000 * 2000));
