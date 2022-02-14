@@ -9,22 +9,21 @@ import {
     SidebarContent
 } from "react-pro-sidebar";
 
-import {FaList, FaRegHeart} from "react-icons/fa";
+import {FaList} from "react-icons/fa";
 import {
     FiHome,
     FiLogOut,
     FiArrowLeftCircle,
     FiArrowRightCircle
 } from "react-icons/fi";
-import {RiPencilLine} from "react-icons/ri";
-import {BiCog} from "react-icons/bi";
+
+import {AiOutlineMail, AiFillFolder} from "react-icons/ai"
 
 import "react-pro-sidebar/dist/css/styles.css";
 import "../css/sidenav.css";
 
 const SideNav = () => {
     const [menuCollapse, setMenuCollapse] = useState(false);
-
     const menuIconClick = () => {
         menuCollapse ? setMenuCollapse(false) : setMenuCollapse(true);
     };
@@ -43,10 +42,9 @@ const SideNav = () => {
                     </SidebarHeader>
                     <SidebarContent>
                         <Menu iconShape="square">
-                            <MenuItem active={true} icon={<FiHome/>}>
-                                Home</MenuItem>
-                            <MenuItem icon={<FaList/>}>Category</MenuItem>
-                            <MenuItem icon={<FaRegHeart/>}>Favourite</MenuItem>
+                            <MenuItem icon={<AiOutlineMail/>}>Write new Email</MenuItem>
+                            <MenuItem icon={<FaList/>}>Check preview</MenuItem>
+                            <MenuItem icon={<AiFillFolder/>}>Make Folder</MenuItem>
                         </Menu>
                     </SidebarContent>
                     <SidebarFooter>
