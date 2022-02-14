@@ -1,0 +1,7 @@
+
+
+endpoints = {
+    "login" : "",
+    "register" : "",
+    "refresh" : ""
+}
