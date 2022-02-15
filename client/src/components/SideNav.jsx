@@ -24,7 +24,7 @@ import "../css/sidenav.css";
 const SideNav = () => {
     const [menuCollapse, setMenuCollapse] = useState(false);
     const menuIconClick = () => {
-        menuCollapse ? setMenuCollapse(false) : setMenuCollapse(true);
+        setMenuCollapse((prev) => !prev)
     };
 
     return (

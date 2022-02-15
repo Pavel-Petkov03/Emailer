@@ -46,6 +46,8 @@ body, html, .App, #root, .auth-wrapper {
   line-height: 1;
   padding-bottom: 20px;
 }
+
+
 .custom-control-label {
   font-weight: 400;
 }
