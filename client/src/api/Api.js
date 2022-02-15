@@ -1,28 +1,34 @@
+import {root} from "./endpoints";
+
+
 export default class Api {
     constructor(endpoint) {
         this.endpoint = endpoint
-        this.tokenManager = TokenManager()
+        this.tokenManager = new TokenManager()
     }
 
 
     async generateRequest(endpoint, method, body, contentType, token) {
-        let init = {}
-        if (body) {
-            init.body = body
+        let options = {
+            method,
         }
+
         let headers = {
-            "content/type": contentType,
-            method
+            "Content-Type": contentType,
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods" : "GET,HEAD,OPTIONS,POST,PUT",
+            "Access-Control-Allow-Headers" : "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+        }
+        if (body) {
+            Object.assign(options, {body: JSON.stringify(body)})
         }
         if (token) {
-            headers.authorization = token
+            Object.assign(headers, {"Authorization": "Bearer " + token})
         }
-        init.headers = headers
-        const response = await fetch(endpoint, init)
-        if (response.status === 400) {
-            throw new Error("Something went wrong")
-        }
-        return await response.json()
+
+        Object.assign(options, {headers})
+        const res = await fetch(endpoint, options)
+        return  await res.json()
     }
 
     async apiCall(method, body, contentType) {
