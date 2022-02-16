@@ -23,7 +23,7 @@ function Login() {
                     <h3>Sign In</h3>
                     <div className="form-group">
                         <label>Email address</label>
-                        <input type="email" className="form-control" placeholder="Enter email" name={"email"}/>
+                        <input type="email" className="form-control" placeholder="Enter email" name={"username"}/>
                     </div>
                     <div className="form-group">
                         <label>Password</label>

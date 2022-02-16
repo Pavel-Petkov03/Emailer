@@ -14,10 +14,8 @@ export default class Api {
         }
 
         let headers = {
-            "Content-Type": contentType,
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods" : "GET,HEAD,OPTIONS,POST,PUT",
-            "Access-Control-Allow-Headers" : "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
         }
         if (body) {
             Object.assign(options, {body: JSON.stringify(body)})
@@ -27,8 +25,9 @@ export default class Api {
         }
 
         Object.assign(options, {headers})
+        console.log(options)
         const res = await fetch(endpoint, options)
-        return  await res.json()
+        return await res.json()
     }
 
     async apiCall(method, body, contentType) {
