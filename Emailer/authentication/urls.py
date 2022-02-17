@@ -12,11 +12,12 @@ urlpatterns = [
 ]
 
 
-# class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-#     def validate(self, attrs):
-#         if not attrs["username"]:
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        if not attrs["username"]:
+            pass
 #
 #
 #
-# class CustomTokenObtainView(views.TokenObtainPairView):
-#     serializer_class = CustomTokenObtainPairSerializer
+class CustomTokenObtainView(views.TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
