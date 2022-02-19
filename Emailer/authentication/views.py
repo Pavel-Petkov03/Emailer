@@ -20,8 +20,7 @@ class RegisterAPIView(APIView):
     serializer_class = RegistrationSerializer
 
     def post(self, request):
-        user = request.data
-        serializer = self.serializer_class(data=user, many=True)
+        serializer = self.serializer_class(data=request.data, many=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
