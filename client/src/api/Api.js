@@ -17,6 +17,7 @@ export default class Api {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*"
         }
+        console.log(body)
         if (body) {
             Object.assign(options, {body: JSON.stringify(body)})
         }

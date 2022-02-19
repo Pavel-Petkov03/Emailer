@@ -1,20 +1,11 @@
 import "../css/auth.css"
 import "react-pro-sidebar"
 import {useNavigate} from "react-router-dom"
-import Api from "../api/Api";
-import {retrieveFormData} from "../utils/retrieveFormData.js"
+import {onClick} from "../utils/initialSubmitCall.js";
+import {endpoints} from "../api/endpoints.js";
+
 function Register() {
     const router = useNavigate()
-
-    function onSubmit() {
-        let body = retrieveFormData(document.querySelector("form"))
-        let api = new Api("/login")
-        api.apiCall("post", body, "application/json").then(data => {
-            router("/")
-        }).catch(er => {
-            // toggle modal
-        })
-    }
 
     return (
         <div className={"auth-wrapper"}>
@@ -33,10 +24,8 @@ function Register() {
                         <label>Password</label>
                         <input type="password" className="form-control" placeholder="Enter password" name={"password"}/>
                     </div>
-                    <button type="submit" className="btn btn-primary btn-block" onClick={(ev) => {
-                        ev.preventDefault()
-                        console.log(formState)
-                    }}>Sign Up
+                    <button type="submit" className="btn btn-primary btn-block"
+                            onClick={onClick.bind(this, endpoints.register, router)}>Sign Up
                     </button>
                     <p className="forgot-password text-right">
                         Already registered <a href={"/login"}>sign in?</a>
@@ -46,7 +35,6 @@ function Register() {
         </div>
     );
 }
-
 
 
 export default Register
