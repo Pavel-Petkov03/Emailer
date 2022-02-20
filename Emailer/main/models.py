@@ -22,4 +22,6 @@ class Email(models.Model):
 
     upload_image = models.ImageField(null=True, blank=True)
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    upload_file = models.FileField(null=True, blank=True)
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="map")
