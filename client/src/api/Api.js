@@ -1,7 +1,7 @@
 import {root} from "./endpoints";
 
 
-export default class Api {
+class Api {
     constructor(endpoint) {
         this.endpoint = endpoint
         this.tokenManager = new TokenManager()
@@ -26,7 +26,6 @@ export default class Api {
         }
 
         Object.assign(options, {headers})
-        console.log(options)
         const res = await fetch(endpoint, options)
         return await res.json()
     }
@@ -58,4 +57,9 @@ class TokenManager {
         let parts = value.split(`; ${name}=`);
         if (parts.length === 2) return parts.pop().split(';').shift();
     }
+}
+
+export {
+    TokenManager,
+    Api
 }

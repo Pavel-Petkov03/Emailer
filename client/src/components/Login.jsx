@@ -12,8 +12,8 @@ function Login() {
                 <form className={"custom-form"}>
                     <h3>Sign In</h3>
                     <div className="form-group">
-                        <label>Email address</label>
-                        <input type="email" className="form-control" placeholder="Enter email" name={"username"}/>
+                        <label>Enter Username</label>
+                        <input type="email" className="form-control" placeholder="Enter username" name={"username"}/>
                     </div>
                     <div className="form-group">
                         <label>Password</label>
