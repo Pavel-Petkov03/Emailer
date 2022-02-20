@@ -25,3 +25,9 @@ class Email(models.Model):
     upload_file = models.FileField(null=True, blank=True)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="map")
+
+
+class CustomTemplate(models.Model):
+    template = models.FileField(upload_to="templates/")
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_global_template = models.BooleanField(default=False)
