@@ -20,7 +20,6 @@ class Email(models.Model):
         MinLengthValidator(TO_MIN_VALIDATOR)
     ])
 
-    upload_image = models.ImageField(null=True, blank=True,
-    validators=())
+    upload_image = models.ImageField(null=True, blank=True)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
