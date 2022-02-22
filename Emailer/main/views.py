@@ -45,7 +45,7 @@ class SendEmailView(APIView):
 
 
 def create_email(data, user, template_url):
-    html_message = render_to_string(template_url, {"context": "context"})
+    html_message = render_to_string("s.html", {"context": "context"})
     plain_message = strip_tags(html_message)
     send_mail(
         data["subject"],
