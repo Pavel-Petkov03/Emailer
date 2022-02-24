@@ -56,9 +56,10 @@ def create_email(data, user, template_url):
     )
 
 
-class CreateCustomTemplate(APIView):
+class CreateCustomTemplate(generics.GenericAPIView, generics.mixins.DestroyModelMixin):
     serializer_class = CreateCustomTemplateSerializer
     permission_classes = [IsAuthenticated]
+    queryset = CustomTemplate.objects.all()
 
     def post(self, request):
         """
@@ -77,6 +78,5 @@ class CreateCustomTemplate(APIView):
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, pk):
-        instance = CustomTemplate.objects.get(id=pk)
-        instance.delete()
+    def delete(self, request, *args, **kwargs):
+        self.destroy(request, *args, **kwargs)
