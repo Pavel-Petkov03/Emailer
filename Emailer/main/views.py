@@ -16,36 +16,31 @@ from django.core.mail import send_mail
 from Emailer.main.serializers import SendEmailSerializer, CreateCustomTemplateSerializer
 
 
-class SendEmailView(APIView):
+class SendEmailView(generics.GenericAPIView, generics.mixins.CreateModelMixin):
     serializer_class = SendEmailSerializer
     permission_classes = [IsAuthenticated]
-    __template_url = ""
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.template_name = ""
+    def post(self, request, *args, **kwargs):
+        template_url = CustomTemplate.objects.get(pk=request.data.template_id)
+        request.data.update({"user": request.user.id})
+        response = super().create(request, *args, **kwargs)
+        create_email(request.data, request.user, template_url)
+        return response
 
-    @property
-    def template_name(self):
-        return self.__template_name
-
-    @template_name.setter
-    def template_name(self, value):
-        self.__template_name = value
-
-    def post(self, request):
-        data = request.data
-        data["user"] = request.user.id
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            create_email(request.data, request.user, self.__template_url)
-            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
-        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # def post(self, request):
+    #     data = request.data
+    #     data["user"] = request.user.id
+    #     serializer = self.serializer_class(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         create_email(request.data, request.user, self.__template_url)
+    #         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+    #     return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 def create_email(data, user, template_url):
-    html_message = render_to_string("s.html", {"context": "context"})
+    context = data.context if data.get("context") else {}
+    html_message = render_to_string(template_url, {"context": context})
     plain_message = strip_tags(html_message)
     send_mail(
         data["subject"],
@@ -56,27 +51,28 @@ def create_email(data, user, template_url):
     )
 
 
-class CreateCustomTemplate(generics.GenericAPIView, generics.mixins.DestroyModelMixin):
+class CreateCustomTemplate(generics.GenericAPIView, generics.mixins.DestroyModelMixin,
+                           generics.mixins.CreateModelMixin,
+                           generics.mixins.ListModelMixin):
     serializer_class = CreateCustomTemplateSerializer
     permission_classes = [IsAuthenticated]
-    queryset = CustomTemplate.objects.all()
 
-    def post(self, request):
-        """
-        :return: Response with data if created entry else bad request response with errors
-        this function checks if user is allowed in admin panel and allows him to post global templates
-        """
-        data = request.data
-        data["user"] = request.user.id
+    def post(self, request, *args, **kwargs):
+        current_user_id = request.user.id
         if request.user.is_staff:
-            data["is_global_template"] = True
+            is_global_template = True
         else:
-            data["is_global_template"] = False
-        serializer = self.serializer_class(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
-        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            is_global_template = False
+        request.data.update({"user": current_user_id, "is_global_template": is_global_template})
+        return super().create(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        self.destroy(request, *args, **kwargs)
+        return self.destroy(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return self.serializer_class.Meta.model.objects. \
+            filter(is_global_template=self.kwargs["is_global_template"]) \
+            # .order_by(self.kwargs["filter"])
