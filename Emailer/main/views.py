@@ -1,22 +1,13 @@
-from django.contrib.auth.models import User
-from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-# Create your views here.
-from rest_framework import status, generics, mixins
+from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.serializers import Serializer, ModelSerializer
-from rest_framework.views import APIView
-
-from Emailer.main.models import Email, CustomTemplate
-
+from Emailer.main.models import  CustomTemplate
 from django.core.mail import send_mail
-
 from Emailer.main.serializers import SendEmailSerializer, CreateCustomTemplateSerializer
 
 
-class SendEmailView(generics.GenericAPIView, generics.mixins.CreateModelMixin):
+class EmailView(generics.GenericAPIView, generics.mixins.CreateModelMixin):
     serializer_class = SendEmailSerializer
     permission_classes = [IsAuthenticated]
 
@@ -26,16 +17,6 @@ class SendEmailView(generics.GenericAPIView, generics.mixins.CreateModelMixin):
         response = super().create(request, *args, **kwargs)
         create_email(request.data, request.user, template_url)
         return response
-
-    # def post(self, request):
-    #     data = request.data
-    #     data["user"] = request.user.id
-    #     serializer = self.serializer_class(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         create_email(request.data, request.user, self.__template_url)
-    #         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
-    #     return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 def create_email(data, user, template_url):
@@ -51,9 +32,9 @@ def create_email(data, user, template_url):
     )
 
 
-class CreateCustomTemplate(generics.GenericAPIView, generics.mixins.DestroyModelMixin,
-                           generics.mixins.CreateModelMixin,
-                           generics.mixins.ListModelMixin):
+class CustomTemplateView(generics.GenericAPIView, generics.mixins.DestroyModelMixin,
+                         generics.mixins.CreateModelMixin,
+                         generics.mixins.ListModelMixin):
     serializer_class = CreateCustomTemplateSerializer
     permission_classes = [IsAuthenticated]
 

@@ -14,15 +14,12 @@ class Email(models.Model):
         validators=[
             MinLengthValidator(SUBJECT_MIN_LENGTH)
         ])
-    message = models.TextField()
 
     to = models.CharField(max_length=TO_MAX_LENGTH, validators=[
         MinLengthValidator(TO_MIN_VALIDATOR)
     ])
 
-    upload_image = models.ImageField(null=True, blank=True)
-
-    upload_file = models.FileField(null=True, blank=True)
+    context = models.JSONField()
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="map")
 

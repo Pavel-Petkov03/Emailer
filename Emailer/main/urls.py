@@ -1,8 +1,8 @@
 from django.urls import path
 
-from Emailer.main.views import SendEmailView, CreateCustomTemplate
+from Emailer.main.views import EmailView, CustomTemplateView
 
 urlpatterns = [
-    path("send", SendEmailView.as_view()),
-    path("create_template", CreateCustomTemplate.as_view())
+    path("send", EmailView.as_view()),
+    path("create_template", CustomTemplateView.as_view())
 ]
