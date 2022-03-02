@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 
-
-
+from Emailer.main.forms import LoginForm, RegisterForm
 
 
 class CustomAuthView(View):
@@ -25,13 +24,13 @@ class CustomAuthView(View):
         })
 
 
-
 class LoginView(CustomAuthView):
     template = "login.html"
     redirect_success = ""
-
+    form = LoginForm
 
 
 class RegisterView(CustomAuthView):
     template = "register.js"
     redirect_success = ""
+    form = RegisterForm

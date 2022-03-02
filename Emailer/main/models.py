@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.core.validators import MinLengthValidator
 from django.db import models
 
@@ -19,12 +19,12 @@ class Email(models.Model):
         MinLengthValidator(TO_MIN_VALIDATOR)
     ])
 
-    context = models.JSONField()
+    context = models.JSONField(null=True, blank=True)
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="map")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="map")
 
 
 class CustomTemplate(models.Model):
     template = models.FileField(upload_to="templates/")
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     is_global_template = models.BooleanField(default=False)

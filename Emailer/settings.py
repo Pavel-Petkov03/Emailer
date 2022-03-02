@@ -91,7 +91,7 @@ DATABASES = {
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
 AUTH_PWD_MODULE = "django.contrib.auth.password_validation."
-
+AUTH_USER_MODEL = "authentication.CustomUserModel"
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": f"{AUTH_PWD_MODULE}UserAttributeSimilarityValidator",
