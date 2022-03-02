@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
+from django.core.mail import send_mail
 
 from Emailer.main.forms import LoginForm, RegisterForm
 
@@ -34,3 +35,13 @@ class RegisterView(CustomAuthView):
     template = "register.html"
     redirect_success = ""
     form = RegisterForm
+
+
+class SendEmail:
+    model = None
+
+    def send_singular_mail(self, *args, **kwargs):
+        send_mail(*args, **kwargs)
+
+    def send_many_mails(self):
+        pass

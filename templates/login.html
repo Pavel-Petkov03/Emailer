@@ -10,6 +10,7 @@
     <div class="auth-wrapper">
         <div class="auth-inner">
             <form class="custom-form" method="POST">
+                {% csrf_token %}
                 <h3>Sign In</h3>
                 {% for field in form %}
                     <div class="form-group">

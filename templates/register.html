@@ -9,6 +9,7 @@
     <div class="auth-wrapper">
         <div class="auth-inner">
             <form method="POST">
+                {% csrf_token %}
                 <h3>Sign Up</h3>
                 {% for field in form %}
                     <div class="form-group">
