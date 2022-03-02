@@ -12,6 +12,11 @@
         <div class="auth-inner">
             <form class="custom-form">
                 <h3>Sign In</h3>
+                {% for field in form.fields %}
+                    <div class="form-group">{{ field }}</div>
+                {% endfor %}
+
+
                 <div class="form-group">
                     <label>Enter Username</label>
                     <input type="email" class="form-control" placeholder="Enter username"/>
