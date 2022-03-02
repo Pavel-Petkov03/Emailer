@@ -1,8 +1,8 @@
 from django.urls import path
 
-from Emailer.main.views import EmailView, CustomTemplateView
+from Emailer.main.views import LoginView, RegisterView
 
 urlpatterns = [
-    path("send", EmailView.as_view()),
-    path("create_template", CustomTemplateView.as_view())
+    path("login", LoginView.as_view()),
+    path("register", RegisterView.as_view())
 ]
