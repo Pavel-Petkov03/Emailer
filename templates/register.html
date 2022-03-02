@@ -12,6 +12,7 @@
                 <h3>Sign Up</h3>
                 {% for field in form %}
                     <div class="form-group">
+                        <label for="">{{ field.label }}</label>
                         {{ field }}
                     </div>
                 {% endfor %}

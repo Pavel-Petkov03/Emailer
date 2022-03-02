@@ -7,25 +7,16 @@
 
 
 {% block content %}
-
     <div class="auth-wrapper">
         <div class="auth-inner">
             <form class="custom-form">
                 <h3>Sign In</h3>
-                {% for field in form.fields %}
-                    <div class="form-group">{{ field }}</div>
+                {% for field in form %}
+                    <div class="form-group">
+                        <label for="">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
                 {% endfor %}
-
-
-                <div class="form-group">
-                    <label>Enter Username</label>
-                    <input type="email" class="form-control" placeholder="Enter username"/>
-                </div>
-
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" class="form-control" placeholder="Enter password"/>
-                </div>
                 <button type="submit" class="btn btn-primary btn-block">Submit</button>
                 <p class="forgot-password text-right">
                     Forgot <a href="#">password?</a>
@@ -33,5 +24,4 @@
             </form>
         </div>
     </div>
-
 {% endblock %}

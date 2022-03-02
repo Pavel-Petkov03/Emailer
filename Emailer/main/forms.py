@@ -8,14 +8,14 @@ from django.forms import ModelForm
 class RegisterForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={
         "type": "text", "class": 'form-control', "placeholder": "Enter Username"
-    }))
+    }), label='Username')
     password = forms.CharField(widget=forms.PasswordInput(attrs={
         "type": "password", "class": 'form-control', "placeholder": "Enter password"
-    }))
+    }), label='Password')
 
     confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={
         "type": "password", "class": 'form-control', "placeholder": "Confirm password"
-    }))
+    }), label='Confirm Password')
 
     def save(self):
         self.clean()
@@ -32,7 +32,12 @@ class RegisterForm(forms.Form):
 
 
 class LoginForm(ModelForm):
-    pass
+    username = forms.CharField(widget=forms.TextInput(attrs={
+        "type": "text", "class": 'form-control', "placeholder": "Enter Username"
+    }), label='Username')
+    password = forms.CharField(widget=forms.PasswordInput(attrs={
+        "type": "password", "class": 'form-control', "placeholder": "Enter password"
+    }), label='Password')
 
     class Meta:
         model = get_user_model()
