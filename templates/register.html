@@ -1,22 +1,24 @@
 {% extends "base.html" %}
 {% load static %}
 {% block css_and_js_loads %}
-        <link rel="stylesheet" href="{% static "css/auth.css" %}">
+    <link rel="stylesheet" href="{% static "css/auth.css" %}">
 {% endblock %}
 
 
 {% block content %}
-<div class="auth-wrapper">
-            <div class="auth-inner">
-                <form>
-                    {% csrf_token %}
-                    <h3>Sign Up</h3>
-                    {% for field in form.fields %}
-                        <div class="form-group">{{ field }}</div>
-                    {% endfor %}
-                    <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
-                    <p class="forgot-password text-right">Already registered <a>sign in?</a></p>
-                </form>
-            </div>
+    <div class="auth-wrapper">
+        <div class="auth-inner">
+            <form>
+                <h3>Sign Up</h3>
+                {% for field in form %}
+                    <div class="form-group">
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+                <p class="forgot-password text-right">Already registered <a>sign in?</a>
+                </p>
+            </form>
         </div>
+    </div>
 {% endblock %}

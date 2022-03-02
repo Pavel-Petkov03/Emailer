@@ -31,6 +31,6 @@ class LoginView(CustomAuthView):
 
 
 class RegisterView(CustomAuthView):
-    template = "register.js"
+    template = "register.html"
     redirect_success = ""
     form = RegisterForm

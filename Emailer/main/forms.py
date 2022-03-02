@@ -1,6 +1,8 @@
 from django.conf import settings
 from django import forms
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from django.forms import ModelForm
 
 
 class RegisterForm(forms.Form):
@@ -29,7 +31,9 @@ class RegisterForm(forms.Form):
         return instance
 
 
-class LoginForm(forms.ModelForm):
+class LoginForm(ModelForm):
+    pass
+
     class Meta:
-        model = settings.AUTH_USER_MODEL
-        fields = "__all__"
+        model = get_user_model()
+        fields = ("username", "password")
