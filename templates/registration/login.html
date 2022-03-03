@@ -25,4 +25,8 @@
             </form>
         </div>
     </div>
+    {% for key , value in form.errors.items %}
+        {{ value }}
+    {% endfor %}
+
 {% endblock %}
