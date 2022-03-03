@@ -11,24 +11,26 @@
 
     {% endblock %}
 </head>
-    <div id="mySidenav" class="topnav">
-          <a href="#">Add email</a>
-          <a href="#">Edit Profile</a>
-          <a href="#">Create Group</a>
-          <a href="#">Contact</a>
-    </div>
+<div id="mySidenav" class="topnav">
+    <a href="#">Add email</a>
+    <a href="#">Edit Profile</a>
+    <a href="#">Create Group</a>
+    <a href="#">Contact</a>
+</div>
+<section class="wrap">
+    <article class="sidenav">
+        <ul>
+            <li><a href="default.asp">Folder</a></li>
+            <li><a href="news.asp">Bin</a></li>
+            <li><a href="contact.asp">Groups</a></li>
+        </ul>
+        <div>
+        </div>
+    </article>
+</section>
 
-     <article class="sidenav">
-         <ul>
-             <li><a href="default.asp">Folder</a></li>
-             <li><a href="news.asp">Bin</a></li>
-             <li><a href="contact.asp">Groups</a></li>
-         </ul>
-         <div>
-         </div>
-     </article>
-    {% block content %}
-    {% endblock %}
+{% block content %}
+{% endblock %}
 <body>
 
 </body>
