@@ -12,22 +12,24 @@
     {% endblock %}
 </head>
     <div id="mySidenav" class="topnav">
-          <a href="#">About</a>
-          <a href="#">Services</a>
-          <a href="#">Clients</a>
+          <a href="#">Add email</a>
+          <a href="#">Edit Profile</a>
+          <a href="#">Create Group</a>
           <a href="#">Contact</a>
     </div>
 
-     <ul class="sidenav">
-         <li><a href="default.asp">Home</a></li>
-         <li><a href="news.asp">News</a></li>
-         <li><a href="contact.asp">Contact</a></li>
-         <li><a href="about.asp">About</a></li>
-     </ul>
-
+     <article class="sidenav">
+         <ul>
+             <li><a href="default.asp">Folder</a></li>
+             <li><a href="news.asp">Bin</a></li>
+             <li><a href="contact.asp">Groups</a></li>
+         </ul>
+         <div>
+         </div>
+     </article>
+    {% block content %}
+    {% endblock %}
 <body>
-{% block content %}
 
-{% endblock %}
 </body>
 </html>
