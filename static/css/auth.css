@@ -1,64 +1,75 @@
 @import url('https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700,800');
+
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
+
 body {
-  background: #1C8EF9 !important;
-  min-height: 100vh;
-  display: flex;
-  font-weight: 400;
-  font-family: 'Fira Sans', sans-serif;
+    min-height: 100vh;
+    font-weight: 400;
+    font-family: 'Fira Sans', sans-serif;
+    background: rgb(2, 0, 36);
+    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%,
+    rgba(143, 143, 153, 1) 0%, rgba(134, 134, 134, 1) 21%,
+    rgba(146, 152, 157, 1) 34%, rgba(128, 131, 134, 1) 41%,
+    rgba(142, 147, 152, 1) 53%, rgba(148, 164, 179, 1) 68%,
+    rgba(134, 147, 159, 1) 100%, rgba(0, 212, 255, 1) 100%);
+    overflow: hidden;
 }
-h1,h2,h3,h4,h5,h6,label,span {
-  font-weight: 500;
-  font-family: 'Fira Sans', sans-serif;
+
+h1, h2, h3, h4, h5, h6, label, span {
+    font-weight: 500;
+    font-family: 'Fira Sans', sans-serif;
 }
-body, html, .App, #root, .auth-wrapper {
-  width: 100%;
-  height: 100%;
-}
+
 .navbar-light {
-  background-color: #ffffff;
-  box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
+    background-color: #ffffff;
+    box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
 }
+
 .auth-wrapper {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  text-align: left;
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
 }
+
 .auth-inner {
-  width: 450px;
-  margin: auto;
-  background: #ffffff;
-  box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
-  padding: 40px 55px 45px 55px;
-  border-radius: 15px;
-  transition: all .3s;
+    width: 450px;
+    margin: auto;
+    background: #ffffff;
+    box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
+    padding: 40px 55px 45px 55px;
+    border-radius: 15px;
+    transition: all .3s;
 }
+
 .auth-wrapper .form-control:focus {
-  border-color: #167bff;
-  box-shadow: none;
+    border-color: #167bff;
+    box-shadow: none;
 }
+
 .auth-wrapper h3 {
-  text-align: center;
-  margin: 0;
-  line-height: 1;
-  padding-bottom: 20px;
+    text-align: center;
+    margin: 0;
+    line-height: 1;
+    padding-bottom: 20px;
 }
 
 
 .custom-control-label {
-  font-weight: 400;
+    font-weight: 400;
 }
+
 .forgot-password,
 .forgot-password a {
-  text-align: right;
-  font-size: 13px;
-  padding-top: 10px;
-  color: #7f7d7d;
-  margin: 0;
+    text-align: right;
+    font-size: 13px;
+    padding-top: 10px;
+    color: #7f7d7d;
+    margin: 0;
 }
+
 .forgot-password a {
-  color: #167bff;
+    color: #167bff;
 }

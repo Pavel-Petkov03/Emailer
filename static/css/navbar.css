@@ -1,0 +1,65 @@
+
+.topnav {
+    background-color: #111;
+    transition: 0.5s;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.topnav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.topnav a:hover {
+    color: #f1f1f1;
+}
+
+
+#main {
+    transition: margin-left .5s;
+    padding: 20px;
+}
+
+@media screen and (max-height: 450px) {
+    .topnav {
+        padding-top: 15px;
+    }
+
+    .topnav a {
+        font-size: 18px;
+    }
+}
+
+.sidenav {
+    position: absolute;
+    height: 100%;
+    background-color: #111;
+    overflow: hidden;
+}
+
+/* Style the links inside the navigation bar */
+.sidenav a {
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+ul{
+    list-style: none;
+}
