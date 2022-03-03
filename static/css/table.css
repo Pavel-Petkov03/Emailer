@@ -1,3 +1,8 @@
 table {
     margin-left: 10rem;
 }
+
+tr:hover{
+    background-color: gray;
+    color: white;
+}
