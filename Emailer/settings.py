@@ -132,6 +132,15 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+    ]
+}
+
 
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
