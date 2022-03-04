@@ -2,7 +2,25 @@ table {
     margin-left: 10rem;
 }
 
-tr:hover{
+tbody tr:hover {
     background-color: gray;
     color: white;
+}
+
+
+
+th  td {
+    text-align: left;
+}
+
+
+
+
+body{
+    overflow: hidden;
+}
+
+
+table th  {
+    width: 100px !important;
 }

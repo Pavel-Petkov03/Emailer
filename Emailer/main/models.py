@@ -16,13 +16,17 @@ class Email(models.Model):
             MinLengthValidator(SUBJECT_MIN_LENGTH)
         ])
 
-    to = models.CharField(max_length=TO_MAX_LENGTH, validators=[
+    receiver = models.CharField(max_length=TO_MAX_LENGTH, validators=[
         MinLengthValidator(TO_MIN_VALIDATOR)
     ])
 
     context = models.JSONField(null=True, blank=True)
 
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="map")
+
+    date = models.DateField()
+
+
 
 
 class CustomTemplate(models.Model):
