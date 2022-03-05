@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css_and_js_loads %}
+    <link rel="stylesheet" href="{% static "css/auth.css" %}">
+{% endblock %}
+
+
+{% block content %}
+    <div class="auth-wrapper">
+        <div class="auth-inner">
+            <form method="POST">
+                {% csrf_token %}
+                <h3>Create Receiver</h3>
+                <div class="wrapper">
+                    {{form }}
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Add</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

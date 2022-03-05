@@ -1,13 +1,13 @@
 from django import forms
 
-from Emailer.main.models import Receiver, Preferences
+from Emailer.main.models import Receiver, Preferences, Group
 
 
 class ReceiverForm(forms.ModelForm):
+    preferences = forms.ModelMultipleChoiceField(queryset=Preferences.objects.all())
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["preferences"] = forms.ModelMultipleChoiceField(
-            queryset=Preferences.objects.all())
         self.fields["preferences"].choices = \
             [(choice, choice) for choice in Preferences.objects.all().values_list("hobby", flat=True)]
 
@@ -38,4 +38,20 @@ class ReceiverForm(forms.ModelForm):
             "first_name": "First Name:",
             "last_name": "Last Name:",
             "age": "Age:"
+        }
+
+
+class GroupForm(forms.ModelForm):
+    receiver = forms.ModelMultipleChoiceField(queryset=Preferences.objects.all())
+
+    class Meta:
+        model = Group
+        fields = ("name", "receivers")
+        widgets = {
+            "receivers": forms.SelectMultiple(attrs={
+                "type": "text", "class": 'form-control',
+            }),
+            "name": forms.TextInput(attrs={
+                "type": "text", "class": 'form-control', "placeholder": "Enter Group Name"
+            }),
         }
