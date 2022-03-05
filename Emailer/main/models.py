@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.core.validators import MinLengthValidator
+from django.core.validators import MinLengthValidator, MinValueValidator
 from django.db import models
 
 User = get_user_model()
@@ -12,24 +12,17 @@ class CustomTemplate(models.Model):
 
 
 class Preferences(models.Model):
-    name = models.CharField(max_length=20, unique=True)
+    hobby = models.CharField(max_length=20, unique=True)
 
 
 class Receiver(models.Model):
-    CHOICES = (
-        ("Sports", "Sports"),
-        ("Work", "Work"),
-        ("Education", "Education"),
-        ("Leisure activities", "Leisure activities"),
-    )
-    name = models.CharField(max_length=20)
     mail = models.EmailField(unique=True)
     first_name = models.CharField(max_length=20, null=True, blank=True)
     last_name = models.CharField(max_length=20, null=True, blank=True)
     age = models.IntegerField(validators=[
-        MinLengthValidator(0)
+        MinValueValidator(0)
     ], null=True, blank=True)
-    preferences = models.ManyToManyField(Preferences, max_length=20, choices=CHOICES)
+    preferences = models.ManyToManyField(Preferences, max_length=20)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
