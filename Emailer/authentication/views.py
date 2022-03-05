@@ -26,7 +26,7 @@ class LoginView(View):
 
 
 class RegisterView(View):
-    template = "register.html"
+    template = "registration/register.html"
     redirect_success = "/"
     form = RegisterForm
 
