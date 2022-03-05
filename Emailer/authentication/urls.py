@@ -9,6 +9,10 @@ def test(req):
 
 
 def l(req):
+
+
+    print(12)
+    print(12342341)
     return render(req, "add_receiver.html")
 
 

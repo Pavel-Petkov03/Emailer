@@ -4,43 +4,6 @@
     <link rel="stylesheet" href="{% static "css/auth.css" %}">
 {% endblock %}
 {% block content %}
-    <script>
-
-
-        function clickEvent(ev) {
-            let authInnerDiv = document.getElementsByClassName("wrapper")[0]
-            if (authInnerDiv.children.length === 11) {
-                let p = document.createElement("p")
-                p.textContent = "You can add max 10 key value pairs"
-                authInnerDiv.appendChild(p)
-            }
-            if (authInnerDiv.lastElementChild === ev.target || ev.target.parentNode === authInnerDiv.lastElementChild) {
-                authInnerDiv.appendChild(loadNewRow())
-            }
-        }
-
-        function loadNewRow() {
-            const div = document.createElement("div")
-            div.classList.add("form-group")
-            const keyInput = document.createElement("input")
-            const valueInput = document.createElement("input")
-            let arrayOfLogs = [keyInput, valueInput]
-            keyInput.placeholder = "Enter a key"
-            valueInput.placeholder = "Enter a value"
-            arrayOfLogs.forEach(el => {
-                el.style.display = "inline-block"
-                el.style.width = "40%"
-            })
-            div.append(...arrayOfLogs)
-            div.addEventListener("click", clickEvent)
-            return div
-        }
-
-        window.onload = () => {
-            let firstRowDiv = document.getElementById("first-row")
-            firstRowDiv.addEventListener("click", clickEvent)
-        }
-    </script>
     <div class="auth-wrapper">
         <div class="auth-inner">
             <form method="POST">
@@ -48,9 +11,13 @@
                 <h3>Create Receiver</h3>
                 <div class="wrapper">
                     <div class="form-group" id="first-row">
-                        <input type="text" style="display: inline-block" placeholder="receiver name">
+                        <input type="text" style="display: inline-block;text-align: center" placeholder="receiver mail" name="mail">
+                        <input type="text" style="display: inline-block;text-align: center" placeholder="receiver mail" name="">
+                        <input type="text" style="display: inline-block;text-align: center" placeholder="receiver mail" name="mail">
+                        <input type="text" style="display: inline-block;text-align: center" placeholder="receiver mail" name="mail">
                     </div>
                 </div>
+
                 <button type="submit" class="btn btn-primary btn-block">Add</button>
             </form>
         </div>

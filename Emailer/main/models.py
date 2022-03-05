@@ -5,19 +5,31 @@ from django.db import models
 User = get_user_model()
 
 
-
-
-
 class CustomTemplate(models.Model):
     template = models.FileField(upload_to="templates/")
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     is_global_template = models.BooleanField(default=False)
 
 
+class Preferences(models.Model):
+    name = models.CharField(max_length=20, unique=True)
+
+
 class Receiver(models.Model):
+    CHOICES = (
+        ("Sports", "Sports"),
+        ("Work", "Work"),
+        ("Education", "Education"),
+        ("Leisure activities", "Leisure activities"),
+    )
     name = models.CharField(max_length=20)
     mail = models.EmailField(unique=True)
-    additional_data = models.JSONField(null=True, blank=True)
+    first_name = models.CharField(max_length=20, null=True, blank=True)
+    last_name = models.CharField(max_length=20, null=True, blank=True)
+    age = models.IntegerField(validators=[
+        MinLengthValidator(0)
+    ], null=True, blank=True)
+    preferences = models.ManyToManyField(Preferences, max_length=20, choices=CHOICES)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
