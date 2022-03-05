@@ -1,7 +1,29 @@
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.validators import MinLengthValidator
 from django.db import models
+
+User = get_user_model()
+
+
+
+
+
+class CustomTemplate(models.Model):
+    template = models.FileField(upload_to="templates/")
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    is_global_template = models.BooleanField(default=False)
+
+
+class Receiver(models.Model):
+    name = models.CharField(max_length=20)
+    mail = models.EmailField(unique=True)
+    additional_data = models.JSONField(null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+class Group(models.Model):
+    name = models.CharField(max_length=20)
+    receivers = models.ManyToManyField(Receiver)
 
 
 class Email(models.Model):
@@ -16,20 +38,7 @@ class Email(models.Model):
             MinLengthValidator(SUBJECT_MIN_LENGTH)
         ])
 
-    receiver = models.CharField(max_length=TO_MAX_LENGTH, validators=[
-        MinLengthValidator(TO_MIN_VALIDATOR)
-    ])
+    receiver = models.ForeignKey(Receiver, on_delete=models.CASCADE)
 
     context = models.JSONField(null=True, blank=True)
-
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="map")
-
-    date = models.DateField()
-
-
-
-
-class CustomTemplate(models.Model):
-    template = models.FileField(upload_to="templates/")
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    is_global_template = models.BooleanField(default=False)
+    date = models.DateField(null=True, blank=True)

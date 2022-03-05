@@ -44,4 +44,3 @@ class RegisterView(View):
             "form": form
         })
 
-
