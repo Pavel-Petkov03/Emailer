@@ -12,7 +12,7 @@
                 {% csrf_token %}
                 <h3>Create Receiver</h3>
                 <div class="wrapper">
-                    {{form }}
+                    {{form.as_p }}
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-block">Add</button>

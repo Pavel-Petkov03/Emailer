@@ -42,14 +42,13 @@ class ReceiverForm(forms.ModelForm):
 
 
 class GroupForm(forms.ModelForm):
-    receiver = forms.ModelMultipleChoiceField(queryset=Preferences.objects.all())
 
     class Meta:
         model = Group
         fields = ("name", "receivers")
         widgets = {
-            "receivers": forms.SelectMultiple(attrs={
-                "type": "text", "class": 'form-control',
+            "receivers": forms.CheckboxSelectMultiple(attrs={
+                "class": 'form-control',
             }),
             "name": forms.TextInput(attrs={
                 "type": "text", "class": 'form-control', "placeholder": "Enter Group Name"

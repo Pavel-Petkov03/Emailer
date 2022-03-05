@@ -1,15 +1,19 @@
+import inspect
+
 from django.shortcuts import render, redirect
 from django.views import View
 from Emailer.main.models import Preferences
-from Emailer.main.forms import ReceiverForm
+from Emailer.main.forms import ReceiverForm, GroupForm
 
 
 class ManyToManyModelCustomView(View):
+    """
+    this class works only if you put Model form and if you have many to many relationship
+    """
     form_class = None
     template = None
     many_to_many_argument = None
     success_url = None
-    query_keyword = None
 
     def get(self, req):
         form = self.form_class()
@@ -19,9 +23,10 @@ class ManyToManyModelCustomView(View):
 
     def post(self, req):
         post_data = req.POST.copy()
-        post_data.setlist(self.many_to_many_argument, self.extract_preferences())
+        post_data.setlist(self.many_to_many_argument,
+                          self.convert_from_many_to_many_arg_to_id(post_data.getlist(self.many_to_many_argument)))
         form = self.form_class(post_data)
-        if form.is_valid:
+        if form.is_valid():
             custom_model_field = form.save(commit=False)
             custom_model_field.user = req.user
             custom_model_field.save()
@@ -32,23 +37,13 @@ class ManyToManyModelCustomView(View):
             "form": form
         })
 
-    def extract_preferences(self):
+    def convert_from_many_to_many_arg_to_id(self, array_of_fields):
         """
 
         :return: array with id's which will be saved via save_m2m()
         this function could be overridden
         """
-        return [str(arg.id) for arg in
-                self.form_class.model.objects.filter(**self.query_param_getter())]
-
-    def query_param_getter(self):
-        context = dict()
-        context[self.get_variable_name(self.many_to_many_argument)] = self.many_to_many_argument
-        return context
-
-    @staticmethod
-    def get_variable_name(variable):
-        return [k for k, v in locals().items() if v == variable][0]
+        return True
 
 
 class ReceiverView(ManyToManyModelCustomView):
@@ -56,8 +51,17 @@ class ReceiverView(ManyToManyModelCustomView):
     template = "add_receiver.html"
     many_to_many_argument = "preferences"
     success_url = "login"
-    query_keyword = "hobby__in"
+
+    def convert_from_many_to_many_arg_to_id(self, array_of_fields):
+        return [str(preference.id) for preference in Preferences.objects.filter(hobby__in=array_of_fields)]
 
 
 class GroupView(ManyToManyModelCustomView):
-    pass
+    form_class = GroupForm
+    template = "add_group.html"
+    many_to_many_argument = "receivers"
+    success_url = "login"
+
+    # def convert_from_many_to_many_arg_to_id(self, array_of_fields):
+    #     return [str(preference.id) for preference in Preferences.objects.filter(hobby__in=array_of_fields)]
+
