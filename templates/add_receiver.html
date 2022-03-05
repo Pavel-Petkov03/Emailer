@@ -9,6 +9,11 @@
 
         function clickEvent(ev) {
             let authInnerDiv = document.getElementsByClassName("wrapper")[0]
+            if (authInnerDiv.children.length === 11) {
+                let p = document.createElement("p")
+                p.textContent = "You can add max 10 key value pairs"
+                authInnerDiv.appendChild(p)
+            }
             if (authInnerDiv.lastElementChild === ev.target || ev.target.parentNode === authInnerDiv.lastElementChild) {
                 authInnerDiv.appendChild(loadNewRow())
             }
@@ -20,6 +25,8 @@
             const keyInput = document.createElement("input")
             const valueInput = document.createElement("input")
             let arrayOfLogs = [keyInput, valueInput]
+            keyInput.placeholder = "Enter a key"
+            valueInput.placeholder = "Enter a value"
             arrayOfLogs.forEach(el => {
                 el.style.display = "inline-block"
                 el.style.width = "40%"
@@ -41,8 +48,7 @@
                 <h3>Create Receiver</h3>
                 <div class="wrapper">
                     <div class="form-group" id="first-row">
-                        <input type="text" style="display: inline-block">
-                        <input type="text" style="display: inline-block">
+                        <input type="text" style="display: inline-block" placeholder="receiver name">
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Add</button>

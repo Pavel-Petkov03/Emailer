@@ -14,7 +14,6 @@ body {
     rgba(146, 152, 157, 1) 34%, rgba(128, 131, 134, 1) 41%,
     rgba(142, 147, 152, 1) 53%, rgba(148, 164, 179, 1) 68%,
     rgba(134, 147, 159, 1) 100%, rgba(0, 212, 255, 1) 100%);
-    overflow: hidden;
 }
 
 h1, h2, h3, h4, h5, h6, label, span {
@@ -28,10 +27,7 @@ h1, h2, h3, h4, h5, h6, label, span {
 }
 
 .auth-wrapper {
-    position: absolute;
-    top: 50%;
-    right: 50%;
-    transform: translate(50%, -50%);
+    margin-top: 10%;
 }
 
 .auth-inner {
