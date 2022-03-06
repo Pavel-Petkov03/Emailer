@@ -1,12 +1,10 @@
-import inspect
-
 from django.shortcuts import render, redirect
-from django.views import View
+from Emailer.authentication.views import LoginRequiredView
 from Emailer.main.models import Preferences, Receiver
 from Emailer.main.forms import ReceiverForm, GroupForm
 
 
-class ManyToManyModelCustomView(View):
+class ManyToManyModelCustomView(LoginRequiredView):
     """
     this class works only if you put Model form and if you have many to many relationship
     """
@@ -64,7 +62,4 @@ class GroupView(ManyToManyModelCustomView):
 
     def convert_from_many_to_many_arg_to_id(self, array_of_fields):
         return [str(receiver.id) for receiver in Receiver.objects.filter(mail__in=array_of_fields)]
-
-    # def convert_from_many_to_many_arg_to_id(self, array_of_fields):
-    #     return [str(preference.id) for preference in Preferences.objects.filter(hobby__in=array_of_fields)]
 

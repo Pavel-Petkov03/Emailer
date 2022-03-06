@@ -1,15 +1,14 @@
-from django.shortcuts import render
+from abc import ABC, abstractmethod
 
-# Create your views here.
 from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.permissions import IsAuthenticated
 
 from Emailer.api.serializers import GenericFolderSerializer
 
 
-class GenericFolder(ListAPIView):
+class GenericFolder(ListAPIView, ABC):
     """
-    This class won't be abstract
+    This class will be abstract
     It will be used for Folder view and Bin view
     """
 
@@ -18,14 +17,17 @@ class GenericFolder(ListAPIView):
     deleted = False
 
     def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        self.serializer_class(queryset, many=True)
+        super().list(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+        self.list(request, *args, **kwargs)
 
     def get_queryset(self):
-        return 1
+        """
+        This function will be overridden if you need take make filtering with params
+        :return: QuerySet
+        """
+        return super().get_queryset()
 
 
 class Folder(GenericFolder):
@@ -45,6 +47,3 @@ class GroupView(ListCreateAPIView):
     def get_queryset(self):
         print(12)
         return 12
-
-
-

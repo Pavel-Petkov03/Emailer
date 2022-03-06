@@ -8,12 +8,7 @@ body {
     min-height: 100vh;
     font-weight: 400;
     font-family: 'Fira Sans', sans-serif;
-    background: rgb(2, 0, 36);
-    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%,
-    rgba(143, 143, 153, 1) 0%, rgba(134, 134, 134, 1) 21%,
-    rgba(146, 152, 157, 1) 34%, rgba(128, 131, 134, 1) 41%,
-    rgba(142, 147, 152, 1) 53%, rgba(148, 164, 179, 1) 68%,
-    rgba(134, 147, 159, 1) 100%, rgba(0, 212, 255, 1) 100%);
+    background-image: linear-gradient(147deg, #000000 0%, #04619f 74%);
 }
 
 h1, h2, h3, h4, h5, h6, label, span {
@@ -73,4 +68,13 @@ h1, h2, h3, h4, h5, h6, label, span {
 
 #content {
     margin : auto;
+}
+
+
+a:hover {
+    text-decoration: none;
+}
+
+a {
+    color: #7eb7f4
 }

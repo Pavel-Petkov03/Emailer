@@ -40,20 +40,6 @@
                 <button type="submit" class="btn btn-primary btn-block">Add</button>
             </form>
         </div>
-    <div class="auth-inner">
-            <form method="POST">
-                {% csrf_token %}
-                <h3>Create Group</h3>
-                <div class="content-wrapper">
-                    {% for option in form.receivers%}
-                        <div class="row">
-                        <label class="row-first-label">{{ option.tag }}</label>
-                        <p class="row-second-label">{{ option.choice_label }}</p>
-                        </div>
-                    {% endfor %}
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Add</button>
-            </form>
-        </div>
+
     </div>
 {% endblock %}
