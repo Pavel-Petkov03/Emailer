@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "Emailer.authentication",
     "Emailer.main",
-    'crispy_forms',
 ]
 
 MIDDLEWARE = [

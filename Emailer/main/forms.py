@@ -43,6 +43,11 @@ class ReceiverForm(forms.ModelForm):
 
 class GroupForm(forms.ModelForm):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["receivers"].choices = \
+            [(choice, choice) for choice in Receiver.objects.all().values_list("mail", flat=True)]
+
     class Meta:
         model = Group
         fields = ("name", "receivers")

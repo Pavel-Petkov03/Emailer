@@ -2,7 +2,7 @@ import inspect
 
 from django.shortcuts import render, redirect
 from django.views import View
-from Emailer.main.models import Preferences
+from Emailer.main.models import Preferences, Receiver
 from Emailer.main.forms import ReceiverForm, GroupForm
 
 
@@ -61,6 +61,9 @@ class GroupView(ManyToManyModelCustomView):
     template = "add_group.html"
     many_to_many_argument = "receivers"
     success_url = "login"
+
+    def convert_from_many_to_many_arg_to_id(self, array_of_fields):
+        return [str(receiver.id) for receiver in Receiver.objects.filter(mail__in=array_of_fields)]
 
     # def convert_from_many_to_many_arg_to_id(self, array_of_fields):
     #     return [str(preference.id) for preference in Preferences.objects.filter(hobby__in=array_of_fields)]

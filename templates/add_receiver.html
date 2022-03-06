@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load crispy_forms_filters %}
 {% load static %}
 {% block css_and_js_loads %}
     <link rel="stylesheet" href="{% static "css/auth.css" %}">
@@ -10,7 +9,7 @@
             <form method="POST">
                 {% csrf_token %}
                 <h3>Create Receiver</h3>
-                <div class="wrapper">
+                <div class="content-wrapper">
                     {{form }}
                 </div>
 
