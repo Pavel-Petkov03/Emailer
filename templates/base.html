@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <link rel="stylesheet" href="{% static "css/navbar.css" %}">
+    <link rel="stylesheet" href="{% static "css/navbars/topnav.css" %}">
     <link rel="stylesheet" href="{% static "css/navbars/sidenav.css" %}">
 
     <script>
@@ -28,17 +28,13 @@
     {% block css_and_js_loads %}
 
     {% endblock %}
-
-
 </head>
-<div id="mySidenav" class="topnav">
+<div id="top-navbar">
     <a href= {% url "add receiver" %}>Add receiver</a>
     <a href="#">Edit Profile</a>
     <a href="{% url "add group" %}">Create Group</a>
     <a href="#">Contact</a>
 </div>
-
-
 <div class="wrapper">
     {% include "navbars/sidenav.html" %}
 
