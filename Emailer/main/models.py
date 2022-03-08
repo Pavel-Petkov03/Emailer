@@ -43,7 +43,7 @@ class Email(models.Model):
             MinLengthValidator(SUBJECT_MIN_LENGTH)
         ])
 
-    receiver = models.ForeignKey(Receiver, on_delete=models.CASCADE)
+    receiver = models.ForeignKey(Receiver, on_delete=models.DO_NOTHING)
 
     context = models.JSONField(null=True, blank=True)
     date = models.DateField(null=True, blank=True)
