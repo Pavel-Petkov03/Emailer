@@ -2,32 +2,8 @@
 {% load static %}
 {% block css_and_js_loads %}
     <link rel="stylesheet" href="{% static "css/table.css" %}">
-    <script>
-        function getCookie(name) {
-            const value = `; ${document.cookie}`;
-            let parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return parts.pop().split(';').shift();
-        }
+    <script type="module" src="{% static "js/showTable.js" %}"></script>
 
-
-        async function getData() {
-            let url = "http://localhost:8000/api/group"
-            let cookieString = `csrftoken=${getCookie("csrftoken")}; sessionid=${getCookie("sessionid")}`
-            let response = await fetch(url, {
-                method: "get",
-                headers: {
-                    "content-type": "application/json",
-                    "Cookie": cookieString,
-                    "Access-Control-Allow-Origin": "*"
-                }
-            })
-            return await response.json()
-        }
-
-        window.onload = async () => {
-            await getData()
-        }
-    </script>
 {% endblock %}
 {% block content %}
     <table class="table">
@@ -40,25 +16,6 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>Mark</td>
-            <td>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias possimus, voluptatem. Adipisci
-            </td>
-            <td>@mdo</td>
-        </tr>
-        <tr>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-            <td>@twitter</td>
-        </tr>
-        <tr onclick="">
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>@twitter</td>
-            <td>@twitter</td>
-        </tr>
         </tbody>
     </table>
 
