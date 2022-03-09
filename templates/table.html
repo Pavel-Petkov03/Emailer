@@ -2,6 +2,26 @@
 {% load static %}
 {% block css_and_js_loads %}
     <link rel="stylesheet" href="{% static "css/table.css" %}">
+    <script>
+
+        async function getData(csrfToken, session) {
+            let url = "http://localhost:8000/api/group"
+            let cookieString = `csrftoken=${csrfToken}; sessionid=${session}`
+            let response = await fetch(url, {
+                method: "get",
+                headers: {
+                    "content-type": "application/json",
+                    "Cookie": cookieString,
+                    "Access-Control-Allow-Origin": "*"
+                }
+            })
+            return await response.json()
+        }
+
+        window.onload = async () => {
+            await getData
+        }
+    </script>
 {% endblock %}
 {% block content %}
     <table class="table">
@@ -35,4 +55,5 @@
         </tr>
         </tbody>
     </table>
+
 {% endblock %}

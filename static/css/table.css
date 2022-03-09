@@ -1,5 +1,5 @@
 tbody tr:hover {
-    background-color: gray;
+    background-color: #121028;
     color: white;
 }
 
@@ -24,5 +24,4 @@ table {
 #content {
     margin: 0;
     width: 100%;
-
 }

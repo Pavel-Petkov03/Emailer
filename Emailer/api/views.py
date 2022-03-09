@@ -2,8 +2,10 @@ from abc import ABC, abstractmethod
 
 from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.serializers import ModelSerializer
 
 from Emailer.api.serializers import GenericFolderSerializer
+from Emailer.main.models import Receiver
 
 
 class GenericFolder(ListAPIView, ABC):
@@ -38,12 +40,16 @@ class Bin(GenericFolder):
     deleted = True
 
 
+class Ser(ModelSerializer):
+    class Meta:
+        fields = ("mail", "first_name", "last_name")
+        model = Receiver
+
+
 class GroupView(ListCreateAPIView):
-    serializer_class = None
+    serializer_class = Ser
+    queryset = Receiver.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         pass
-
-    def get_queryset(self):
-        print(12)
-        return 12
