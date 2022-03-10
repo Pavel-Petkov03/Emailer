@@ -4,7 +4,7 @@ const i = document.createElement("i")
 i.className = "fa fa-solid fa-filter"
 window.onload = async () => {
     let filter = localStorage.getItem("filter") || ""
-    await loadRows(endpoints.folder + "?" + filter)
+    await loadRows(endpoints.folder + "?kwarg=" + filter)
     let headerTrs = document.querySelectorAll("thead tr th")
     Array.from(headerTrs).forEach(el => {
         if (el.textContent.toLowerCase() === localStorage.getItem("filter")) {
@@ -35,5 +35,5 @@ async function filterEvent(ev) {
     ev.target.prepend(i)
     const loweredFilter = ev.target.textContent.toLowerCase()
     localStorage.setItem("filter", loweredFilter)
-    await loadRows(endpoints.folder + "?" + loweredFilter)
+    await loadRows(endpoints.folder + "?kwarg=" + loweredFilter)
 }

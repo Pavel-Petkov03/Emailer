@@ -21,10 +21,10 @@ class GenericFolder(ListAPIView, ABC):
 
     def get_queryset(self):
         try:
-            kwarg = list(self.request.GET.dict())[0]
+            kwarg = self.request.GET.dict()["kwarg"]
             if kwarg not in self.allowed_filtering_strings:
                 raise ValueError('the filter params must match the allowed filtering params')
-        except [IndexError, ValueError]:
+        except ValueError as error:
             kwarg = "subject"
         return Email.objects.filter(receiver__user__id=self.request.user.id, is_deleted=self.deleted).order_by(kwarg)
 

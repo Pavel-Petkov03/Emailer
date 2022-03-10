@@ -32,6 +32,15 @@ class Group(models.Model):
 
 
 class Email(models.Model):
+    SUBJECT_MAX_LENGTH = 30
+    SUBJECT_MIN_LENGTH = 5
+
+    subject = models.CharField(
+        max_length=SUBJECT_MAX_LENGTH,
+        validators=[
+            MinLengthValidator(SUBJECT_MIN_LENGTH)
+        ])
+
     receiver = models.ForeignKey(Receiver, on_delete=models.DO_NOTHING)
     is_deleted = models.BooleanField(default=False)
     date = models.DateField(null=True, blank=True)

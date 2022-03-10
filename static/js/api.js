@@ -21,6 +21,7 @@ async function getData(path) {
     let response = await fetch(url, {
         method: "get",
         headers: {
+            "Access-Control-Allow-Origin" : "http://localhost:8000/",
             "content-type": "application/json",
             "Cookie": cookieString,
         }
