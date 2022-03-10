@@ -17,7 +17,7 @@ class GenericFolder(ListAPIView, ABC):
     permission_classes = [IsAuthenticated]
     serializer_class = GenericFolderSerializer
     deleted = False
-    allowed_filtering_strings = ["subject", "creation date", "template", "receiver"]
+    allowed_filtering_strings = ["subject", "date", "template", "receiver"]
 
     def get_queryset(self):
         try:
@@ -32,9 +32,15 @@ class GenericFolder(ListAPIView, ABC):
 class Folder(GenericFolder):
     deleted = False
 
+    def get_queryset(self):
+        super().get_queryset()
+
 
 class Bin(GenericFolder):
     deleted = True
+
+    def get_queryset(self):
+        super().get_queryset()
 
 
 class Ser(serializers.ModelSerializer):

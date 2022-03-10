@@ -1,6 +1,6 @@
 from django import forms
 
-from Emailer.main.models import Receiver, Preferences, Group
+from Emailer.main.models import Receiver, Preferences, Group, Email
 
 
 class ReceiverForm(forms.ModelForm):
@@ -59,3 +59,6 @@ class GroupForm(forms.ModelForm):
                 "type": "text", "class": 'form-control', "placeholder": "Enter Group Name"
             }),
         }
+
+
+
