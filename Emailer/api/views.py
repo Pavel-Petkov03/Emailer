@@ -19,11 +19,14 @@ class GenericFolder(ListAPIView, ABC):
     deleted = False
     allowed_filtering_strings = ["subject", "creation date", "template", "receiver"]
 
-    def list(self, request, *args, **kwargs):
-        super().list(request, *args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        self.list(request, *args, **kwargs)
+    def get_queryset(self):
+        try:
+            kwarg = list(self.request.GET.dict())[0]
+            if kwarg not in self.allowed_filtering_strings:
+                raise ValueError('the filter params must match the allowed filtering params')
+        except [IndexError, ValueError]:
+            kwarg = "subject"
+        return Email.objects.filter(receiver__user__id=self.request.user.id, is_deleted=self.deleted).order_by(kwarg)
 
 
 class Folder(GenericFolder):
@@ -45,11 +48,3 @@ class Ser(serializers.ModelSerializer):
 class GroupView(ListCreateAPIView):
     serializer_class = Ser
     permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        try:
-            kwarg = list(self.request.GET.dict())[0]
-        except IndexError:
-            kwarg = "subject"
-        print()
-        return Email.objects.filter(receiver__user__id=self.request.user.id)

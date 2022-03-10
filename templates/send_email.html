@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block css_and_js_loads %}
+    <style>
+        #content {
+            width: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .thumbnails {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            overflow-x: auto;
+            height: 400px;
+            list-style: none;
+            background: black;
+        }
+
+        .thumbnails li {
+            border: 1px solid black;
+            width: 50%;
+        }
+
+        .thumbnails a {
+            display: block;
+        }
+
+        .thumbnails img {
+            width: 30vmin;
+            height: 20vmin;
+            -o-object-fit: cover;
+            object-fit: cover;
+            -o-object-position: top;
+            object-position: top;
+        }
+    </style>
+
+
+{% endblock %}
+{% block content %}
+    <div>fewfvewfgvewfew</div>
+
+    <ul class="thumbnails">
+        <li>
+            <a href="#slide1"><img
+                    src="https://www.lifewire.com/thmb/_Kwbk6Eien6Bn0Kr1FM1NKvA6pQ=/1002x564/smart/filters:no_upscale()/jpg-files-591e000b5f9b58f4c0912446.png"/></a>
+        </li>
+        <li>
+            <a href="#slide2"><img
+                    src="https://www.lifewire.com/thmb/_Kwbk6Eien6Bn0Kr1FM1NKvA6pQ=/1002x564/smart/filters:no_upscale()/jpg-files-591e000b5f9b58f4c0912446.png"/></a>
+        </li>
+        <li>
+            <a href="#slide3"><img
+                    src="https://www.lifewire.com/thmb/_Kwbk6Eien6Bn0Kr1FM1NKvA6pQ=/1002x564/smart/filters:no_upscale()/jpg-files-591e000b5f9b58f4c0912446.png"/></a>
+        </li>
+        <li>
+            <a href="#slide4"><img
+                    src="https://www.lifewire.com/thmb/_Kwbk6Eien6Bn0Kr1FM1NKvA6pQ=/1002x564/smart/filters:no_upscale()/jpg-files-591e000b5f9b58f4c0912446.png"/></a>
+        </li>
+        <li>
+            <a href="#slide5"><img
+                    src="https://www.lifewire.com/thmb/_Kwbk6Eien6Bn0Kr1FM1NKvA6pQ=/1002x564/smart/filters:no_upscale()/jpg-files-591e000b5f9b58f4c0912446.png"/></a>
+        </li>
+    </ul>
+{% endblock %}
+
+
+
