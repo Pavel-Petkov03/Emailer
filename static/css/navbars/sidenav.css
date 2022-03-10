@@ -30,9 +30,8 @@ a[data-toggle="collapse"] {
 .dropdown-toggle::after {
     display: block;
     position: absolute;
-    top: 50%;
-    right: 20px;
-    transform: translateY(-50%);
+    left: 12rem;
+    bottom: 1rem;
 }
 
 
@@ -54,7 +53,7 @@ a[data-toggle="collapse"] {
 }
 
 #sidebar ul.components {
-    padding: 20px 0;
+    padding: 20px 1rem;
     border-bottom: 1px solid rgb(4, 97, 159);
 }
 
@@ -62,8 +61,10 @@ a[data-toggle="collapse"] {
 #sidebar ul li a {
     padding: 10px;
     font-size: 1.1em;
-    display: block;
+    display: inline-block;
 }
+
+
 
 
 #group-ul li {
@@ -71,4 +72,3 @@ a[data-toggle="collapse"] {
     font-size: 0.9em;
     border-bottom: 1px solid #5e4b4b;
 }
-

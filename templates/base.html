@@ -7,22 +7,24 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static "css/auth.css" %}">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script src="https://kit.fontawesome.com/f992dbc3fb.js" crossorigin="anonymous"></script>
 
+
+
+
+    <link rel="stylesheet" href="{% static "css/auth.css" %}">
     <link rel="stylesheet" href="{% static "css/navbars/topnav.css" %}">
     <link rel="stylesheet" href="{% static "css/navbars/sidenav.css" %}">
 
     <script>
-        window.onload = () => {
+        let groupCollapse = () => {
             let groupLink = document.querySelector("#group-menu")
             let groupMenu = document.querySelector("#group-ul")
             groupLink.addEventListener("click", () => {
                 groupMenu.classList.toggle("collapse")
             })
         }
+
     </script>
 
     {% block css_and_js_loads %}
@@ -48,3 +50,4 @@
 
 </body>
 </html>
+<script>groupCollapse()</script>
