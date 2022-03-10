@@ -44,6 +44,5 @@ class Email(models.Model):
         ])
 
     receiver = models.ForeignKey(Receiver, on_delete=models.DO_NOTHING)
-
-    context = models.JSONField(null=True, blank=True)
+    is_deleted = models.BooleanField(default=False)
     date = models.DateField(null=True, blank=True)

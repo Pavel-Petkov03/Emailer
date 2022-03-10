@@ -2,10 +2,10 @@ from abc import ABC, abstractmethod
 
 from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 
 from Emailer.api.serializers import GenericFolderSerializer
-from Emailer.main.models import Receiver
+from Emailer.main.models import Receiver, Email
 
 
 class GenericFolder(ListAPIView, ABC):
@@ -17,19 +17,13 @@ class GenericFolder(ListAPIView, ABC):
     permission_classes = [IsAuthenticated]
     serializer_class = GenericFolderSerializer
     deleted = False
+    allowed_filtering_strings = ["subject", "creation date", "template", "receiver"]
 
     def list(self, request, *args, **kwargs):
         super().list(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         self.list(request, *args, **kwargs)
-
-    def get_queryset(self):
-        """
-        This function will be overridden if you need take make filtering with params
-        :return: QuerySet
-        """
-        return super().get_queryset()
 
 
 class Folder(GenericFolder):
@@ -40,16 +34,22 @@ class Bin(GenericFolder):
     deleted = True
 
 
-class Ser(ModelSerializer):
+class Ser(serializers.ModelSerializer):
+    receiver = serializers.CharField(source="receiver.mail")
+
     class Meta:
-        fields = ("mail", "first_name", "last_name")
-        model = Receiver
+        fields = ("receiver", "subject", "date",)
+        model = Email
 
 
 class GroupView(ListCreateAPIView):
     serializer_class = Ser
-    queryset = Receiver.objects.all()
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, *args, **kwargs):
-        pass
+    def get_queryset(self):
+        try:
+            kwarg = list(self.request.GET.dict())[0]
+        except IndexError:
+            kwarg = "subject"
+        print()
+        return Email.objects.filter(receiver__user__id=self.request.user.id)
