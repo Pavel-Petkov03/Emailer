@@ -1,4 +1,8 @@
+from abc import ABC, abstractmethod
+
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.utils.decorators import method_decorator
 from django.views import View
 
 from Emailer.authentication.views import LoginRequiredView
@@ -7,7 +11,7 @@ from Emailer.main.forms import ReceiverForm, GroupForm
 from html2image import Html2Image
 
 
-class ManyToManyModelCustomView(LoginRequiredView):
+class ManyToManyModelCustomView(LoginRequiredView, ABC):
     """
     this class works only if you put Model form and if you have many to many relationship
     """
@@ -38,11 +42,12 @@ class ManyToManyModelCustomView(LoginRequiredView):
             "form": form
         })
 
+    @abstractmethod
     def convert_from_many_to_many_arg_to_id(self, array_of_fields):
         """
 
         :return: array with id's which will be saved via save_m2m()
-        this function could be overridden
+        this function must be overridden
         """
         return True
 

@@ -6,6 +6,11 @@
             margin: 0;
             display: flex;
             justify-content: flex-end;
+            background: rgb(240, 240, 240);
+        }
+
+        .form-control {
+            margin-bottom: 30px;
         }
 
         .thumbnails {
@@ -20,6 +25,7 @@
 
         .thumbnails li {
             border: 1px solid black;
+            margin : 15px
         }
 
         .thumbnails a {
@@ -38,30 +44,59 @@
         form {
             width: 100%;
         }
+
+        .form-content {
+            width: 75%;
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+
+        label {
+            margin: 0;
+            display: block;
+            width: 70%;
+        }
+
+        textarea {
+            width: 100%;
+
+        }
+
+        .description {
+            display: flex;
+            height: 35%;
+        }
     </style>
-
-
 {% endblock %}
 {% block content %}
     <form action="">
         <div class="first-row">
-            <div class="form-content">fwefwe</div>
+            <div class="form-content">
+                <label for="">Enter receiver Email
+                    <input type="text" placeholder="Enter email" class="form-control">
+                </label>
+
+                <label for="">Enter Subject
+                    <input type="text" placeholder="Enter Subject" class="form-control"></label>
+                <label for="">Choose template from the right menu<input type="text" placeholder="Choose template"
+                                                                        class="form-control" disabled></label>
+            </div>
             <ul class="thumbnails">
                 <li>
                     <a href="#slide1"><img
-                            src="https://www.lifewire.com/thmb/_Kwbk6Eien6Bn0Kr1FM1NKvA6pQ=/1002x564/smart/filters:no_upscale()/jpg-files-591e000b5f9b58f4c0912446.png"/></a>
+                            src="https://slidesmania.com/wp-content/uploads/2021/11/Harlow-Organic-Shapes-presentation-template-download-ppt-570x350.jpg"/></a>
                 </li>
                 <li>
                     <a href="#slide2"><img
-                            src="https://www.lifewire.com/thmb/_Kwbk6Eien6Bn0Kr1FM1NKvA6pQ=/1002x564/smart/filters:no_upscale()/jpg-files-591e000b5f9b58f4c0912446.png"/></a>
+                            src="https://templates.office.com/Images/homepage-premium-banner.png"/></a>
                 </li>
                 <li>
                     <a href="#slide3"><img
-                            src="https://www.lifewire.com/thmb/_Kwbk6Eien6Bn0Kr1FM1NKvA6pQ=/1002x564/smart/filters:no_upscale()/jpg-files-591e000b5f9b58f4c0912446.png"/></a>
+                            src="https://slidesmania.com/wp-content/uploads/2022/02/Cassidy-free-powerpoint-template-and-google-slides-theme-570x350.jpg"/></a>
                 </li>
                 <li>
                     <a href="#slide4"><img
-                            src="https://www.lifewire.com/thmb/_Kwbk6Eien6Bn0Kr1FM1NKvA6pQ=/1002x564/smart/filters:no_upscale()/jpg-files-591e000b5f9b58f4c0912446.png"/></a>
+                            src="https://assets.market-storefront.envato-static.com/storefront/packs/media/images/home/themeforest/category-tiles-cms-themes-dcf193e313c6cc9c0f9b26a394bb3283.png"/></a>
                 </li>
                 <li>
                     <a href="#slide5"><img
@@ -69,8 +104,8 @@
                 </li>
             </ul>
         </div>
-        <div class="second-row">
-            fdewfewfew
+        <div class="description">
+            <textarea placeholder="Enter content"></textarea>
         </div>
     </form>
 {% endblock %}

@@ -2,7 +2,7 @@ const ROOT = "http://localhost:8000/api"
 
 
 const endpoints = {
-    folder: "/group",
+    folder: "/folder",
     bin: "/bin",
 
 }

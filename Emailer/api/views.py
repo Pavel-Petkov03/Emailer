@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import serializers
 
 from Emailer.api.serializers import GenericFolderSerializer
-from Emailer.main.models import Receiver, Email
+from Emailer.main.models import Email
 
 
 class GenericFolder(ListAPIView, ABC):
@@ -19,12 +19,13 @@ class GenericFolder(ListAPIView, ABC):
     deleted = False
     allowed_filtering_strings = ["subject", "date", "template", "receiver"]
 
+    @abstractmethod
     def get_queryset(self):
         try:
             kwarg = self.request.GET.dict()["kwarg"]
             if kwarg not in self.allowed_filtering_strings:
                 raise ValueError('the filter params must match the allowed filtering params')
-        except ValueError as error:
+        except KeyError as error:
             kwarg = "subject"
         return Email.objects.filter(receiver__user__id=self.request.user.id, is_deleted=self.deleted).order_by(kwarg)
 
