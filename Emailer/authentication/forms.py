@@ -6,9 +6,9 @@ User = get_user_model()
 
 
 class RegisterForm(forms.Form):
-    username = forms.CharField(widget=forms.TextInput(attrs={
-        "type": "text", "class": 'form-control', "placeholder": "Enter Username"
-    }), label='Username')
+    email = forms.EmailField(widget=forms.EmailInput(attrs={
+        "type": "text", "class": 'form-control', "placeholder": "Enter mail"
+    }), label='Mail')
     password = forms.CharField(widget=forms.PasswordInput(attrs={
         "type": "password", "class": 'form-control', "placeholder": "Enter password"
     }), label='Password')
@@ -22,32 +22,34 @@ class RegisterForm(forms.Form):
         if self.data["password"] != self.data["confirm_password"]:
             raise ValidationError(confirm_password_error_message)
 
-    def save(self, req):
-        self.clean()
-        current_user = User.objects.create_user(username=self.cleaned_data["username"],
-                                                password=self.cleaned_data["password"])
-        current_user.save()
-        login(req, current_user)
+    def save(self):
+        email = self.cleaned_data["email"]
+        password = self.cleaned_data["password"]
+        User.objects.create_user(email=email, password=password)
+
+    class Meta:
+        fields = ("email", "password", "confirm_password")
+        model = User
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(max_length=255, required=True, widget=forms.TextInput(attrs={
-        "type": "text", "class": 'form-control', "placeholder": "Enter Username"
-    }), label='Username')
+    email = forms.EmailField(max_length=255, required=True, widget=forms.EmailInput(attrs={
+        "type": "text", "class": 'form-control', "placeholder": "Enter Mail"
+    }), label='Email')
     password = forms.CharField(widget=forms.PasswordInput(attrs={
         "type": "password", "class": 'form-control', "placeholder": "Enter password"
     }), required=True, label="Password")
 
     def clean(self):
-        username = self.cleaned_data["username"]
+        email = self.cleaned_data["email"]
         password = self.cleaned_data["password"]
-        user = authenticate(username=username, password=password)
+        user = authenticate(email=email, password=password)
         if not user or not user.is_active:
-            raise forms.ValidationError("Sorry, but username and password does not match")
+            raise forms.ValidationError("Sorry, but email and password does not match")
         return self.cleaned_data
 
     def login(self):
-        username = self.cleaned_data.get('username')
+        email = self.cleaned_data.get('email')
         password = self.cleaned_data.get('password')
-        user = authenticate(username=username, password=password)
+        user = authenticate(email=email, password=password)
         return user
