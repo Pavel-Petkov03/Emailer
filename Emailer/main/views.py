@@ -6,6 +6,8 @@ from Emailer.main.models import Preferences, Receiver
 from Emailer.main.forms import ReceiverForm, GroupForm
 from html2image import Html2Image
 
+from Emailer.main.utils import Sender
+
 
 class ManyToManyModelCustomView(LoginRequiredView, ABC):
     """
@@ -77,3 +79,7 @@ class SendEmailView(LoginRequiredView):
 
     def get(self, req):
         return render(req, "send_email.html")
+
+    def post(self, req):
+        sender = Sender.get_instance()
+        sender.send_single_mail()
