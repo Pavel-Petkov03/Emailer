@@ -1,9 +1,5 @@
 from abc import ABC, abstractmethod
-
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.utils.decorators import method_decorator
-from django.views import View
 
 from Emailer.authentication.views import LoginRequiredView
 from Emailer.main.models import Preferences, Receiver
