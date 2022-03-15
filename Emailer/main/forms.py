@@ -2,7 +2,9 @@ from abc import ABC
 
 from django import forms
 
+from Emailer.authentication.models import CustomUserModel
 from Emailer.main.models import Receiver, Preferences, Group, Email
+from Emailer.main.utils import Sender
 
 
 class ReceiverForm(forms.ModelForm):
@@ -15,9 +17,9 @@ class ReceiverForm(forms.ModelForm):
 
     class Meta:
         model = Receiver
-        fields = ("mail", "first_name", "last_name", "age", "preferences")
+        fields = ("email", "first_name", "last_name", "age", "preferences")
         widgets = {
-            "mail": forms.EmailInput(attrs={
+            "email": forms.EmailInput(attrs={
                 "type": "text", "class": 'form-control', "required": True, "placeholder": "Enter Mail"
             }),
             "preferences": forms.SelectMultiple(attrs={
@@ -61,3 +63,23 @@ class GroupForm(forms.ModelForm):
                 "type": "text", "class": 'form-control', "placeholder": "Enter Group Name"
             }),
         }
+
+
+class SendMailForm(forms.Form):
+    """
+    This form is to authenticate all the entries
+    """
+    email = forms.EmailField()
+    message = forms.CharField(max_length=250)
+    subject = forms.CharField(max_length=20)
+    template = forms.CharField(max_length=20)
+
+    def save(self, sender: CustomUserModel):
+        receiver = Receiver(email=self.cleaned_data["email"])
+        subject = self.cleaned_data["subject"]
+        message = self.cleaned_data["message"]
+        template = self.cleaned_data["template"]
+        receiver.save()
+        sender_class_instance = Sender.get_instance()
+        sender_class_instance.send_single_mail(subject, message, sender, receiver, template)
+        Email()

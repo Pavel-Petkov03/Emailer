@@ -16,13 +16,13 @@ class Preferences(models.Model):
 
 
 class Receiver(models.Model):
-    mail = models.EmailField(unique=True)
+    email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=20, null=True, blank=True)
     last_name = models.CharField(max_length=20, null=True, blank=True)
     age = models.IntegerField(validators=[
         MinValueValidator(0)
     ], null=True, blank=True)
-    preferences = models.ManyToManyField(Preferences, max_length=20)
+    preferences = models.ManyToManyField(Preferences, max_length=20, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 

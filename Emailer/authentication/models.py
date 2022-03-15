@@ -9,3 +9,6 @@ class CustomUserModel(AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
     objects = UserManager()
+
+    class Meta:
+        unique_together = ("email", )

@@ -81,5 +81,4 @@ class SendEmailView(LoginRequiredView):
         return render(req, "send_email.html")
 
     def post(self, req):
-        sender = Sender.get_instance()
-        sender.send_single_mail()
+        pass
