@@ -1,9 +1,9 @@
 from abc import ABC
 
 from django import forms
-
+from html2image import Html2Image
 from Emailer.authentication.models import CustomUserModel
-from Emailer.main.models import Receiver, Preferences, Group, Email
+from Emailer.main.models import Receiver, Preferences, Group, Email, CustomTemplate
 from Emailer.main.utils import Sender
 
 
@@ -65,21 +65,34 @@ class GroupForm(forms.ModelForm):
         }
 
 
-class SendMailForm(forms.Form):
+class SendEmailForm(forms.Form):
     """
     This form is to authenticate all the entries
     """
-    email = forms.EmailField()
-    message = forms.CharField(max_length=250)
-    subject = forms.CharField(max_length=20)
-    template = forms.CharField(max_length=20)
+    email = forms.EmailField(widget=forms.EmailInput(attrs={
+        "placeholder": "Enter email", "class": "form-control"
+    }), label="Enter Email")
+    subject = forms.CharField(max_length=250, widget=forms.TextInput(attrs={
+        "placeholder": "Enter Subject", "class": "form-control"
+    }), label="Enter Subject")
+    template = forms.CharField(widget=forms.TextInput(attrs={
+        "placeholder": "Choose template", "class": "form-control", "id": "template-input",
+    }), label="Choose template from the right menu")
+    message = forms.CharField(max_length=20, widget=forms.Textarea(attrs={
+        "placeholder": "Enter content"
+    }))
 
     def save(self, sender: CustomUserModel):
-        receiver = Receiver(email=self.cleaned_data["email"])
+        (receiver, created) = Receiver.objects.get_or_create(email=self.cleaned_data["email"], user_id=sender.id)
+
         subject = self.cleaned_data["subject"]
         message = self.cleaned_data["message"]
-        template = self.cleaned_data["template"]
-        receiver.save()
-        sender_class_instance = Sender.get_instance()
-        sender_class_instance.send_single_mail(subject, message, sender, receiver, template)
-        Email()
+
+        template = CustomTemplate.objects.get(template__exact=self.cleaned_data["template"])
+
+        sender_class_instance = Sender()
+        html_str = sender_class_instance.send_single_mail(subject, message, sender, receiver, template.template.path)
+        saver = Html2Image()
+        screenshot_path = saver.screenshot(html_str=html_str)
+        email = Email(subject=subject, receiver=receiver, template=template, screenshot=screenshot_path)
+        email.save()

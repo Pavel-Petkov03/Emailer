@@ -41,7 +41,7 @@ class Email(models.Model):
             MinLengthValidator(SUBJECT_MIN_LENGTH)
         ])
 
-    receiver = models.ForeignKey(Receiver, on_delete=models.DO_NOTHING)
+    receiver = models.ForeignKey(Receiver, on_delete=models.DO_NOTHING, related_name="receiver")
     is_deleted = models.BooleanField(default=False)
     date = models.DateField(null=True, blank=True)
     template = models.ForeignKey(CustomTemplate, on_delete=models.DO_NOTHING, null=True, blank=True)

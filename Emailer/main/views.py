@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 
 from Emailer.authentication.views import LoginRequiredView
 from Emailer.main.models import Preferences, Receiver
-from Emailer.main.forms import ReceiverForm, GroupForm
+from Emailer.main.forms import ReceiverForm, GroupForm, SendEmailForm
 from html2image import Html2Image
 
 from Emailer.main.utils import Sender
@@ -78,7 +78,16 @@ class GroupView(ManyToManyModelCustomView):
 class SendEmailView(LoginRequiredView):
 
     def get(self, req):
-        return render(req, "send_email.html")
+        form = SendEmailForm()
+        return render(req, "send_email.html", {
+            "form": form
+        })
 
     def post(self, req):
-        pass
+        form = SendEmailForm(req.POST)
+        if form.is_valid():
+            form.save(req.user)
+            return redirect("add receiver")
+        return render(req, "send_email.html", {
+            "form": form
+        })

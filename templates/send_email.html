@@ -71,18 +71,18 @@
 
 {% endblock %}
 {% block content %}
-    <form action="">
+    <form action="" method="post">
+        {% csrf_token %}
         <div class="first-row">
             <div class="form-content">
-                <label for="">Enter receiver Email
-                    <input type="text" placeholder="Enter email" class="form-control">
-                </label>
+                <label for="">{{ form.fields.email.label }}</label>
+                {{ form.email }}
 
-                <label for="">Enter Subject
-                    <input type="text" placeholder="Enter Subject" class="form-control"></label>
-                <label for="">Choose template from the right menu<input type="text" placeholder="Choose template"
-                                                                        class="form-control" disabled
-                                                                        id="template-input"></label>
+                <label for="">{{ form.fields.subject.label }}</label>
+                {{ form.subject }}
+                <label for="">{{ form.fields.template.label }}</label>
+                {{ form.template }}
+
             </div>
             <ul class="thumbnails">
                 <li>
@@ -108,18 +108,16 @@
             </ul>
         </div>
         <div class="description">
-            <textarea placeholder="Enter content"></textarea>
+            {{ form.message }}
         </div>
+    <button>Submit</button>
     </form>
     <script>
-
-
         function onTemplateClick(ev) {
             const templateInput = document.getElementById("template-input")
             ev.preventDefault()
             templateInput.value = ev.target.src
         }
-
     </script>
 {% endblock %}
 

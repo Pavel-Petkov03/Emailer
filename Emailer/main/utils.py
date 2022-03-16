@@ -24,10 +24,12 @@ class Sender(metaclass=SingletonMeta):
     """
 
     def send_single_mail(self, subject: str, message: str, sender: CustomUserModel, receiver: Receiver,
-                         template: str) -> None:
+                         template: str) -> str:
         (html_message, plain_message) = self.__get_raw_message(receiver, message, template)
         send_mail(subject, plain_message, sender.email, [receiver.email], auth_user=sender.email,
                   auth_password=sender.password, html_message=html_message, fail_silently=False)
+
+        return html_message
 
     def send_mass_mail(self, subject: str, message: str, sender: CustomUserModel, receivers: [Receiver],
                        template) -> None:
