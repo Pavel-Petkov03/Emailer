@@ -1,4 +1,6 @@
 import os
+import string
+from random import choice
 
 from django.contrib.auth import get_user_model
 from django.core.files import File
@@ -6,6 +8,11 @@ from django.core.validators import MinLengthValidator, MinValueValidator
 from django.db import models
 
 User = get_user_model()
+
+
+def generate_random_id():
+    n = 10
+    return ''.join(choice(string.ascii_uppercase + string.digits) for _ in range(n))
 
 
 class CustomTemplate(models.Model):
@@ -47,12 +54,25 @@ class Email(models.Model):
     receiver = models.ForeignKey(Receiver, on_delete=models.DO_NOTHING, related_name="receiver")
     is_deleted = models.BooleanField(default=False)
     date = models.DateField(null=True, blank=True)
-    template = models.ForeignKey(CustomTemplate, on_delete=models.DO_NOTHING, null=True, blank=True)
     screenshot = models.ImageField(null=True, blank=True, upload_to="screenshots/")
 
     def save(self, *args, **kwargs):
-        screenshot_path = kwargs["screenshot_path"]
-        with open(screenshot_path) as file:
-            self.screenshot.save("", File(file))
-            os.remove(screenshot_path)
+        """
+        The name of the saved file will be combination if :
+            - sender id
+            - receiver id
+            - random generated code
+        """
+        if not self.screenshot:
+            with open(self.screenshot.path , "rb") as file:
+                self.screenshot.save(self.generate_file_location(), File(file))
+        else:
+            # this prevents recursion calls
+            pass
         super().save(*args, **kwargs)
+
+    def generate_file_location(self):
+        receiver_id = self.receiver.id
+        sender_id = self.receiver.user.id
+        png_extension = ".png"
+        return f'{sender_id}-{receiver_id}-{generate_random_id()}{png_extension}'
