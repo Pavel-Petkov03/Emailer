@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+from smtplib import SMTPAuthenticationError
+
 from django.shortcuts import render, redirect
 
 from Emailer.authentication.views import LoginRequiredView
@@ -7,7 +9,6 @@ from Emailer.main.forms import ReceiverForm, GroupForm, SendEmailForm
 from html2image import Html2Image
 
 from Emailer.main.utils import Sender
-
 
 class ManyToManyModelCustomView(LoginRequiredView, ABC):
     """

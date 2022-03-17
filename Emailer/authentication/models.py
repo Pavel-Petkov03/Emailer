@@ -6,6 +6,7 @@ from Emailer.authentication.base_manager import UserManager
 class CustomUserModel(AbstractUser):
     username = None
     email = models.EmailField(unique=True)
+    email_password = models.CharField(max_length=30, null=True, blank=True)
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
     objects = UserManager()

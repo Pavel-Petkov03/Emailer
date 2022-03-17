@@ -6,7 +6,7 @@ User = get_user_model()
 
 
 class CustomTemplate(models.Model):
-    template = models.FileField(upload_to="templates/")
+    template = models.FileField(upload_to="template/")
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     is_global_template = models.BooleanField(default=False)
 
@@ -45,4 +45,4 @@ class Email(models.Model):
     is_deleted = models.BooleanField(default=False)
     date = models.DateField(null=True, blank=True)
     template = models.ForeignKey(CustomTemplate, on_delete=models.DO_NOTHING, null=True, blank=True)
-    screenshot = models.ImageField(null=True, blank=True)
+    screenshot = models.ImageField(null=True, blank=True, upload_to="screenshots/")

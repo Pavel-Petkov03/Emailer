@@ -27,7 +27,7 @@ class Sender(metaclass=SingletonMeta):
                          template: str) -> str:
         (html_message, plain_message) = self.__get_raw_message(receiver, message, template)
         send_mail(subject, plain_message, sender.email, [receiver.email], auth_user=sender.email,
-                  auth_password=sender.password, html_message=html_message, fail_silently=False)
+                  auth_password=sender.email_password, html_message=html_message, fail_silently=False)
 
         return html_message
 
@@ -35,7 +35,7 @@ class Sender(metaclass=SingletonMeta):
                        template) -> None:
         send_mass_mail(self.__populate_data_tuple(subject, message, sender, receivers, template),
                        auth_user=sender.email,
-                       auth_password=sender.password, fail_silently=False)
+                       auth_password=sender.email_password, fail_silently=False)
 
     def __populate_data_tuple(self, subject: str, message: str, sender: CustomUserModel,
                               receivers: Union[QuerySet, list[Receiver]],

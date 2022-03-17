@@ -83,7 +83,7 @@ class SendEmailForm(forms.Form):
     }))
 
     def save(self, sender: CustomUserModel):
-        (receiver, created) = Receiver.objects.get_or_create(email=self.cleaned_data["email"], user_id=sender.id)
+        receiver = self.create_receiver(sender)
 
         subject = self.cleaned_data["subject"]
         message = self.cleaned_data["message"]
@@ -96,3 +96,9 @@ class SendEmailForm(forms.Form):
         screenshot_path = saver.screenshot(html_str=html_str)
         email = Email(subject=subject, receiver=receiver, template=template, screenshot=screenshot_path)
         email.save()
+
+    def create_receiver(self, sender: CustomUserModel):
+        (receiver, created) = Receiver.objects.get_or_create(email=self.cleaned_data["email"])
+        if created:
+            receiver.user = sender
+        return receiver
