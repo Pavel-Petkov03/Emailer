@@ -94,7 +94,7 @@ class SendEmailForm(forms.Form):
         html_str = sender_class_instance.send_single_mail(subject, message, sender, receiver, template.template.path)
         saver = Html2Image()
         screenshot_path = saver.screenshot(html_str=html_str)
-        email = Email(subject=subject, receiver=receiver, template=template, screenshot=screenshot_path)
+        email = Email(subject=subject, receiver=receiver, screenshot_path=screenshot_path)
         email.save()
 
     def create_receiver(self, sender: CustomUserModel):

@@ -1,4 +1,7 @@
+import os
+
 from django.contrib.auth import get_user_model
+from django.core.files import File
 from django.core.validators import MinLengthValidator, MinValueValidator
 from django.db import models
 
@@ -46,3 +49,10 @@ class Email(models.Model):
     date = models.DateField(null=True, blank=True)
     template = models.ForeignKey(CustomTemplate, on_delete=models.DO_NOTHING, null=True, blank=True)
     screenshot = models.ImageField(null=True, blank=True, upload_to="screenshots/")
+
+    def save(self, *args, **kwargs):
+        screenshot_path = kwargs["screenshot_path"]
+        with open(screenshot_path) as file:
+            self.screenshot.save("", File(file))
+            os.remove(screenshot_path)
+        super().save(*args, **kwargs)
