@@ -10,11 +10,6 @@ from django.db import models
 User = get_user_model()
 
 
-def generate_random_id():
-    n = 10
-    return ''.join(choice(string.ascii_uppercase + string.digits) for _ in range(n))
-
-
 class CustomTemplate(models.Model):
     template = models.FileField(upload_to="template/")
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
@@ -63,16 +58,19 @@ class Email(models.Model):
             - receiver id
             - random generated code
         """
-        if not self.screenshot:
-            with open(self.screenshot.path , "rb") as file:
-                self.screenshot.save(self.generate_file_location(), File(file))
-        else:
-            # this prevents recursion calls
-            pass
+        path = self.screenshot.path
+        with open(path, "rb") as file:
+            self.screenshot.save(self.__generate_file_location(), File(file), save=False)
+        os.remove(path)
         super().save(*args, **kwargs)
 
-    def generate_file_location(self):
+    def __generate_file_location(self):
         receiver_id = self.receiver.id
         sender_id = self.receiver.user.id
         png_extension = ".png"
-        return f'{sender_id}-{receiver_id}-{generate_random_id()}{png_extension}'
+        return f'{sender_id}-{receiver_id}-{self.__generate_random_id()}{png_extension}'
+
+    @staticmethod
+    def __generate_random_id():
+        n = 10
+        return ''.join(choice(string.ascii_uppercase + string.digits) for _ in range(n))

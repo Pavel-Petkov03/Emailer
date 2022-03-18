@@ -5,8 +5,9 @@ from django import forms
 from html2image import Html2Image
 from Emailer.authentication.models import CustomUserModel
 from Emailer.main.models import Receiver, Preferences, Group, Email, CustomTemplate
-from Emailer.main.utils import Sender
+from Emailer.main.utils import Sender, EmailDispatcher
 from django.conf import settings
+
 
 class ReceiverForm(forms.ModelForm):
     preferences = forms.ModelMultipleChoiceField(queryset=Preferences.objects.all())
@@ -85,21 +86,14 @@ class SendEmailForm(forms.Form):
 
     def save(self, sender: CustomUserModel):
         receiver = self.create_receiver(sender)
-
         subject = self.cleaned_data["subject"]
         message = self.cleaned_data["message"]
-
         template = CustomTemplate.objects.get(template__exact=self.cleaned_data["template"])
-
-        sender_class_instance = Sender()
-        html_str = sender_class_instance.send_single_mail(subject, message, sender, receiver, template.template.path)
-        saver = Html2Image(output_path=settings.BASE_DIR / "media")
-        screenshot_path = saver.screenshot(html_str=html_str)[0]
-        email = Email(subject=subject, receiver=receiver,  date=datetime.now(), screenshot=screenshot_path)
+        dispatcher = EmailDispatcher()
+        dispatcher.send_single_mail(subject, message, sender, receiver, template.template.path)
 
     def create_receiver(self, sender: CustomUserModel):
         (receiver, created) = Receiver.objects.get_or_create(email=self.cleaned_data["email"])
         if created:
             receiver.user = sender
         return receiver
-
