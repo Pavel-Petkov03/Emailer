@@ -1,12 +1,7 @@
-from abc import ABC
-from datetime import datetime
-
 from django import forms
-from html2image import Html2Image
 from Emailer.authentication.models import CustomUserModel
-from Emailer.main.models import Receiver, Preferences, Group, Email, CustomTemplate
-from Emailer.main.utils import Sender, EmailDispatcher
-from django.conf import settings
+from Emailer.main.models import Receiver, Preferences, Group, CustomTemplate
+from Emailer.main.utils import EmailDispatcher
 
 
 class ReceiverForm(forms.ModelForm):
@@ -89,8 +84,14 @@ class SendEmailForm(forms.Form):
         subject = self.cleaned_data["subject"]
         message = self.cleaned_data["message"]
         template = CustomTemplate.objects.get(template__exact=self.cleaned_data["template"])
-        dispatcher = EmailDispatcher()
-        dispatcher.send_single_mail(subject, message, sender, receiver, template.template.path)
+        dispatcher = EmailDispatcher(
+            subject=subject,
+            message=message,
+            sender=sender,
+            receivers=[receiver],
+            template=template.template.path
+        )
+        dispatcher.send_single_mail()
 
     def create_receiver(self, sender: CustomUserModel):
         (receiver, created) = Receiver.objects.get_or_create(email=self.cleaned_data["email"])

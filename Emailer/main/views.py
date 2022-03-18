@@ -1,14 +1,10 @@
 from abc import ABC, abstractmethod
 from smtplib import SMTPAuthenticationError
-
 from django.shortcuts import render, redirect
-
 from Emailer.authentication.views import LoginRequiredView
 from Emailer.main.models import Preferences, Receiver
 from Emailer.main.forms import ReceiverForm, GroupForm, SendEmailForm
-from html2image import Html2Image
 
-from Emailer.main.utils import Sender
 
 class ManyToManyModelCustomView(LoginRequiredView, ABC):
     """
@@ -71,11 +67,6 @@ class GroupView(ManyToManyModelCustomView):
         return [str(receiver.id) for receiver in Receiver.objects.filter(mail__in=array_of_fields)]
 
 
-# class Ra:
-#     htm = Html2Image(output_path="")
-#     htm.screenshot(html_file="", save_as="", )
-
-
 class SendEmailView(LoginRequiredView):
 
     def get(self, req):
@@ -87,8 +78,15 @@ class SendEmailView(LoginRequiredView):
     def post(self, req):
         form = SendEmailForm(req.POST)
         if form.is_valid():
-            form.save(req.user)
+            try:
+                form.save(req.user)
+            except SMTPAuthenticationError:
+                return render(req, "send_email.html", {
+
+                })
             return redirect("add receiver")
         return render(req, "send_email.html", {
             "form": form
         })
+
+
