@@ -23,25 +23,27 @@ class GenericFolder(ListAPIView, ABC):
     def get_queryset(self):
         try:
             kwarg = self.request.GET.dict()["kwarg"]
-            if kwarg not in self.allowed_filtering_strings:
+            if kwarg not in GenericFolder.allowed_filtering_strings:
                 raise ValueError('the filter params must match the allowed filtering params')
         except KeyError as error:
             kwarg = "subject"
-        return Email.objects.filter(receiver__user__id=self.request.user.id, is_deleted=self.deleted).order_by(kwarg)
+        except ValueError:
+            kwarg = "subject"
+        return Email.objects.filter(receiver__user=self.request.user, is_deleted=self.deleted).order_by(kwarg)
 
 
 class Folder(GenericFolder):
     deleted = False
 
     def get_queryset(self):
-        super().get_queryset()
+        return super().get_queryset()
 
 
 class Bin(GenericFolder):
     deleted = True
 
     def get_queryset(self):
-        super().get_queryset()
+        return super().get_queryset()
 
 
 class Ser(serializers.ModelSerializer):

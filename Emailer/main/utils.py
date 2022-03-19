@@ -6,8 +6,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from html2image import Html2Image
 from Emailer.main.models import Receiver, Email
-
-
+from django.utils import timezone
 
 class Sender:
     """
@@ -21,6 +20,7 @@ class Sender:
         self.receivers = receivers
         self.template = template
         self.recipients = self.__get_all_recipients_mails(receivers)
+        self.date = timezone.now()
 
     @property
     def subject(self):
@@ -52,21 +52,9 @@ class Sender:
             raise ValueError("receivers must be a list of receivers")
         self.__receivers = value
 
-    @property
-    def template(self):
-        return self.__template
-
-    @template.setter
-    def template(self, value):
-        if not isinstance(value, str):
-            raise ValueError("template must be string path")
-        if not os.path.exists(value):
-            raise ValueError("template path must exist")
-        self.__template = value
-
     def send_single_mail(self) -> str:
         (html_message, plain_message) = self.__get_raw_message(self.receivers[0])
-        send_mail(self.subject, plain_message, self.sender.email, [self.receivers[0].email],
+        send_mail(self.subject, plain_message, self.sender.email, self.recipients,
                   auth_user=self.sender.email,
                   auth_password=self.sender.email_password, html_message=html_message, fail_silently=False)
 
@@ -89,7 +77,7 @@ class Sender:
 
     @staticmethod
     def __get_all_recipients_mails(receivers) -> list:
-        return [receiver.mail for receiver in receivers]
+        return [receiver.email for receiver in receivers]
 
     def __get_context(self, user: Receiver) -> dict:
         variable_names = ["first_name", "last_name", "age"]
@@ -99,7 +87,7 @@ class Sender:
 
     def __get_raw_message(self, receiver: Receiver) -> tuple:
         context = self.__get_context(receiver)
-        html_message = render_to_string(self.template, context=context)
+        html_message = render_to_string(self.template.template.path, context=context)
         plain_message = strip_tags(html_message)
         return html_message, plain_message
 
@@ -132,12 +120,5 @@ class EmailDispatcher(Sender):
         return screenshot_path
 
     def create_email_instance(self, screenshot_path, receiver: Receiver):
-        return Email(subject=self.subject, receiver=receiver, date=datetime.now(), screenshot=screenshot_path)
-
-    @staticmethod
-    def retrieve_html_strings(data_tuple):
-        """
-        :param data_tuple:
-        :return: list[html_str]
-        """
-        return [entry[1] for entry in data_tuple]
+        return Email(subject=self.subject, receiver=receiver, date=self.date, screenshot=screenshot_path,
+                     template=self.template)

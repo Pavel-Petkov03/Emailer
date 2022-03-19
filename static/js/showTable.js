@@ -20,8 +20,12 @@ async function loadRows(url) {
     let tbody = document.querySelector("tbody")
     tbody.innerText = ""
     data.forEach(el => {
+        let {id , ...state} = el
         let tr = document.createElement("tr")
-        Object.values(el).forEach(value => {
+        tr.className = "clickable-row"
+        tr.addEventListener("click", trEventListener)
+        tr.setAttribute("data-href", id)
+        Object.values(state).forEach(value => {
             let td = document.createElement("td")
             td.textContent = value
             tr.appendChild(td)
@@ -29,6 +33,11 @@ async function loadRows(url) {
         tbody.appendChild(tr)
     })
 }
+
+function trEventListener(ev){
+    window.location.href = window.location.href + "/" +  ev.target.parentNode.getAttribute("data-href")
+}
+
 
 
 async function filterEvent(ev) {

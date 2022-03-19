@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 from smtplib import SMTPAuthenticationError
+
+from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from Emailer.authentication.views import LoginRequiredView
 from Emailer.main.models import Preferences, Receiver
@@ -64,7 +66,7 @@ class GroupView(ManyToManyModelCustomView):
     success_url = "login"
 
     def convert_from_many_to_many_arg_to_id(self, array_of_fields):
-        return [str(receiver.id) for receiver in Receiver.objects.filter(mail__in=array_of_fields)]
+        return [str(receiver.id) for receiver in Receiver.objects.filter(email__in=array_of_fields)]
 
 
 class SendEmailView(LoginRequiredView):
@@ -81,12 +83,11 @@ class SendEmailView(LoginRequiredView):
             try:
                 form.save(req.user)
             except SMTPAuthenticationError:
+                form.add_error(None, ValidationError("The email and the password of your email must match"))
                 return render(req, "send_email.html", {
-
+                    "form": form
                 })
             return redirect("add receiver")
         return render(req, "send_email.html", {
-            "form": form
+            "form": form,
         })
-
-

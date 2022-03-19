@@ -48,8 +48,9 @@ class Email(models.Model):
 
     receiver = models.ForeignKey(Receiver, on_delete=models.DO_NOTHING, related_name="receiver")
     is_deleted = models.BooleanField(default=False)
-    date = models.DateField(null=True, blank=True)
+    date = models.DateTimeField(auto_now=True)
     screenshot = models.ImageField(null=True, blank=True, upload_to="screenshots/")
+    template = models.ForeignKey(CustomTemplate, on_delete=models.DO_NOTHING)
 
     def save(self, *args, **kwargs):
         """

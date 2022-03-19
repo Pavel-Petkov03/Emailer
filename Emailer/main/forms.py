@@ -1,4 +1,6 @@
 from django import forms
+from django.core.exceptions import ValidationError
+
 from Emailer.authentication.models import CustomUserModel
 from Emailer.main.models import Receiver, Preferences, Group, CustomTemplate
 from Emailer.main.utils import EmailDispatcher
@@ -47,7 +49,7 @@ class GroupForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["receivers"].choices = \
-            [(choice, choice) for choice in Receiver.objects.all().values_list("mail", flat=True)]
+            [(choice, choice) for choice in Receiver.objects.all().values_list("email", flat=True)]
 
     class Meta:
         model = Group
@@ -79,17 +81,24 @@ class SendEmailForm(forms.Form):
         "placeholder": "Enter content"
     }))
 
+    def clean_template(self):
+        try:
+            value = CustomTemplate.objects.get(template__exact=self.cleaned_data["template"])
+        except ValueError:
+            raise ValidationError("Template doesn't exist")
+        return value
+
     def save(self, sender: CustomUserModel):
         receiver = self.create_receiver(sender)
         subject = self.cleaned_data["subject"]
         message = self.cleaned_data["message"]
-        template = CustomTemplate.objects.get(template__exact=self.cleaned_data["template"])
+        template = self.cleaned_data["template"]
         dispatcher = EmailDispatcher(
             subject=subject,
             message=message,
             sender=sender,
             receivers=[receiver],
-            template=template.template.path
+            template=template
         )
         dispatcher.send_single_mail()
 
