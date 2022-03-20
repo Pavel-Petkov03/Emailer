@@ -6,25 +6,47 @@ const endpoints = {
     bin: "/bin",
 }
 
-
-// These functions will be used to interact with django api folder
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    let parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-}
-async function getData(path) {
+async function getData(path, body) {
     let url = `${ROOT}` + path
-    let cookieString = `csrftoken=${getCookie("csrftoken")}; sessionid=${getCookie("sessionid")}`
-    let response = await fetch(url, {
+    let init = {
         method: "get",
         headers: {
-            "Access-Control-Allow-Origin": "http://localhost:8000/",
             "content-type": "application/json",
-            "Cookie": cookieString,
-        }
-    })
+        },
+    }
+    if (body) {
+        Object.assign(init, body)
+    }
+    console.log(init)
+    let response = await fetch(url, init)
     return await response.json()
+}
+
+
+function mainLoad() {
+    let select = document.getElementsByName("select")[0]
+
+    async function sendFilterInfo() {
+        const preferenceField = select.getElementById("id_preferences")
+        const all_emails = extract_email(preferenceField)
+
+        let path = ""
+        let data = await getData(path)
+    }
+
+
+    function load() {
+
+        let email_reference_reducer = Array.from(select.children).reduce((acc, cur) => {
+            let value = cur.value
+            acc[value] = cur
+            return acc
+        }, {})
+    }
+
+    function extract_email(field) {
+        return Array.from(field.children.map(child => child.value))
+    }
 }
 
 

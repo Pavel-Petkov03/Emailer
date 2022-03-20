@@ -1,28 +1,45 @@
 {% extends "base.html" %}
 {% load static %}
-
-
 {% block css_and_js_loads %}
-
     <style>
-    .row {
-        display: flex;
-        align-items: center;
-    }
+        #content {
+            display: flex;
 
-    .row-first-label{
-        width: 10px;
-        margin: 0;
-    }
-    .row-second-label{
-        padding-left: 10px;
-        margin: 0;
-    }
+        }
 
-
+        #filter-div {
+            background: green;
+            margin-left: 10px;
+            width: 300px;
+            text-align: center;
+        }
     </style>
-{% endblock %}
+    <link href="//cdn.bootcss.com/noUiSlider/8.5.1/nouislider.min.css" rel="stylesheet">
+    <script src="//cdn.bootcss.com/noUiSlider/8.5.1/nouislider.js"></script>
+    <script>
+        function a() {
+            const slider = document.getElementById('slider');
+            noUiSlider.create(slider, {
+                start: [20, 80],
+                connect: true,
+                range: {
+                    'min': 0,
+                    'max': 100
+                },
+            });
+            const from = document.querySelector("#from")
+            const to = document.querySelector("#to")
+            slider.noUiSlider.on("update", (values) => {
+                values = values.map(el => Number.parseInt(el))
+                let [start, end] = values
+                from.textContent = start
+                to.textContent = end
+            })
+        }
+    </script>
 
+
+{% endblock %}
 {% block content %}
     <div class="auth-wrapper">
         <div class="auth-inner">
@@ -30,16 +47,22 @@
                 {% csrf_token %}
                 <h3>Create Group</h3>
                 <div class="content-wrapper">
-                    {% for option in form.receivers%}
-                        <div class="row">
-                        <label class="row-first-label">{{ option.tag }}</label>
-                        <p class="row-second-label">{{ option.choice_label }}</p>
-                        </div>
-                    {% endfor %}
+                    {{ form }}
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Add</button>
             </form>
         </div>
 
     </div>
+    <div id="filter-div">
+        {{ filter_form }}
+    <div id="slider">
+
+        </div>
+        <div class="show-range">
+            <div id="from"></div>
+            <div id="to"></div>
+        </div>
+    </div>
+    <script>a()</script>
 {% endblock %}

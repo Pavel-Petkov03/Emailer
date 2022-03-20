@@ -55,7 +55,7 @@ class GroupForm(forms.ModelForm):
         model = Group
         fields = ("name", "receivers")
         widgets = {
-            "receivers": forms.CheckboxSelectMultiple(attrs={
+            "receivers": forms.SelectMultiple(attrs={
                 "class": 'form-control',
             }),
             "name": forms.TextInput(attrs={
@@ -107,3 +107,9 @@ class SendEmailForm(forms.Form):
         if created:
             receiver.user = sender
         return receiver
+
+
+class FilterForm(ReceiverForm):
+    class Meta(ReceiverForm.Meta):
+        fields = ("preferences", )
+

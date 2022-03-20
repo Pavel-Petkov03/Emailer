@@ -1,7 +1,6 @@
 import os
 import string
 from random import choice
-
 from django.contrib.auth import get_user_model
 from django.core.files import File
 from django.core.validators import MinLengthValidator, MinValueValidator

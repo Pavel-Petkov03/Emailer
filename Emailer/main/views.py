@@ -4,8 +4,8 @@ from smtplib import SMTPAuthenticationError
 from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from Emailer.authentication.views import LoginRequiredView
-from Emailer.main.models import Preferences, Receiver
-from Emailer.main.forms import ReceiverForm, GroupForm, SendEmailForm
+from Emailer.main.models import Preferences, Receiver, Email, Group
+from Emailer.main.forms import ReceiverForm, GroupForm, SendEmailForm, FilterForm
 
 
 class ManyToManyModelCustomView(LoginRequiredView, ABC):
@@ -65,6 +65,14 @@ class GroupView(ManyToManyModelCustomView):
     many_to_many_argument = "receivers"
     success_url = "login"
 
+    def get(self, req):
+        form = self.form_class()
+        filter_form = FilterForm()
+        return render(req, self.template, {
+            "form": form,
+            "filter_form": filter_form
+        })
+
     def convert_from_many_to_many_arg_to_id(self, array_of_fields):
         return [str(receiver.id) for receiver in Receiver.objects.filter(email__in=array_of_fields)]
 
@@ -90,4 +98,12 @@ class SendEmailView(LoginRequiredView):
             return redirect("add receiver")
         return render(req, "send_email.html", {
             "form": form,
+        })
+
+
+class EmailDetailView(LoginRequiredView):
+    def get(self, req, pk):
+        current_email = Email.objects.get(receiver__user=req.user, id=pk)
+        return render(req, "email-description.html", {
+            "image": current_email.screenshot
         })

@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import serializers
 
 from Emailer.api.serializers import GenericFolderSerializer
-from Emailer.main.models import Email
+from Emailer.main.models import Email, Group
 
 
 class GenericFolder(ListAPIView, ABC):
@@ -57,3 +57,4 @@ class Ser(serializers.ModelSerializer):
 class GroupView(ListCreateAPIView):
     serializer_class = Ser
     permission_classes = [IsAuthenticated]
+    Group.objects.filter()
