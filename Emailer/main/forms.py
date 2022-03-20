@@ -22,7 +22,7 @@ class ReceiverForm(forms.ModelForm):
                 "type": "text", "class": 'form-control', "required": True, "placeholder": "Enter Mail"
             }),
             "preferences": forms.SelectMultiple(attrs={
-                "type": "text", "class": 'form-control',
+                "class": 'form-control',
             }),
             "first_name": forms.TextInput(attrs={
                 "type": "text", "class": 'form-control', "placeholder": "Enter First Name"

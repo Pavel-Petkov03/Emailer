@@ -1,0 +1,26 @@
+#content {
+    display: flex;
+
+}
+
+
+.show-range * {
+    display: inline-block;
+}
+
+select {
+    display: block;
+    width: 100%;
+}
+
+.auth-wrapper {
+    margin-left: 30px;
+}
+
+.show-range {
+    margin: 20px;
+}
+
+#counter {
+    display: inline-block;
+}

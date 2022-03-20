@@ -1,45 +1,18 @@
 {% extends "base.html" %}
 {% load static %}
+
+
+
 {% block css_and_js_loads %}
-    <style>
-        #content {
-            display: flex;
-
-        }
-
-        #filter-div {
-            background: green;
-            margin-left: 10px;
-            width: 300px;
-            text-align: center;
-        }
-    </style>
     <link href="//cdn.bootcss.com/noUiSlider/8.5.1/nouislider.min.css" rel="stylesheet">
     <script src="//cdn.bootcss.com/noUiSlider/8.5.1/nouislider.js"></script>
-    <script>
-        function a() {
-            const slider = document.getElementById('slider');
-            noUiSlider.create(slider, {
-                start: [20, 80],
-                connect: true,
-                range: {
-                    'min': 0,
-                    'max': 100
-                },
-            });
-            const from = document.querySelector("#from")
-            const to = document.querySelector("#to")
-            slider.noUiSlider.on("update", (values) => {
-                values = values.map(el => Number.parseInt(el))
-                let [start, end] = values
-                from.textContent = start
-                to.textContent = end
-            })
-        }
-    </script>
-
-
+    <link rel="stylesheet" href="{% static "css/add-group.css" %}">
+    <script src="{% static "js/add-group.js" %}" type="module"></script>
 {% endblock %}
+
+
+
+
 {% block content %}
     <div class="auth-wrapper">
         <div class="auth-inner">
@@ -51,18 +24,31 @@
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Add</button>
             </form>
+            <div>
+                <p style="display: inline-block">Selected </p>
+                <p id="counter">0</p>
+            </div>
+
+        </div>
+    </div>
+    <div class="auth-wrapper">
+        <div class="auth-inner">
+            <h2 style="text-align: center">Select Emails</h2>
+            {{ filter_form }}
+            <p>Age:</p>
+            <div id="slider">
+            </div>
+            <div class="show-range">
+                <div>From :
+                    <div id="from"></div>
+                </div>
+                <div>To :
+                    <div id="to"></div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" id="select-button">Select</button>
         </div>
 
     </div>
-    <div id="filter-div">
-        {{ filter_form }}
-    <div id="slider">
 
-        </div>
-        <div class="show-range">
-            <div id="from"></div>
-            <div id="to"></div>
-        </div>
-    </div>
-    <script>a()</script>
 {% endblock %}
