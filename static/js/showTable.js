@@ -10,7 +10,7 @@ i.className = "fa fa-solid fa-filter"
 async function mainTableLoader(flag){
     console.log(1)
     let filter = localStorage.getItem("filter") || ""
-    const endpointString = `${endpoints.folder}?kwarg=${filter}?isbin=${flag}`
+    const endpointString = `${endpoints.folder}?kwarg=${filter}&isbin=${flag}`
     await loadRows(endpointString)
     let headerTrs = document.querySelectorAll("thead tr th")
     Array.from(headerTrs).forEach(el => {
@@ -52,8 +52,8 @@ async function filterEvent(flag , ev) {
     ev.target.prepend(i)
     const loweredFilter = ev.target.textContent.toLowerCase()
     localStorage.setItem("filter", loweredFilter)
-    const endpointString = `${endpoints.folder}?kwarg=${loweredFilter}?isbin=${flag}`
-    await loadRows(endpoints.folder + "?kwarg=" + loweredFilter)
+    const endpointString = `${endpoints.folder}?kwarg=${loweredFilter}&isbin=${flag}`
+    await loadRows(endpointString)
 }
 
 export  {

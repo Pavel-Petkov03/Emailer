@@ -67,6 +67,14 @@
             height: 35%;
         }
     </style>
+    <script>
+        function onTemplateClick(ev) {
+            console.log(1)
+            const templateInput = document.getElementById("template-input")
+            ev.preventDefault()
+            templateInput.value = ev.target.src
+        }
+    </script>
 
 
 {% endblock %}
@@ -84,9 +92,9 @@
                 {{ form.template }}
             </div>
             <ul class="thumbnails">
-                <li>
-                    <a href="#slide1"><img
-                            src="https://slidesmania.com/wp-content/uploads/2021/11/Harlow-Organic-Shapes-presentation-template-download-ppt-570x350.jpg"/></a>
+                <li onclick="onTemplateClick">
+                    <a href="#slide1">
+                        <img onclick="onTemplateClick" src="https://slidesmania.com/wp-content/uploads/2021/11/Harlow-Organic-Shapes-presentation-template-download-ppt-570x350.jpg"/></a>
                 </li>
                 <li>
                     <a href="#slide2"><img
@@ -111,13 +119,6 @@
         </div>
     <button>Submit</button>
     </form>
-    <script>
-        function onTemplateClick(ev) {
-            const templateInput = document.getElementById("template-input")
-            ev.preventDefault()
-            templateInput.value = ev.target.src
-        }
-    </script>
 {% endblock %}
 
 

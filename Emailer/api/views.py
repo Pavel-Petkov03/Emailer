@@ -1,15 +1,14 @@
-from abc import ABC, abstractmethod
 
-from rest_framework.generics import ListAPIView, ListCreateAPIView
+
+from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from Emailer.api.serializers import GenericFolderSerializer
-from Emailer.main.models import Email, Group, Receiver, Preferences
+from Emailer.api.serializers import GenericFolderSerializer, FilterSerializer
+from Emailer.main.models import Email, Receiver, Preferences
 
 
-class GenericFolder(ListAPIView, ABC):
+class GenericFolder(ListAPIView):
     """
     This class will be abstract
     It will be used for Folder view and Bin view
@@ -17,54 +16,22 @@ class GenericFolder(ListAPIView, ABC):
 
     permission_classes = [IsAuthenticated]
     serializer_class = GenericFolderSerializer
-    deleted = False
     allowed_filtering_strings = ["subject", "date", "template", "receiver"]
 
-    @abstractmethod
     def get_queryset(self):
+        deleted = None
         try:
-            kwarg = self.request.GET.dict()["kwarg"]
+            filter_dict = self.request.GET.dict().copy()
+            kwarg = filter_dict["kwarg"]
+            is_bin = filter_dict["isbin"]
+            deleted = True if is_bin == str(True) else False
             if kwarg not in GenericFolder.allowed_filtering_strings:
                 raise ValueError('the filter params must match the allowed filtering params')
         except KeyError as error:
             kwarg = "subject"
         except ValueError:
             kwarg = "subject"
-        return Email.objects.filter(receiver__user=self.request.user, is_deleted=self.deleted).order_by(kwarg)
-
-
-class Folder(GenericFolder):
-    deleted = False
-
-    def get_queryset(self):
-        return super().get_queryset()
-
-
-class Bin(GenericFolder):
-    deleted = True
-
-    def get_queryset(self):
-        return super().get_queryset()
-
-
-class Ser(serializers.ModelSerializer):
-    receiver = serializers.CharField(source="receiver.mail")
-
-    class Meta:
-        fields = ("receiver", "subject", "date",)
-        model = Email
-
-
-class GroupView(ListCreateAPIView):
-    serializer_class = Ser
-    permission_classes = [IsAuthenticated]
-    Group.objects.filter()
-
-
-class Ser1(serializers.ModelSerializer):
-    class Meta:
-        fields = ("email",)
-        model = Receiver
+        return Email.objects.filter(receiver__user=self.request.user, is_deleted=deleted).order_by(kwarg)
 
 
 class FilterEmail(APIView):
@@ -82,5 +49,5 @@ class FilterEmail(APIView):
             age__lte=max_value,
         )
 
-        serializer = Ser1(data, many=True)
+        serializer = FilterSerializer(data, many=True)
         return Response(serializer.data)

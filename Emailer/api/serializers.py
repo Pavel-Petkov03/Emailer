@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from Emailer.main.models import Email
+from Emailer.main.models import Email, Receiver
 from rest_framework import serializers
 
 
@@ -26,3 +26,9 @@ class GenericFolderSerializer(serializers.ModelSerializer):
             fm = "%d:%m:%y"
         representation["date"] = current_date.strftime(fm)
         return representation
+
+
+class FilterSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = ("email",)
+        model = Receiver

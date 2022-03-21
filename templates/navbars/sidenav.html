@@ -1,9 +1,10 @@
+{% load display_groups %}
+{% display_groups as groups %}
 <nav id="sidebar">
     <div class="sidebar-header">
 
         <h3><p>Mailer</p></h3>
     </div>
-
     <ul class="list-unstyled components" >
         <li>
             <i class="fa fa-solid fa-envelope-open"></i>
@@ -12,25 +13,21 @@
         </li>
         <li>
             <i class="fa fa-solid fa-trash"></i>
-            <a href="#">Bin</a>
+            <a href="{% url "bin" %}">Bin</a>
         </li>
         <li>
             <i class="fa fa-solid fa-users"></i>
             <a href="#" id="group-menu" data-toggle="collapse"  class="dropdown-toggle">Groups</a>
             <ul class="collapse list-unstyled" id="group-ul">
-                <li>
-                    <a href="#">Page 1</a>
-                </li>
-                <li>
-                    <a href="#">Page 2</a>
-                </li>
-                <li>
-                    <a href="#">Page 3</a>
-                </li>
+                {% for foo in groups %}
+                    <li>
+                        <a href="{{ foo.id }}">{{ foo.name }}</a>
+                    </li>
+
+                {% endfor %}
             </ul>
         </li>
     </ul>
-
     <div id="user-auth-content">
         <div>content</div>
     </div>

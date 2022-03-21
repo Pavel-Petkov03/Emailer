@@ -83,6 +83,10 @@ WSGI_APPLICATION = 'Emailer.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth'
+)
+
 
 DATABASES = {
     'default': {

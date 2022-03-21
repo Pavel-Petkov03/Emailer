@@ -1,5 +1,3 @@
-import os.path
-from datetime import datetime
 from django.conf import settings
 from django.core.mail import send_mail, send_mass_mail
 from django.template.loader import render_to_string

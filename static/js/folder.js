@@ -1,5 +1,5 @@
 import {mainTableLoader} from "./showTable.js";
 
 window.onload = async () => {
-    await mainTableLoader(false)
+    await mainTableLoader("False")
 }
