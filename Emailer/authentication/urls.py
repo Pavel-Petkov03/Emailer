@@ -6,7 +6,7 @@ from Emailer.main.views import EmailDetailView
 
 
 def test(req):
-    return render(req, "table.html")
+    return render(req, "folder.html")
 
 
 urlpatterns = [

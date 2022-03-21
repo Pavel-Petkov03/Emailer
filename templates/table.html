@@ -2,7 +2,9 @@
 {% load static %}
 {% block css_and_js_loads %}
     <link rel="stylesheet" href="{% static "css/table.css" %}">
-    <script type="module" src="{% static "js/showTable.js" %}"></script>
+    {% block main_folder_scripts %}
+    
+    {% endblock %}
 
 {% endblock %}
 {% block content %}
@@ -18,5 +20,7 @@
         <tbody>
         </tbody>
     </table>
+    
+    
 
 {% endblock %}

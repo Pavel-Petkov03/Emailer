@@ -2,17 +2,25 @@ import {endpoints, getData} from "./api.js";
 
 const i = document.createElement("i")
 i.className = "fa fa-solid fa-filter"
-window.onload = async () => {
+
+
+
+
+
+async function mainTableLoader(flag){
+    console.log(1)
     let filter = localStorage.getItem("filter") || ""
-    await loadRows(endpoints.folder + "?kwarg=" + filter)
+    const endpointString = `${endpoints.folder}?kwarg=${filter}?isbin=${flag}`
+    await loadRows(endpointString)
     let headerTrs = document.querySelectorAll("thead tr th")
     Array.from(headerTrs).forEach(el => {
         if (el.textContent.toLowerCase() === localStorage.getItem("filter")) {
             el.prepend(i)
         }
-        el.addEventListener("click", filterEvent)
+        el.addEventListener("click", filterEvent.bind(this, flag))
     })
 }
+
 
 
 async function loadRows(url) {
@@ -40,9 +48,14 @@ function trEventListener(ev){
 
 
 
-async function filterEvent(ev) {
+async function filterEvent(flag , ev) {
     ev.target.prepend(i)
     const loweredFilter = ev.target.textContent.toLowerCase()
     localStorage.setItem("filter", loweredFilter)
+    const endpointString = `${endpoints.folder}?kwarg=${loweredFilter}?isbin=${flag}`
     await loadRows(endpoints.folder + "?kwarg=" + loweredFilter)
+}
+
+export  {
+    mainTableLoader
 }

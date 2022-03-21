@@ -71,8 +71,8 @@ class FilterEmail(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, req):
-        min_value = req.data.get("min_value")
-        max_value = req.data.get("max_value")
+        min_value = req.data.get("min_age")
+        max_value = req.data.get("max_age")
         preferences = req.data.get("preferences")
 
         data = Receiver.objects.filter(
