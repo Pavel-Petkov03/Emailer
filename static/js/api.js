@@ -6,21 +6,32 @@ const endpoints = {
     bin: "/bin",
 }
 
-async function getData(path, method , body) {
+
+// These functions will be used to interact with django api folder
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    let parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+async function getData(path, body) {
     let url = `${ROOT}` + path
-    let init = {
-        method,
+    let cookieString = `csrftoken=${getCookie("csrftoken")}; sessionid=${getCookie("sessionid")}`
+
+    let context = {
+        method: "get",
         headers: {
             "content-type": "application/json",
-        },
+            "Cookie": cookieString,
+        }
     }
     if (body) {
-        Object.assign(init, {body})
+        Object.assign(context, {body: JSON.stringify(body)})
     }
-    console.log(init)
-    let response = await fetch(url, init)
+    let response = await fetch(url, context)
     return await response.json()
 }
+
 
 export {
     endpoints,

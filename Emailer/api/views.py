@@ -3,9 +3,10 @@ from abc import ABC, abstractmethod
 from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import serializers
-
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from Emailer.api.serializers import GenericFolderSerializer
-from Emailer.main.models import Email, Group
+from Emailer.main.models import Email, Group, Receiver, Preferences
 
 
 class GenericFolder(ListAPIView, ABC):
@@ -58,3 +59,28 @@ class GroupView(ListCreateAPIView):
     serializer_class = Ser
     permission_classes = [IsAuthenticated]
     Group.objects.filter()
+
+
+class Ser1(serializers.ModelSerializer):
+    class Meta:
+        fields = ("email",)
+        model = Receiver
+
+
+class FilterEmail(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, req):
+        min_value = req.data.get("min_value")
+        max_value = req.data.get("max_value")
+        preferences = req.data.get("preferences")
+
+        data = Receiver.objects.filter(
+            preferences__in=Preferences.objects.filter(hobby__in=preferences),
+            user=req.user,
+            age__gte=min_value,
+            age__lte=max_value,
+        )
+
+        serializer = Ser1(data, many=True)
+        return Response(serializer.data)
