@@ -122,13 +122,13 @@ class GenericEmailView(LoginRequiredView):
 
 class SendSingleEmailView(GenericEmailView):
     form_class = SendSingleEmailForm
-    template = "send_email.html"
+    template = "send-single-email.html"
     success_redirect = "add receiver"
 
 
 class SendMassEmailView(GenericEmailView):
     form_class = SendMassEmailForm
-    template = "send_email.html"
+    template = "send_mass_email.html"
     success_redirect = "group/"
 
     @staticmethod

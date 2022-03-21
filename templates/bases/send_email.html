@@ -1,11 +1,10 @@
-{% extends "base.html" %}
+{% extends "bases/base.html" %}
 
 {% load static %}
 {% block css_and_js_loads %}
     <link rel="stylesheet" href="{% static "css/send-email.css" %}">
     <script>
         function onTemplateClick(ev) {
-            console.log(1)
             const templateInput = document.getElementById("template-input")
             ev.preventDefault()
             templateInput.value = ev.target.src
@@ -17,7 +16,9 @@
             })
         }
     </script>
+    {% block main_folder_scripts %}
 
+    {% endblock %}
 
 {% endblock %}
 {% block content %}
@@ -26,13 +27,7 @@
         <div class="first-row">
             <div class="form-content">
                 {% block sender_form_header %}
-                    <label for="">{{ form.fields.email.label }}</label>
-                    {{ form.email }}
 
-                    <label for="">{{ form.fields.subject.label }}</label>
-                    {{ form.subject }}
-                    <label for="">{{ form.fields.template.label }}</label>
-                    {{ form.template }}
                 {% endblock %}
             </div>
             <ul class="thumbnails">

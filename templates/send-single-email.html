@@ -1,0 +1,10 @@
+{% extends "bases/send_email.html" %}
+{% block sender_form_header %}
+<label for="">{{ form.fields.email.label }}</label>
+                    {{ form.email }}
+
+                    <label for="">{{ form.fields.subject.label }}</label>
+                    {{ form.subject }}
+                    <label for="">{{ form.fields.template.label }}</label>
+                    {{ form.template }}
+{% endblock %}

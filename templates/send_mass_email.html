@@ -1,0 +1,24 @@
+{% extends "bases/send_email.html" %}
+
+{% block main_folder_scripts %}
+    <style>
+        #group-name {
+            text-align: center;
+            margin: 0;
+            display: block;
+        }
+    </style>
+{% endblock %}
+{% block sender_form_header %}
+    <h1 id="group-name">Some bullshit</h1>
+    <label for="">{{ form.fields.subject.label }}</label>
+    {{ form.subject }}
+    <label for="">{{ form.fields.template.label }}</label>
+    {{ form.template }}
+{% endblock %}
+{% block additional_data %}
+    {% for email in emails %}
+        <p>{{ email }}</p>
+    {% endfor %}
+{% endblock %}
+
