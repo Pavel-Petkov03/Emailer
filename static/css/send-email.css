@@ -1,0 +1,65 @@
+#content {
+    width: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: flex-end;
+    background: rgb(240, 240, 240);
+}
+
+.form-control {
+    margin-bottom: 30px;
+}
+
+.thumbnails {
+    overflow-x: auto;
+    height: 20REM;
+    width: 25%;
+    list-style: none;
+    background: black;
+    padding: 10px;
+    margin-right: 10px;
+}
+
+.thumbnails li {
+    border: 1px solid black;
+    margin: 15px
+}
+
+.thumbnails a {
+    display: block;
+}
+
+.thumbnails img {
+    width: 100%;
+}
+
+.first-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+form {
+    width: 100%;
+}
+
+.form-content {
+    width: 75%;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+label {
+    margin: 0;
+    display: block;
+    width: 70%;
+}
+
+textarea {
+    width: 100%;
+
+}
+
+.description {
+    display: flex;
+    height: 35%;
+}

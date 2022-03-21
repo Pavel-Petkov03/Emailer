@@ -1,78 +1,19 @@
 {% extends "base.html" %}
+{% load static %}
 {% block css_and_js_loads %}
-    <style>
-        #content {
-            width: 100%;
-            margin: 0;
-            display: flex;
-            justify-content: flex-end;
-            background: rgb(240, 240, 240);
-        }
-
-        .form-control {
-            margin-bottom: 30px;
-        }
-
-        .thumbnails {
-            overflow-x: auto;
-            height: 20REM;
-            width: 25%;
-            list-style: none;
-            background: black;
-            padding: 10px;
-            margin-right: 10px;
-        }
-
-        .thumbnails li {
-            border: 1px solid black;
-            margin: 15px
-        }
-
-        .thumbnails a {
-            display: block;
-        }
-
-        .thumbnails img {
-            width: 100%;
-        }
-
-        .first-row {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        form {
-            width: 100%;
-        }
-
-        .form-content {
-            width: 75%;
-            margin-top: 20px;
-            margin-left: 20px;
-        }
-
-        label {
-            margin: 0;
-            display: block;
-            width: 70%;
-        }
-
-        textarea {
-            width: 100%;
-
-        }
-
-        .description {
-            display: flex;
-            height: 35%;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static "css/send-email.css" %}">
     <script>
         function onTemplateClick(ev) {
             console.log(1)
             const templateInput = document.getElementById("template-input")
             ev.preventDefault()
             templateInput.value = ev.target.src
+        }
+
+        window.onload = () => {
+            Array.from(document.querySelector(".thumbnails").querySelectorAll("img")).forEach(el => {
+                el.addEventListener("click", onTemplateClick)
+            })
         }
     </script>
 
@@ -83,18 +24,21 @@
         {% csrf_token %}
         <div class="first-row">
             <div class="form-content">
-                <label for="">{{ form.fields.email.label }}</label>
-                {{ form.email }}
+                {% block sender_form_header %}
+                    <label for="">{{ form.fields.email.label }}</label>
+                    {{ form.email }}
 
-                <label for="">{{ form.fields.subject.label }}</label>
-                {{ form.subject }}
-                <label for="">{{ form.fields.template.label }}</label>
-                {{ form.template }}
+                    <label for="">{{ form.fields.subject.label }}</label>
+                    {{ form.subject }}
+                    <label for="">{{ form.fields.template.label }}</label>
+                    {{ form.template }}
+                {% endblock %}
             </div>
             <ul class="thumbnails">
                 <li onclick="onTemplateClick">
                     <a href="#slide1">
-                        <img onclick="onTemplateClick" src="https://slidesmania.com/wp-content/uploads/2021/11/Harlow-Organic-Shapes-presentation-template-download-ppt-570x350.jpg"/></a>
+                        <img onclick="onTemplateClick"
+                             src="https://slidesmania.com/wp-content/uploads/2021/11/Harlow-Organic-Shapes-presentation-template-download-ppt-570x350.jpg"/></a>
                 </li>
                 <li>
                     <a href="#slide2"><img
@@ -117,8 +61,13 @@
         <div class="description">
             {{ form.message }}
         </div>
-    <button>Submit</button>
+        <button>Submit</button>
+        {% block additional_data %}
+
+        {% endblock %}
     </form>
+
+
 {% endblock %}
 
 

@@ -1,3 +1,5 @@
+from abc import ABC, abstractmethod
+
 from django import forms
 from django.core.exceptions import ValidationError
 
@@ -64,13 +66,10 @@ class GroupForm(forms.ModelForm):
         }
 
 
-class SendEmailForm(forms.Form):
+class GenericSendEmailForm(forms.Form, ABC):
     """
-    This form is to authenticate all the entries
+    This is base form for Send email forms
     """
-    email = forms.EmailField(widget=forms.EmailInput(attrs={
-        "placeholder": "Enter email", "class": "form-control"
-    }), label="Enter Email")
     subject = forms.CharField(max_length=250, widget=forms.TextInput(attrs={
         "placeholder": "Enter Subject", "class": "form-control"
     }), label="Enter Subject")
@@ -88,7 +87,20 @@ class SendEmailForm(forms.Form):
             raise ValidationError("Template doesn't exist")
         return value
 
-    def save(self, sender: CustomUserModel):
+    @abstractmethod
+    def save(self, *args):
+        """
+        This function must be overritten
+        :return: void
+        """
+
+
+class SendSingleEmailForm(GenericSendEmailForm):
+    email = forms.EmailField(widget=forms.EmailInput(attrs={
+        "placeholder": "Enter email", "class": "form-control"
+    }), label="Enter Email")
+
+    def save(self, sender):
         receiver = self.create_receiver(sender)
         subject = self.cleaned_data["subject"]
         message = self.cleaned_data["message"]
@@ -109,7 +121,24 @@ class SendEmailForm(forms.Form):
         return receiver
 
 
+class SendMassEmailForm(GenericSendEmailForm):
+    def save(self, sender, group_id):
+        receivers = Group.objects.get(id=group_id).receivers
+        subject = self.cleaned_data["subject"]
+        message = self.cleaned_data["message"]
+        template = self.cleaned_data["template"]
+
+        dispatcher = EmailDispatcher(
+            receivers=receivers,
+            subject=subject,
+            message=message,
+            template=template,
+            sender=sender
+        )
+
+        dispatcher.send_mass_mail()
+
+
 class FilterForm(ReceiverForm):
     class Meta(ReceiverForm.Meta):
-        fields = ("preferences", )
-
+        fields = ("preferences",)

@@ -4,8 +4,8 @@ from smtplib import SMTPAuthenticationError
 from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from Emailer.authentication.views import LoginRequiredView
-from Emailer.main.models import Preferences, Receiver, Email, Group
-from Emailer.main.forms import ReceiverForm, GroupForm, SendEmailForm, FilterForm
+from Emailer.main.models import Preferences, Receiver, Email
+from Emailer.main.forms import ReceiverForm, GroupForm, FilterForm, SendSingleEmailForm
 
 
 class ManyToManyModelCustomView(LoginRequiredView, ABC):
@@ -77,28 +77,60 @@ class GroupView(ManyToManyModelCustomView):
         return [str(receiver.id) for receiver in Receiver.objects.filter(email__in=array_of_fields)]
 
 
-class SendEmailView(LoginRequiredView):
+class GenericEmailView(LoginRequiredView):
+    """
+    This class will be based of email sending class
+    In this class will be bing a sending from which inherits GenericSendEmailForm
+
+    """
+    form_class = None
+    template = None
+    success_redirect = None
 
     def get(self, req):
-        form = SendEmailForm()
-        return render(req, "send_email.html", {
-            "form": form
+        form = self.form_class()
+        return render(req, self.template, {
+            "form": form,
+            **self.additional_get_kwargs()
         })
 
     def post(self, req):
-        form = SendEmailForm(req.POST)
+        form = self.form_class(req.POST)
         if form.is_valid():
             try:
                 form.save(req.user)
             except SMTPAuthenticationError:
                 form.add_error(None, ValidationError("The email and the password of your email must match"))
-                return render(req, "send_email.html", {
-                    "form": form
+                return render(req, self.template, {
+                    "form": form,
+                    **self.additional_post_kwargs()
                 })
-            return redirect("add receiver")
-        return render(req, "send_email.html", {
+            return redirect(self.success_redirect)
+        return render(req, self.template, {
             "form": form,
         })
+
+    def additional_get_kwargs(self):
+        """
+        This function will be overridden if need to pass additional args to get
+        :return: {}
+        """
+        return {}
+
+    def additional_post_kwargs(self):
+        """
+        This function will be overridden if need to pass additional args to post
+        :return: {}
+        """
+        return {}
+
+
+class SendEmailView(GenericEmailView):
+    form_class = SendSingleEmailForm
+    template = "send-email.html"
+    success_redirect = "add receiver"
+
+
 
 
 class EmailDetailView(LoginRequiredView):
