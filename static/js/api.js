@@ -4,6 +4,7 @@ const ROOT = "http://localhost:8000/api"
 const endpoints = {
     folder: "/folder",
     bin: "/bin",
+    "filter-emails" : "/filter"
 }
 
 
@@ -14,15 +15,18 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-async function getData(path, body) {
+async function getData(path, method ,body) {
     let url = `${ROOT}` + path
-    let cookieString = `csrftoken=${getCookie("csrftoken")}; sessionid=${getCookie("sessionid")}`
+    const csrfToken = getCookie("csrftoken")
+    const sessionId = getCookie("sessionid")
+    let cookieString = `csrftoken=${csrfToken}; sessionid=${sessionId}`
 
     let context = {
-        method: "get",
+        method,
         headers: {
             "content-type": "application/json",
             "Cookie": cookieString,
+            "X-CSRFToken" : csrfToken
         }
     }
     if (body) {

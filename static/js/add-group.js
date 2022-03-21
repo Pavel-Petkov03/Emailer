@@ -1,4 +1,7 @@
-import {getData} from "./api.js";
+import {endpoints, getData} from "./api.js";
+
+
+
 
 
 async function filterEventListener() {
@@ -9,13 +12,12 @@ async function filterEventListener() {
         const preferences = extract_email(preferenceField)
         const min_age = document.querySelector("#from").textContent
         const max_age = document.querySelector("#from").textContent
-        let path = ""
         const body = {
             min_age,
             max_age,
             preferences
         }
-        return await getData(path, "post", body)
+        return await getData(endpoints["filter-emails"], "post", body)
     }
 
 
@@ -28,7 +30,7 @@ async function filterEventListener() {
         }, {})
 
         const data = await retrieveFilterInfo()
-        data.forEach(el => email_reference_reducer[el].selected = true)
+        data.forEach(el => email_reference_reducer[el.email].selected = true)
     }
 
     function extract_email(field) {
@@ -75,6 +77,9 @@ select.addEventListener("click", () => {
 
     counter.textContent = extractSelectedCount()
 })
+
+
+
 
 initialiseSlider()
 document.querySelector("#select-button").addEventListener("click", filterEventListener)

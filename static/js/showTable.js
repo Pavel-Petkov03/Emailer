@@ -16,7 +16,7 @@ window.onload = async () => {
 
 
 async function loadRows(url) {
-    let data = await getData(url, "get'")
+    let data = await getData(url, "get")
     let tbody = document.querySelector("tbody")
     tbody.innerText = ""
     data.forEach(el => {
