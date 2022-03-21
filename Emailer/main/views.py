@@ -4,8 +4,8 @@ from smtplib import SMTPAuthenticationError
 from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from Emailer.authentication.views import LoginRequiredView
-from Emailer.main.models import Preferences, Receiver, Email
-from Emailer.main.forms import ReceiverForm, GroupForm, FilterForm, SendSingleEmailForm
+from Emailer.main.models import Preferences, Receiver, Email, Group
+from Emailer.main.forms import ReceiverForm, GroupForm, FilterForm, SendSingleEmailForm, SendMassEmailForm
 
 
 class ManyToManyModelCustomView(LoginRequiredView, ABC):
@@ -87,14 +87,14 @@ class GenericEmailView(LoginRequiredView):
     template = None
     success_redirect = None
 
-    def get(self, req):
+    def get(self, req, pk=None):
         form = self.form_class()
         return render(req, self.template, {
             "form": form,
-            **self.additional_get_kwargs()
+            **self.additional_get_kwargs(req, pk)
         })
 
-    def post(self, req):
+    def post(self, req, pk=None):
         form = self.form_class(req.POST)
         if form.is_valid():
             try:
@@ -103,34 +103,40 @@ class GenericEmailView(LoginRequiredView):
                 form.add_error(None, ValidationError("The email and the password of your email must match"))
                 return render(req, self.template, {
                     "form": form,
-                    **self.additional_post_kwargs()
                 })
-            return redirect(self.success_redirect)
+            success_redirect = self.success_redirect + pk if pk else self.success_redirect
+            return redirect(success_redirect)
         return render(req, self.template, {
             "form": form,
         })
 
-    def additional_get_kwargs(self):
+    @staticmethod
+    def additional_get_kwargs(req, pk):
+
         """
         This function will be overridden if need to pass additional args to get
         :return: {}
         """
         return {}
 
-    def additional_post_kwargs(self):
-        """
-        This function will be overridden if need to pass additional args to post
-        :return: {}
-        """
-        return {}
 
-
-class SendEmailView(GenericEmailView):
+class SendSingleEmailView(GenericEmailView):
     form_class = SendSingleEmailForm
-    template = "send-email.html"
+    template = "send_email.html"
     success_redirect = "add receiver"
 
 
+class SendMassEmailView(GenericEmailView):
+    form_class = SendMassEmailForm
+    template = "send_email.html"
+    success_redirect = "group/"
+
+    @staticmethod
+    def additional_get_kwargs(req, pk):
+        query = Group.objects.get(id=pk).receivers.values_list("email", flat=True)
+        return {
+            "emails": query
+        }
 
 
 class EmailDetailView(LoginRequiredView):

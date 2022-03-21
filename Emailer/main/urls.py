@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.urls import path
 
-from Emailer.main.views import ReceiverView, GroupView, SendEmailView, EmailDetailView
+from Emailer.main.views import ReceiverView, GroupView,  EmailDetailView, SendSingleEmailView
 
 
 def folder(req):
@@ -19,5 +19,5 @@ urlpatterns = [
     path("bin", _bin, name="bin"),
     path("add-receiver", ReceiverView.as_view(), name="add receiver"),
     path("add-group", GroupView.as_view(), name="add group"),
-    path("send", SendEmailView.as_view()),
+    path("send", SendSingleEmailView.as_view()),
 ]

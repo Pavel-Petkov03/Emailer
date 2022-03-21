@@ -66,7 +66,7 @@ class GroupForm(forms.ModelForm):
         }
 
 
-class GenericSendEmailForm(forms.Form, ABC):
+class GenericSendEmailForm(forms.Form):
     """
     This is base form for Send email forms
     """
@@ -87,7 +87,6 @@ class GenericSendEmailForm(forms.Form, ABC):
             raise ValidationError("Template doesn't exist")
         return value
 
-    @abstractmethod
     def save(self, *args):
         """
         This function must be overritten

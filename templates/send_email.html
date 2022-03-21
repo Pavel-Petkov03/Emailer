@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% load static %}
 {% block css_and_js_loads %}
     <link rel="stylesheet" href="{% static "css/send-email.css" %}">
@@ -35,27 +36,12 @@
                 {% endblock %}
             </div>
             <ul class="thumbnails">
-                <li onclick="onTemplateClick">
-                    <a href="#slide1">
+                {% for template in templates %}
+                    <li>
                         <img onclick="onTemplateClick"
-                             src="https://slidesmania.com/wp-content/uploads/2021/11/Harlow-Organic-Shapes-presentation-template-download-ppt-570x350.jpg"/></a>
-                </li>
-                <li>
-                    <a href="#slide2"><img
-                            src="https://templates.office.com/Images/homepage-premium-banner.png"/></a>
-                </li>
-                <li>
-                    <a href="#slide3"><img
-                            src="https://slidesmania.com/wp-content/uploads/2022/02/Cassidy-free-powerpoint-template-and-google-slides-theme-570x350.jpg"/></a>
-                </li>
-                <li>
-                    <a href="#slide4"><img
-                            src="https://assets.market-storefront.envato-static.com/storefront/packs/media/images/home/themeforest/category-tiles-cms-themes-dcf193e313c6cc9c0f9b26a394bb3283.png"/></a>
-                </li>
-                <li>
-                    <a href="#slide5"><img
-                            src="https://www.lifewire.com/thmb/_Kwbk6Eien6Bn0Kr1FM1NKvA6pQ=/1002x564/smart/filters:no_upscale()/jpg-files-591e000b5f9b58f4c0912446.png"/></a>
-                </li>
+                             src="{{ template }}"/>
+                    </li>
+                {% endfor %}
             </ul>
         </div>
         <div class="description">
