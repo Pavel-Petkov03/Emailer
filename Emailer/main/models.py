@@ -1,6 +1,8 @@
 import os
 import string
 from random import choice
+
+from cloudinary.models import CloudinaryField
 from django.contrib.auth import get_user_model
 from django.core.files import File
 from django.core.validators import MinLengthValidator, MinValueValidator
@@ -9,16 +11,14 @@ from django.db import models
 User = get_user_model()
 
 
+
 class CustomTemplate(models.Model):
     template = models.FileField(upload_to="template/")
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    is_global_template = models.BooleanField(default=False)
+    name = models.CharField(max_length=20)
 
 
 class Preferences(models.Model):
     hobby = models.CharField(max_length=20, unique=True)
-
-
 
 
 class Receiver(models.Model):

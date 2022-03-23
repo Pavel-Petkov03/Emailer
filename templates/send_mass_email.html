@@ -7,18 +7,46 @@
             margin: 0;
             display: block;
         }
+
+        #receiver-id {
+            margin-bottom: 150px;
+            margin-top: 50px;
+        }
+
+        form {
+            overflow: auto;
+        }
     </style>
 {% endblock %}
 {% block sender_form_header %}
-    <h1 id="group-name">Some bullshit</h1>
+    <h1 id="group-name">{{ group_name }}</h1>
     <label for="">{{ form.fields.subject.label }}</label>
     {{ form.subject }}
     <label for="">{{ form.fields.template.label }}</label>
     {{ form.template }}
 {% endblock %}
 {% block additional_data %}
-    {% for email in emails %}
-        <p>{{ email }}</p>
-    {% endfor %}
+    <table class="table table-sm" id="receiver-id">
+        <thead>
+        <tr>
+            <th scope="col">Email</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for receiver in receivers %}
+            <tr id="{{ receiver.id }}">
+                <td>{{ receiver.email }}</td>
+                <td><button class="table-danger">Delete</button></td>
+            </tr>
+        {% endfor %}
+        {% for receiver in receivers %}
+            <tr id="{{ receiver.id }}">
+                <td>{{ receiver.email }}</td>
+                <td><button class="table-danger">Delete</button></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
 

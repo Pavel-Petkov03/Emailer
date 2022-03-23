@@ -4,6 +4,6 @@ from django import template
 register = template.Library()
 
 
-@register.simple_tag(takes_context=True)
-def display_templates(context):
+@register.simple_tag()
+def display_templates():
     return CustomTemplate.objects.all()

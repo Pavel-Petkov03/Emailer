@@ -19,9 +19,9 @@
             <i class="fa fa-solid fa-users"></i>
             <a  id="group-menu" data-toggle="collapse"  class="dropdown-toggle">Groups</a>
             <ul class="collapse list-unstyled" id="group-ul">
-                {% for foo in groups %}
+                {% for group in groups %}
                     <li>
-                        <a href="{{ foo.id }}">{{ foo.name }}</a>
+                        <a href="{% url "preview group" group.id %}">{{ group.name }}</a>
                     </li>
 
                 {% endfor %}
