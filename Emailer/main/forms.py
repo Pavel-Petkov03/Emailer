@@ -122,7 +122,7 @@ class SendSingleEmailForm(GenericSendEmailForm):
 
 class SendMassEmailForm(GenericSendEmailForm):
     def save(self, sender, group_id):
-        receivers = Group.objects.get(id=group_id).receivers
+        receivers = Group.objects.get(id=group_id).receivers.all()
         subject = self.cleaned_data["subject"]
         message = self.cleaned_data["message"]
         template = self.cleaned_data["template"]

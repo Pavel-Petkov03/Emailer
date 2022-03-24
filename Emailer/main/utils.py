@@ -1,3 +1,6 @@
+import random
+import string
+
 from django.conf import settings
 from django.core.mail import send_mail, send_mass_mail
 from django.template.loader import render_to_string
@@ -5,6 +8,7 @@ from django.utils.html import strip_tags
 from html2image import Html2Image
 from Emailer.main.models import Receiver, Email
 from django.utils import timezone
+
 
 class Sender:
     """
@@ -46,8 +50,8 @@ class Sender:
 
     @receivers.setter
     def receivers(self, value):
-        if not isinstance(value, list) or not all([receiver for receiver in value if isinstance(receiver, Receiver)]):
-            raise ValueError("receivers must be a list of receivers")
+        # if not isinstance(value, list) or not all([receiver for receiver in value if isinstance(receiver, Receiver)]):
+        #     raise ValueError("receivers must be a list of receivers")
         self.__receivers = value
 
     def send_single_mail(self) -> str:
@@ -66,8 +70,8 @@ class Sender:
         return data_tuple
 
     def __populate_data_tuple(self):
-        return (self.__populate_one_entry(receiver) for receiver in
-                self.receivers)
+        return [self.__populate_one_entry(receiver) for receiver in
+                self.receivers]
 
     def __populate_one_entry(self, receiver: Receiver):
         (html_message, plain_message) = self.__get_raw_message(receiver)
@@ -111,12 +115,16 @@ class EmailDispatcher(Sender):
             email_list.append(self.create_email_instance(screenshot_path, receiver))
         Email.objects.bulk_create(email_list)
 
-    @staticmethod
-    def create_screenshot(html_str):
-        saver = Html2Image(output_path=settings.BASE_DIR / "media")
-        screenshot_path = saver.screenshot(html_str=html_str)[0]
+    def create_screenshot(self, html_str):
+        saver = Html2Image(output_path=settings.BASE_DIR / "media", )
+        screenshot_path = saver.screenshot(html_str=html_str, save_as=self.__generate_random_id() + ".png")[0]
         return screenshot_path
 
     def create_email_instance(self, screenshot_path, receiver: Receiver):
         return Email(subject=self.subject, receiver=receiver, date=self.date, screenshot=screenshot_path,
                      template=self.template)
+
+    @staticmethod
+    def __generate_random_id():
+        n = 10
+        return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(n))

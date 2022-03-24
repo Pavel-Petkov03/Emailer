@@ -98,13 +98,13 @@ class GenericEmailView(LoginRequiredView):
         form = self.form_class(req.POST)
         if form.is_valid():
             try:
-                form.save(req.user)
+                form.save(req.user, pk)
             except SMTPAuthenticationError:
                 form.add_error(None, ValidationError("The email and the password of your email must match"))
                 return render(req, self.template, {
                     "form": form,
                 })
-            success_redirect = self.success_redirect + pk if pk else self.success_redirect
+            success_redirect = self.success_redirect
             return redirect(success_redirect)
         return render(req, self.template, {
             "form": form,
@@ -123,18 +123,19 @@ class GenericEmailView(LoginRequiredView):
 class SendSingleEmailView(GenericEmailView):
     form_class = SendSingleEmailForm
     template = "send-single-email.html"
-    success_redirect = "add receiver"
+    success_redirect = "folder"
 
 
 class SendMassEmailView(GenericEmailView):
     form_class = SendMassEmailForm
     template = "send_mass_email.html"
-    success_redirect = "group/"
+    success_redirect = "folder"
 
     @staticmethod
     def additional_get_kwargs(req, pk):
         group = Group.objects.get(id=pk)
         query = group.receivers.all()
+        print(query)
         return {
             "receivers": query,
             "group_name": group.name
