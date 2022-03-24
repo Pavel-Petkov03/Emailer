@@ -8,7 +8,6 @@ i.className = "fa fa-solid fa-filter"
 
 
 async function mainTableLoader(flag){
-    console.log(1)
     let filter = localStorage.getItem("filter") || ""
     const endpointString = `${endpoints.folder}?kwarg=${filter}&isbin=${flag}`
     await loadRows(endpointString)
@@ -24,7 +23,7 @@ async function mainTableLoader(flag){
 
 
 async function loadRows(url) {
-    let data = await getData(url, "get")
+    let data = await getData(url, "get", undefined)
     let tbody = document.querySelector("tbody")
     tbody.innerText = ""
     data.forEach(el => {

@@ -2,4 +2,9 @@
 {% load static %}
 {% block main_folder_scripts %}
     <script type="module" src="{% static "js/bin.js" %}"></script>
+
 {% endblock %}
+
+<script>
+    let csrfToken = {{ csrf_token }}
+</script>
