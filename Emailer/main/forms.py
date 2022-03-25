@@ -1,22 +1,56 @@
-from abc import ABC, abstractmethod
-
 from django import forms
 from django.core.exceptions import ValidationError
-
 from Emailer.authentication.models import CustomUserModel
 from Emailer.main.models import Receiver, Preferences, Group, CustomTemplate
 from Emailer.main.utils import EmailDispatcher
 
 
-class ReceiverForm(forms.ModelForm):
+class GenericManyToManyForm(forms.ModelForm):
+    def __init__(self, *args, user=None,  **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+
+    unique_arg = None
+
+    class Meta:
+        model = None
+        fields = None
+
+    def clean(self):
+        unique_data = self.cleaned_data[self.unique_arg]
+        instance = self.check_if_exists(unique_data)
+        if instance is not None:
+            self.instance = instance
+        super().clean()
+
+    def check_if_exists(self, unique_entry):
+        """
+        check if unique entry exists in model
+        :return: Model instance or None
+        """
+        return None
+
+    def save(self, commit=True):
+        if self.instance and self.instance.id is not None:
+            self.instance.delete()
+        instance = super().save(commit=False)
+        instance.user = self.user
+        if commit:
+            instance.save()
+            self.save_m2m()
+        return instance
+
+
+class ReceiverForm(GenericManyToManyForm):
     preferences = forms.ModelMultipleChoiceField(queryset=Preferences.objects.all())
+    unique_arg = "email"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["preferences"].choices = \
             [(choice, choice) for choice in Preferences.objects.all().values_list("hobby", flat=True)]
 
-    class Meta:
+    class Meta(GenericManyToManyForm.Meta):
         model = Receiver
         fields = ("email", "first_name", "last_name", "age", "preferences")
         widgets = {
@@ -45,15 +79,22 @@ class ReceiverForm(forms.ModelForm):
             "age": "Age:"
         }
 
+    def check_if_exists(self, unique_entry):
+        try:
+            return Receiver.objects.filter(user=self.user, email__exact=unique_entry)[0]
+        except IndexError:
+            return None
 
-class GroupForm(forms.ModelForm):
+
+class GroupForm(GenericManyToManyForm):
+    unique_arg = "name"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["receivers"].choices = \
             [(choice, choice) for choice in Receiver.objects.all().values_list("email", flat=True)]
 
-    class Meta:
+    class Meta(GenericManyToManyForm.Meta):
         model = Group
         fields = ("name", "receivers")
         widgets = {
@@ -64,6 +105,12 @@ class GroupForm(forms.ModelForm):
                 "type": "text", "class": 'form-control', "placeholder": "Enter Group Name"
             }),
         }
+
+    def check_if_exists(self, unique_entry):
+        try:
+            return Group.objects.filter(receivers__user_id__exact=self.user, name__exact=unique_entry)[0]
+        except IndexError:
+            return None
 
 
 class GenericSendEmailForm(forms.Form):
@@ -93,6 +140,13 @@ class GenericSendEmailForm(forms.Form):
         :return: void
         """
 
+    def get_kwargs(self):
+        return {
+            "subject": self.cleaned_data["subject"],
+            "message": self.cleaned_data["message"],
+            "template": self.cleaned_data["template"]
+        }
+
 
 class SendSingleEmailForm(GenericSendEmailForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs={
@@ -101,15 +155,10 @@ class SendSingleEmailForm(GenericSendEmailForm):
 
     def save(self, sender, pk=None):
         receiver = self.create_receiver(sender)
-        subject = self.cleaned_data["subject"]
-        message = self.cleaned_data["message"]
-        template = self.cleaned_data["template"]
         dispatcher = EmailDispatcher(
-            subject=subject,
-            message=message,
             sender=sender,
             receivers=[receiver],
-            template=template
+            **self.get_kwargs()
         )
         dispatcher.send_single_mail()
 
@@ -117,21 +166,17 @@ class SendSingleEmailForm(GenericSendEmailForm):
         (receiver, created) = Receiver.objects.get_or_create(email=self.cleaned_data["email"])
         if created:
             receiver.user = sender
+            receiver.save()
         return receiver
 
 
 class SendMassEmailForm(GenericSendEmailForm):
     def save(self, sender, group_id):
         receivers = Group.objects.get(id=group_id).receivers.all()
-        subject = self.cleaned_data["subject"]
-        message = self.cleaned_data["message"]
-        template = self.cleaned_data["template"]
 
         dispatcher = EmailDispatcher(
             receivers=receivers,
-            subject=subject,
-            message=message,
-            template=template,
+            **self.get_kwargs(),
             sender=sender
         )
 

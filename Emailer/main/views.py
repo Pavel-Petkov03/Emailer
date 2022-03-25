@@ -27,12 +27,9 @@ class ManyToManyModelCustomView(LoginRequiredView, ABC):
         post_data = req.POST.copy()
         post_data.setlist(self.many_to_many_argument,
                           self.convert_from_many_to_many_arg_to_id(post_data.getlist(self.many_to_many_argument)))
-        form = self.form_class(post_data)
+        form = self.form_class(post_data, user=req.user)
         if form.is_valid():
-            custom_model_field = form.save(commit=False)
-            custom_model_field.user = req.user
-            custom_model_field.save()
-            form.save_m2m()
+            form.save(commit=True)
             return redirect(self.success_url)
 
         return render(req, self.template, {

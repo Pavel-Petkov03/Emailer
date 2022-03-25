@@ -14,9 +14,9 @@ class GenericFolder(ListAPIView):
     It will be used for Folder view and Bin view
     """
 
-    permission_classes = [IsAuthenticated]
     serializer_class = GenericFolderSerializer
     allowed_filtering_strings = ["subject", "date", "template", "receiver"]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         deleted = None

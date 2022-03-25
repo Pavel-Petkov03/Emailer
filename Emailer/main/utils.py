@@ -1,6 +1,5 @@
 import random
 import string
-
 from django.conf import settings
 from django.core.mail import send_mail, send_mass_mail
 from django.template.loader import render_to_string
@@ -8,6 +7,7 @@ from django.utils.html import strip_tags
 from html2image import Html2Image
 from Emailer.main.models import Receiver, Email
 from django.utils import timezone
+from cloudinary.uploader import upload
 
 
 class Sender:
@@ -117,18 +117,27 @@ class EmailDispatcher(Sender):
 
     def create_screenshot(self, html_str, receiver) -> str:
         saver = Html2Image(output_path=settings.BASE_DIR / "media/screenshots", )
-        screenshot_path = saver.screenshot(html_str=html_str, save_as=self.__generate_file_location(receiver) + ".png")[0]
+        screenshot_path = saver.screenshot(html_str=html_str, save_as=self.__generate_file_location(receiver) + ".png")[
+            0]
         return screenshot_path
 
     def create_email_instance(self, screenshot_path, receiver: Receiver):
-        return Email(subject=self.subject, receiver=receiver, date=self.date, screenshot=screenshot_path,
-                     template=self.template)
+        image = self.save_image(screenshot_path)
+        instance = Email(subject=self.subject, receiver=receiver, date=self.date,
+                         screenshot=image["url"],
+                         template=self.template)
+        return instance
+
+    @staticmethod
+    def save_image(path):
+        with open(path):
+            value = upload(open(path, "rb"), folder="Emailer")
+        return value
 
     def __generate_file_location(self, receiver):
         receiver_id = receiver.id
         sender_id = receiver.user.id
-        png_extension = ".png"
-        return f'{sender_id}-{receiver_id}-{self.__generate_random_id()}{png_extension}'
+        return f'{sender_id}-{receiver_id}-{self.__generate_random_id()}'
 
     @staticmethod
     def __generate_random_id():

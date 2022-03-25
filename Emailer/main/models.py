@@ -1,10 +1,5 @@
-import os
-import string
-from random import choice
 
-from cloudinary.models import CloudinaryField
 from django.contrib.auth import get_user_model
-from django.core.files import File
 from django.core.validators import MinLengthValidator, MinValueValidator
 from django.db import models
 
@@ -22,7 +17,7 @@ class Preferences(models.Model):
 
 
 class Receiver(models.Model):
-    email = models.EmailField(unique=True)
+    email = models.EmailField()
     first_name = models.CharField(max_length=20, null=True, blank=True)
     last_name = models.CharField(max_length=20, null=True, blank=True)
     age = models.IntegerField(validators=[
@@ -50,8 +45,6 @@ class Email(models.Model):
     receiver = models.ForeignKey(Receiver, on_delete=models.DO_NOTHING, related_name="receiver")
     is_deleted = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now=True)
-    screenshot = CloudinaryField("image", folder="Emailer")
+    screenshot = models.URLField()
     template = models.ForeignKey(CustomTemplate, on_delete=models.DO_NOTHING)
-
-
 
