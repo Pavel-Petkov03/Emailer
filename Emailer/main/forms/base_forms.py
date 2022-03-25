@@ -54,6 +54,7 @@ class BaseSendEmailForm(forms.Form):
         "placeholder": "Enter content"
     }))
 
+
     def clean_template(self):
         try:
             value = CustomTemplate.objects.get(template__exact=self.cleaned_data["template"])

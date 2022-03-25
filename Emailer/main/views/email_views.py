@@ -3,8 +3,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views import View
-
-from Emailer.authentication.views import LoginRequiredView
 from Emailer.main.forms.email_forms import SendMassEmailForm, SendSingleEmailForm
 from Emailer.main.models import Group, Email
 from Emailer.main.views.base_views import BaseEmailView
@@ -32,7 +30,7 @@ class SendMassEmailView(BaseEmailView):
 
 
 @method_decorator(login_required(login_url="login"), name="dispatch")
-class EmailDetailView(LoginRequiredView):
+class EmailDetailView(View):
     def get(self, req, pk):
         current_email = Email.objects.get(receiver__user=req.user, id=pk)
         return render(req, "email-description.html", {
@@ -40,11 +38,12 @@ class EmailDetailView(LoginRequiredView):
         })
 
 
-class Folder(View, LoginRequiredMixin):
+@method_decorator(login_required(login_url="login"), name="dispatch")
+class Folder(View):
     def get(self, req):
         return render(req, "folder.html")
 
-
+@method_decorator(login_required(login_url="login"), name="dispatch")
 class Bin(View):
     def get(self, req):
         return render(req, "bin.html")

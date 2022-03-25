@@ -1,13 +1,15 @@
 from abc import ABC, abstractmethod
 from smtplib import SMTPAuthenticationError
 
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
+from django.utils.decorators import method_decorator
+from django.views import View
 
-from Emailer.authentication.views import LoginRequiredView
 
-
-class BaseManyToManyView(LoginRequiredView, ABC):
+@method_decorator(login_required(login_url="login"), name="dispatch")
+class BaseManyToManyView(View , ABC):
     """
     this class works only if you put Model form and if you have many to many relationship
     """
@@ -44,8 +46,8 @@ class BaseManyToManyView(LoginRequiredView, ABC):
         """
         return True
 
-
-class BaseEmailView(LoginRequiredView):
+@method_decorator(login_required(login_url="login"), name="dispatch")
+class BaseEmailView(View):
     """
     This class will be based of email sending class
     In this class will be bing a sending from which inherits GenericSendEmailForm

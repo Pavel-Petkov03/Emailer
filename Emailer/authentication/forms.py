@@ -41,8 +41,8 @@ class LoginForm(forms.Form):
     }), required=True, label="Password")
 
     def clean(self):
-        email = self.cleaned_data["email"]
-        password = self.cleaned_data["password"]
+        email = self.data["email"]
+        password = self.data["password"]
         user = authenticate(email=email, password=password)
         if not user or not user.is_active:
             raise forms.ValidationError("Sorry, but email and password does not match")

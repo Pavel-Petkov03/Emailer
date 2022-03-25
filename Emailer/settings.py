@@ -44,11 +44,11 @@ INSTALLED_APPS = [
     "Emailer.authentication",
     "Emailer.main",
     "cloudinary",
-    'corsheaders'
+    'corsheaders',
+    "rest_framework"
 ]
 
 MIDDLEWARE = [
-
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -158,11 +158,11 @@ STATICFILES_DIRS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
-
 }
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -188,11 +188,18 @@ CORS_ALLOW_HEADERS = [
     "access-control-allow-origin"
     "accept",
     "accept-encoding",
-    "authorization",
     "content-type",
-    "dnt",
     "origin",
-    "user-agent",
     "x-csrftoken",
     "x-requested-with",
+    "set-cookie"
 ]
+"""
+var buttons = document.querySelectorAll(".toggle-button");
+var modal = document.querySelector("#modal");
+
+[].forEach.call(buttons, function (button) {
+  button.addEventListener("click", function () {
+    modal.classList.toggle("off");
+  });
+});"""

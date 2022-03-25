@@ -17,12 +17,13 @@ function getCookie(name) {
 
 async function getData(path, method ,body) {
     let url = `${ROOT}` + path
-    const csrfToken = getCookie("csrftoken")
+    const session = getCookie("csrftoken")
+    console.log(session)
     let context = {
         method,
         headers: {
             "content-type": "application/json",
-            "X-CSRFToken" : csrfToken,
+            "X-CSRFToken" : getCookie("csrftoken"),
         }
     }
     if (body) {

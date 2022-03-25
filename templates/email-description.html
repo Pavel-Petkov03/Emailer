@@ -3,13 +3,80 @@
 {% load cloudinary %}
 {% block css_and_js_loads %}
     <style>
-    img {
-        background: white;
-        margin : 40px;
-        width: 80%;
-    }
+        img {
+            background: white;
+            margin: 40px;
+            width: 80%;
+        }
+
+.custom-modal {
+    width: 500px;
+    background: white;
+    border: 1px solid #ccc;
+    transition: 0.5s;
+    box-shadow: -2rem 2rem 2rem black;
+    opacity: 1;
+    visibility: visible;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.off {
+    opacity: 0;
+    visibility: hidden;
+    box-shadow: 1rem 0 0 black;
+}
+
+.modal-header {
+    border-bottom: 1px solid #ccc;
+    padding: 1rem;
+    margin: 0;
+}
+
+.modal-content {
+    padding: 1rem;
+}
+
+.modal-actions {
+  border-top: 1px solid #ccc;
+  background: #eee;
+  padding: 0.5rem 1rem;
+}
+.modal-button {
+    border: 0;
+    background: #78f89f;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    line-height: 1;
+}
+
     </style>
+    {#    <script>#}
+    {#        window.onload = () => {#}
+    {#            document.getElementsByTagName("button")[0].addEventListener("click", (ev) => {#}
+    {#                ev.preventDefault()#}
+    {#                document.querySelector(".modal").style.display = "block"#}
+    {#            })#}
+    {#        }#}
+    {#    </script>#}
+
 {% endblock %}
 {% block content %}
     <img src="{{ image }}" alt="">
+
+<div class="custom-modal" id="modal">
+  <h2 class="modal-header">Modal Window</h2>
+  <div class="modal-content">
+      <ul>
+          <li>rfewfwfew</li>
+          <li>fwefwfewe</li>
+      </ul>
+
+  </div>
+  <div class="modal-actions">
+    <button class="modal-button">OK</button>
+  </div>
+</div>
 {% endblock %}
