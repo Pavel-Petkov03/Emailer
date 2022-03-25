@@ -34,6 +34,8 @@ class GenericFolder(ListAPIView):
         return Email.objects.filter(receiver__user=self.request.user, is_deleted=deleted).order_by(kwarg)
 
 
+
+
 class FilterEmail(APIView):
     permission_classes = [IsAuthenticated]
 

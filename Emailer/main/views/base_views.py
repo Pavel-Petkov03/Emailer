@@ -2,13 +2,12 @@ from abc import ABC, abstractmethod
 from smtplib import SMTPAuthenticationError
 
 from django.core.exceptions import ValidationError
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
+
 from Emailer.authentication.views import LoginRequiredView
-from Emailer.main.models import Preferences, Receiver, Email, Group
-from Emailer.main.forms import ReceiverForm, GroupForm, FilterForm, SendSingleEmailForm, SendMassEmailForm
 
 
-class ManyToManyModelCustomView(LoginRequiredView, ABC):
+class BaseManyToManyView(LoginRequiredView, ABC):
     """
     this class works only if you put Model form and if you have many to many relationship
     """
@@ -46,35 +45,7 @@ class ManyToManyModelCustomView(LoginRequiredView, ABC):
         return True
 
 
-class ReceiverView(ManyToManyModelCustomView):
-    form_class = ReceiverForm
-    template = "add_receiver.html"
-    many_to_many_argument = "preferences"
-    success_url = "login"
-
-    def convert_from_many_to_many_arg_to_id(self, array_of_fields):
-        return [str(preference.id) for preference in Preferences.objects.filter(hobby__in=array_of_fields)]
-
-
-class GroupView(ManyToManyModelCustomView):
-    form_class = GroupForm
-    template = "add_group.html"
-    many_to_many_argument = "receivers"
-    success_url = "login"
-
-    def get(self, req):
-        form = self.form_class()
-        filter_form = FilterForm()
-        return render(req, self.template, {
-            "form": form,
-            "filter_form": filter_form
-        })
-
-    def convert_from_many_to_many_arg_to_id(self, array_of_fields):
-        return [str(receiver.id) for receiver in Receiver.objects.filter(email__in=array_of_fields)]
-
-
-class GenericEmailView(LoginRequiredView):
+class BaseEmailView(LoginRequiredView):
     """
     This class will be based of email sending class
     In this class will be bing a sending from which inherits GenericSendEmailForm
@@ -115,32 +86,3 @@ class GenericEmailView(LoginRequiredView):
         :return: {}
         """
         return {}
-
-
-class SendSingleEmailView(GenericEmailView):
-    form_class = SendSingleEmailForm
-    template = "send-single-email.html"
-    success_redirect = "folder"
-
-
-class SendMassEmailView(GenericEmailView):
-    form_class = SendMassEmailForm
-    template = "send_mass_email.html"
-    success_redirect = "folder"
-
-    @staticmethod
-    def additional_get_kwargs(req, pk):
-        group = Group.objects.get(id=pk)
-        query = group.receivers.all()
-        return {
-            "receivers": query,
-            "group_name": group.name
-        }
-
-
-class EmailDetailView(LoginRequiredView):
-    def get(self, req, pk):
-        current_email = Email.objects.get(receiver__user=req.user, id=pk)
-        return render(req, "email-description.html", {
-            "image": current_email.screenshot
-        })
