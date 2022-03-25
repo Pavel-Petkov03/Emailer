@@ -7,6 +7,7 @@ from Emailer.authentication.views import LoginRequiredView
 from Emailer.main.models import Preferences, Receiver, Email, Group
 from Emailer.main.forms import ReceiverForm, GroupForm, FilterForm, SendSingleEmailForm, SendMassEmailForm
 
+
 class ManyToManyModelCustomView(LoginRequiredView, ABC):
     """
     this class works only if you put Model form and if you have many to many relationship
@@ -34,7 +35,9 @@ class ManyToManyModelCustomView(LoginRequiredView, ABC):
             form.save_m2m()
             return redirect(self.success_url)
 
-        return render(req, self.template)
+        return render(req, self.template, {
+            "form": form
+        })
 
     @abstractmethod
     def convert_from_many_to_many_arg_to_id(self, array_of_fields):
