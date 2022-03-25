@@ -135,7 +135,6 @@ class SendMassEmailView(GenericEmailView):
     def additional_get_kwargs(req, pk):
         group = Group.objects.get(id=pk)
         query = group.receivers.all()
-        print(query)
         return {
             "receivers": query,
             "group_name": group.name

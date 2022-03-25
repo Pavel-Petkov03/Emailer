@@ -50,29 +50,8 @@ class Email(models.Model):
     receiver = models.ForeignKey(Receiver, on_delete=models.DO_NOTHING, related_name="receiver")
     is_deleted = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now=True)
-    screenshot = models.ImageField(null=True, blank=True, upload_to="screenshots/")
+    screenshot = CloudinaryField("image", folder="Emailer")
     template = models.ForeignKey(CustomTemplate, on_delete=models.DO_NOTHING)
 
-    def save(self, *args, **kwargs):
-        """
-        The name of the saved file will be combination if :
-            - sender id
-            - receiver id
-            - random generated code
-        """
-        path = self.screenshot.path
-        with open(path, "rb") as file:
-            self.screenshot.save(self.__generate_file_location(), File(file), save=False)
-        os.remove(path)
-        super().save(*args, **kwargs)
 
-    def __generate_file_location(self):
-        receiver_id = self.receiver.id
-        sender_id = self.receiver.user.id
-        png_extension = ".png"
-        return f'{sender_id}-{receiver_id}-{self.__generate_random_id()}{png_extension}'
 
-    @staticmethod
-    def __generate_random_id():
-        n = 10
-        return ''.join(choice(string.ascii_uppercase + string.digits) for _ in range(n))

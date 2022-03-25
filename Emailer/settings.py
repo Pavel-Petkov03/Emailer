@@ -13,6 +13,9 @@ from datetime import timedelta
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "Emailer.authentication",
     "Emailer.main",
-    "corsheaders"
+    "corsheaders",
+    "cloudinary"
 ]
 
 MIDDLEWARE = [
@@ -86,7 +90,6 @@ WSGI_APPLICATION = 'Emailer.wsgi.application'
 CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth'
 )
-
 
 DATABASES = {
     'default': {
@@ -173,3 +176,9 @@ MEDIA_URL = '/media/'
 
 # Path where media is stored
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET")
+)

@@ -101,7 +101,7 @@ class EmailDispatcher(Sender):
 
     def send_single_mail(self) -> None:
         html_str = super().send_single_mail()
-        screenshot_path = self.create_screenshot(html_str)
+        screenshot_path = self.create_screenshot(html_str, self.receivers[0])
         email_instance = self.create_email_instance(screenshot_path, self.receivers[0])
         email_instance.save()
 
@@ -111,18 +111,24 @@ class EmailDispatcher(Sender):
         for index, entry in enumerate(data_tuple):
             html_str = entry[1]
             receiver = self.receivers[index]
-            screenshot_path = self.create_screenshot(html_str)
+            screenshot_path = self.create_screenshot(html_str, receiver)
             email_list.append(self.create_email_instance(screenshot_path, receiver))
         Email.objects.bulk_create(email_list)
 
-    def create_screenshot(self, html_str):
-        saver = Html2Image(output_path=settings.BASE_DIR / "media", )
-        screenshot_path = saver.screenshot(html_str=html_str, save_as=self.__generate_random_id() + ".png")[0]
+    def create_screenshot(self, html_str, receiver) -> str:
+        saver = Html2Image(output_path=settings.BASE_DIR / "media/screenshots", )
+        screenshot_path = saver.screenshot(html_str=html_str, save_as=self.__generate_file_location(receiver) + ".png")[0]
         return screenshot_path
 
     def create_email_instance(self, screenshot_path, receiver: Receiver):
         return Email(subject=self.subject, receiver=receiver, date=self.date, screenshot=screenshot_path,
                      template=self.template)
+
+    def __generate_file_location(self, receiver):
+        receiver_id = receiver.id
+        sender_id = receiver.user.id
+        png_extension = ".png"
+        return f'{sender_id}-{receiver_id}-{self.__generate_random_id()}{png_extension}'
 
     @staticmethod
     def __generate_random_id():

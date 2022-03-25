@@ -99,7 +99,7 @@ class SendSingleEmailForm(GenericSendEmailForm):
         "placeholder": "Enter email", "class": "form-control"
     }), label="Enter Email")
 
-    def save(self, sender):
+    def save(self, sender, pk=None):
         receiver = self.create_receiver(sender)
         subject = self.cleaned_data["subject"]
         message = self.cleaned_data["message"]
