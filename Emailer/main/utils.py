@@ -101,24 +101,22 @@ class EmailDispatcher(Sender):
 
     def send_single_mail(self) -> None:
         html_str = super().send_single_mail()
-        screenshot_path = self.create_screenshot(html_str, self.receivers[0])
+        screenshot_path = self.create_screenshot([html_str], self.receivers)
         email_instance = self.create_email_instance(screenshot_path, self.receivers[0])
         email_instance.save()
 
     def send_mass_mail(self) -> None:
         data_tuple = super().send_mass_mail()
-        email_list = []
-        for index, entry in enumerate(data_tuple):
-            html_str = entry[1]
-            receiver = self.receivers[index]
-            screenshot_path = self.create_screenshot(html_str, receiver)
-            email_list.append(self.create_email_instance(screenshot_path, receiver))
+        html_strings = [entry[1] for entry in data_tuple]
+        file_locations = [self.__generate_file_location(receiver) for receiver in self.receivers]
+        path_list = self.create_screenshot(html_strings, file_locations)
+        email_list = [self.create_email_instance(path_list[index], entry) for index, entry in enumerate(self.receivers)]
         Email.objects.bulk_create(email_list)
 
-    def create_screenshot(self, html_str, receiver) -> str:
+    @staticmethod
+    def create_screenshot(html_strings: list, file_locations: list):
         saver = Html2Image(output_path=settings.BASE_DIR / "media/screenshots", )
-        screenshot_path = saver.screenshot(html_str=html_str, save_as=self.__generate_file_location(receiver) + ".png")[
-            0]
+        screenshot_path = saver.screenshot(html_str=html_strings, save_as=file_locations)
         return screenshot_path
 
     def create_email_instance(self, screenshot_path, receiver: Receiver):
@@ -130,8 +128,8 @@ class EmailDispatcher(Sender):
 
     @staticmethod
     def save_image(path):
-        with open(path):
-            value = upload(open(path, "rb"), folder="Emailer")
+        with open(path) as file:
+            value = upload(file, folder="Emailer")
         return value
 
     def __generate_file_location(self, receiver):

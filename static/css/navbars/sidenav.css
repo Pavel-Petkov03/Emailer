@@ -17,6 +17,7 @@
     background: #111;
     color: #fff;
     transition: all 0.3s;
+    align-self: flex-start
 }
 
 #sidebar.active {

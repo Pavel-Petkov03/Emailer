@@ -2,12 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <style>
+        body {
+            background: #181a18;
+        }
+
+        #content {
+            background: #ceb3b3;
+            width: fit-content;
+        height: fit-content;
+            padding: 10px;
+            overflow-y: scroll;
+            font-size: 10px;
+        }
+
+        #name {
+            margin-top: 20px;
+            margin-bottom: 100px;
+            background: #ceb3b3;
+        }
+    </style>
 </head>
 <body>
-    <p>It works</p>
-{{ first_name }}
-{{ last_name }}
-{{ age }}
+<div id="name">Hi, {{ first_name }} {{ last_name }}</div>
+
+<div id="content">
+
+    {{ message }}
+</div>
 </body>
 </html>

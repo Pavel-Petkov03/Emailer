@@ -22,7 +22,7 @@ class GroupView(BaseManyToManyView):
     success_url = "login"
 
     def get(self, req):
-        form = self.form_class()
+        form = self.form_class(user=req.user)
         filter_form = FilterForm()
         return render(req, self.template, {
             "form": form,

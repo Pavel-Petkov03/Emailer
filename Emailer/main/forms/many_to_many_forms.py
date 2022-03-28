@@ -4,7 +4,6 @@ from Emailer.main.models import Preferences, Receiver, Group
 
 
 class ReceiverForm(BaseManyToManyForm):
-    preferences = forms.ModelMultipleChoiceField(queryset=Preferences.objects.all())
     unique_arg = "email"
 
     def __init__(self, *args, **kwargs):
@@ -51,10 +50,11 @@ class ReceiverForm(BaseManyToManyForm):
 class GroupForm(BaseManyToManyForm):
     unique_arg = "name"
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, user=None, **kwargs):
+        self.user = user
         super().__init__(*args, **kwargs)
         self.fields["receivers"].choices = \
-            [(choice, choice) for choice in Receiver.objects.all().values_list("email", flat=True)]
+            [(choice, choice) for choice in Receiver.objects.filter(user__exact=user).values_list("email", flat=True)]
 
     class Meta(BaseManyToManyForm.Meta):
         model = Group

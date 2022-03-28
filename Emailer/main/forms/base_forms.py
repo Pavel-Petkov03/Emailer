@@ -58,7 +58,7 @@ class BaseSendEmailForm(forms.Form):
     def clean_template(self):
         try:
             value = CustomTemplate.objects.get(template__exact=self.cleaned_data["template"])
-        except ValueError:
+        except :
             raise ValidationError("Template doesn't exist")
         return value
 
