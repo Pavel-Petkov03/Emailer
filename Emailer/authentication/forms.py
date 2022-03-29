@@ -7,7 +7,7 @@ from Emailer.authentication.models import CustomUserModel
 User = get_user_model()
 
 
-class RegisterForm(forms.Form):
+class RegisterForm(forms.ModelForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs={
         "type": "text", "class": 'form-control', "placeholder": "Enter mail"
     }), label='Mail')
@@ -23,11 +23,7 @@ class RegisterForm(forms.Form):
         confirm_password_error_message = "password and confirm password must match"
         if self.data["password"] != self.data["confirm_password"]:
             raise ValidationError(confirm_password_error_message)
-
-    def save(self):
-        email = self.cleaned_data["email"]
-        password = self.cleaned_data["password"]
-        User.objects.create_user(email=email, password=password)
+        super().clean()
 
     class Meta:
         fields = ("email", "password", "confirm_password")

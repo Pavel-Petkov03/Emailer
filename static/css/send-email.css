@@ -12,8 +12,8 @@
 
 .thumbnails {
     overflow-x: auto;
-    height: 20REM;
-    width: 25%;
+    height: 30rem;
+    width: 50%;
     list-style: none;
     background: black;
     padding: 10px;
@@ -43,7 +43,7 @@ form {
 }
 
 .form-content {
-    width: 75%;
+    width: 50%;
     margin-top: 20px;
     margin-left: 20px;
 }

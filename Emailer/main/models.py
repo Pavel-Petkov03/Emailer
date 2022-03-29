@@ -1,15 +1,15 @@
-
+from cloudinary.models import CloudinaryField
 from django.contrib.auth import get_user_model
-from django.core.validators import MinLengthValidator, MinValueValidator
+from django.core.validators import MinLengthValidator, MinValueValidator, MaxValueValidator, MaxLengthValidator
 from django.db import models
 
 User = get_user_model()
 
 
-
 class CustomTemplate(models.Model):
     template = models.FileField(upload_to="template/")
     name = models.CharField(max_length=20)
+    thumbnail = CloudinaryField("image", null=True, blank=True)
 
 
 class Preferences(models.Model):
@@ -18,10 +18,17 @@ class Preferences(models.Model):
 
 class Receiver(models.Model):
     email = models.EmailField()
-    first_name = models.CharField(max_length=20, null=True, blank=True)
-    last_name = models.CharField(max_length=20, null=True, blank=True)
+    first_name = models.CharField(max_length=20, null=True, blank=True, validators=[
+        MinLengthValidator(5),
+        MaxLengthValidator(20),
+    ])
+    last_name = models.CharField(max_length=20, null=True, blank=True, validators=[
+        MinLengthValidator(5),
+        MaxLengthValidator(20),
+    ])
     age = models.IntegerField(validators=[
-        MinValueValidator(0)
+        MinValueValidator(0),
+        MaxValueValidator(100)
     ], null=True, blank=True)
     preferences = models.ManyToManyField(Preferences, max_length=20, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -47,4 +54,3 @@ class Email(models.Model):
     date = models.DateTimeField(auto_now=True)
     screenshot = models.URLField()
     template = models.ForeignKey(CustomTemplate, on_delete=models.DO_NOTHING)
-

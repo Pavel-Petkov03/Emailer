@@ -7,7 +7,9 @@
         function onTemplateClick(ev) {
             const templateInput = document.getElementById("template-input")
             ev.preventDefault()
-            templateInput.value = ev.target.src
+            console.log(ev.target)
+            console.log(ev.target.getAttribute("data-id"))
+            templateInput.value =  ev.target.getAttribute("data-id")
         }
 
         window.onload = () => {
@@ -32,7 +34,8 @@
             </div>
             <ul class="thumbnails">
                 {% for template in templates %}
-                    <li><img src="{% get_media_prefix %}{{ template.template }}" alt="image not found"/></li>
+                    <li><img src="{{ template.thumbnail.url }}" data-id="{{ template.name }}" alt="image not found"/></li>
+
                 {% endfor %}
             </ul>
         </div>

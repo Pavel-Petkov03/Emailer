@@ -1,12 +1,11 @@
 import random
 import string
 from django.conf import settings
-from django.core.mail import send_mail, send_mass_mail, EmailMultiAlternatives, get_connection
+from django.core.mail import send_mail, EmailMultiAlternatives, get_connection
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from html2image import Html2Image
 from Emailer.main.models import Receiver, Email
-from django.utils import timezone
 from cloudinary.uploader import upload
 import shutil
 
@@ -23,7 +22,6 @@ class Sender:
         self.receivers = receivers
         self.template = template
         self.recipients = self.__get_all_recipients_mails(receivers)
-        self.date = timezone.now()
 
     @property
     def subject(self):
@@ -127,7 +125,7 @@ class EmailDispatcher(Sender):
 
     def create_email_instance(self, screenshot_path, receiver: Receiver):
         image = self.save_image(screenshot_path)
-        instance = Email(subject=self.subject, receiver=receiver, date=self.date,
+        instance = Email(subject=self.subject, receiver=receiver,
                          screenshot=image["url"],
                          template=self.template)
         return instance
