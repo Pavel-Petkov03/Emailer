@@ -52,7 +52,8 @@ class EditProfileView(View):
         return render(request, "edit_profile.html", {"form": self.form()})
 
     def post(self, request):
-        form = self.form(instance=request.user)
+        form = self.form(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
             return redirect("add group")
+        return render(request, "edit_profile.html", {"form": form})

@@ -1,7 +1,7 @@
 import random
 import string
 from django.conf import settings
-from django.core.mail import send_mail, send_mass_mail
+from django.core.mail import send_mail, send_mass_mail, EmailMultiAlternatives, get_connection
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from html2image import Html2Image
@@ -9,6 +9,7 @@ from Emailer.main.models import Receiver, Email
 from django.utils import timezone
 from cloudinary.uploader import upload
 import shutil
+
 
 class Sender:
     """
@@ -63,19 +64,22 @@ class Sender:
         return html_message
 
     def send_mass_mail(self):
-        data_tuple = self.__populate_data_tuple()
-        send_mass_mail(data_tuple,
-                       auth_user=self.sender.email,
-                       auth_password=self.sender.email_password, fail_silently=False)
-        return data_tuple
-
-    def __populate_data_tuple(self):
-        return [self.__populate_one_entry(receiver) for receiver in
-                self.receivers]
+        connection = get_connection(
+            username=self.sender.email, password=self.sender.email_password, fail_silently=False)
+        message_list = []
+        html_messages = []
+        for receiver in self.receivers:
+            *message_props, html_message = self.__populate_one_entry(receiver)
+            html_messages.append(html_message)
+            message = EmailMultiAlternatives(*message_props)
+            message.attach_alternative(html_message, "text/html")
+            message_list.append(message)
+        connection.send_messages(message_list)
+        return html_messages
 
     def __populate_one_entry(self, receiver: Receiver):
         (html_message, plain_message) = self.__get_raw_message(receiver)
-        return self.subject, html_message, self.sender.email, self.recipients
+        return self.subject, plain_message, self.sender.email, self.recipients, html_message
 
     @staticmethod
     def __get_all_recipients_mails(receivers) -> list:
@@ -108,7 +112,7 @@ class EmailDispatcher(Sender):
 
     def send_mass_mail(self) -> None:
         data_tuple = super().send_mass_mail()
-        html_strings = [entry[1] for entry in data_tuple]
+        html_strings = [entry for entry in data_tuple]
         file_locations = self.__generate_file_location()
         path_list = self.create_screenshot(html_strings, file_locations)
         email_list = [self.create_email_instance(path_list[index], entry) for index, entry in enumerate(self.receivers)]

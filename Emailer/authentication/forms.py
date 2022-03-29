@@ -58,6 +58,23 @@ class LoginForm(forms.Form):
 
 
 class EditProfileForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for _, field in self.fields.items():
+            field.widget.attrs["class"] = "form-control"
+
     class Meta:
         model = CustomUserModel
         fields = ("first_name", "last_name", "email_password")
+        widgets = {
+            "first_name": forms.TextInput(attrs={
+                "placeholder": "Enter First Name"
+            }),
+            "last_name": forms.TextInput(attrs={
+                "placeholder": "Enter Last Name"
+            }),
+            "email_password": forms.PasswordInput(attrs={
+                "placeholder": "Enter Email Password"
+            }),
+        }

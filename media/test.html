@@ -1,34 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <style>
-        body {
-            background: #181a18;
-        }
-
-        #content {
-            background: #ceb3b3;
+<body style="background: #181a18;">
+<div id="name" style="margin-top: 20px;
+        margin-bottom: 100px;
+        background: #ceb3b3;">
+    Hi, {{ first_name }} {{ last_name }}</div>
+<div id="content" style="background: #ceb3b3;
             width: fit-content;
         height: fit-content;
             padding: 10px;
             overflow-y: scroll;
-            font-size: 10px;
-        }
-
-        #name {
-            margin-top: 20px;
-            margin-bottom: 100px;
-            background: #ceb3b3;
-        }
-    </style>
-</head>
-<body>
-<div id="name">Hi, {{ first_name }} {{ last_name }}</div>
-
-<div id="content">
-
+            font-size: 10px;">
     {{ message }}
 </div>
 </body>
-</html>
