@@ -12,7 +12,6 @@
     <script src="https://kit.fontawesome.com/f992dbc3fb.js" crossorigin="anonymous"></script>
 
 
-
     <link rel="stylesheet" href="{% static "css/auth.css" %}">
     <link rel="stylesheet" href="{% static "css/navbars/topnav.css" %}">
     <link rel="stylesheet" href="{% static "css/navbars/sidenav.css" %}">
@@ -33,10 +32,15 @@
     {% endblock %}
 </head>
 <div id="top-navbar">
-    <a href= {% url "add receiver" %}>Add receiver</a>
-    <a href="#">Edit Profile</a>
-    <a href="{% url "add group" %}">Create Group</a>
-    <a href="#">Contact</a>
+    {% if user.is_authenticated %}
+        <a href= {% url "add receiver" %}>Add receiver</a>
+        <a href={% url "edit-profile" %}>Edit Profile</a>
+        <a href="{% url "add group" %}">Create Group</a>
+        <a href={% url "send-single-email" %}>Send Email</a>
+    {% else %}
+        <a href= {% url "login" %}>Sign In</a>
+        <a href={% url "register" %}>Sign up</a>
+    {% endif %}
 </div>
 <div class="wrapper">
     {% include "navbars/sidenav.html" %}

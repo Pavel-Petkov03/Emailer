@@ -4,7 +4,6 @@ from Emailer.main.models import Preferences, Receiver, Group
 
 
 class ReceiverForm(BaseManyToManyForm):
-    unique_arg = "email"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -40,21 +39,29 @@ class ReceiverForm(BaseManyToManyForm):
             "age": "Age:"
         }
 
-    def check_if_exists(self, unique_entry):
+    def save(self, commit=True):
         try:
-            return Receiver.objects.filter(user=self.user, email__exact=unique_entry)[0]
-        except IndexError:
-            return None
+            instance = Receiver.objects.get(email__exact=self.cleaned_data["email"], user__exact=self.user)
+            for preference in instance.preferences.all():
+                instance.preferences.remove(preference)
+            instance.__dict__.update(self.cleaned_data)
+            instance.preferences.add(*self.cleaned_data["preferences"])
+            instance.save()
+        except Receiver.DoesNotExist:
+            many_to_many_arg = self.cleaned_data.pop("preferences")
+            instance = Receiver(**self.cleaned_data, user=self.user)
+            instance.save()
+            instance.preferences.add(*many_to_many_arg)
+            instance.save()
 
 
 class GroupForm(BaseManyToManyForm):
     unique_arg = "name"
 
-    def __init__(self, *args, user=None, **kwargs):
-        self.user = user
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["receivers"].choices = \
-            [(choice, choice) for choice in Receiver.objects.filter(user__exact=user).values_list("email", flat=True)]
+            [(choice, choice) for choice in Receiver.objects.filter(user__exact=self.user).values_list("email", flat=True)]
 
     class Meta(BaseManyToManyForm.Meta):
         model = Group
@@ -68,8 +75,17 @@ class GroupForm(BaseManyToManyForm):
             }),
         }
 
-    def check_if_exists(self, unique_entry):
+    def save(self, commit=True):
         try:
-            return Group.objects.filter(receivers__user_id__exact=self.user, name__exact=unique_entry)[0]
-        except IndexError:
-            return None
+            instance = Group.objects.get(name__exact=self.cleaned_data["name"], receivers__user__exact=self.user)
+            for receiver in instance.receivers.all():
+                instance.preferences.remove(receiver)
+            instance.__dict__.update(self.cleaned_data)
+            instance.preferences.add(*self.cleaned_data["receivers"])
+            instance.save()
+        except Group.DoesNotExist:
+            many_to_many_arg = self.cleaned_data.pop("receivers")
+            instance = Group(**self.cleaned_data)
+            instance.save()
+            instance.receivers.add(*many_to_many_arg)
+            instance.save()

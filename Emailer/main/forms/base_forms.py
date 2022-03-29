@@ -9,35 +9,13 @@ class BaseManyToManyForm(forms.ModelForm):
         self.user = user
         super().__init__(*args, **kwargs)
 
-    unique_arg = None
-
     class Meta:
         model = None
         fields = None
 
-    def clean(self):
-        unique_data = self.cleaned_data[self.unique_arg]
-        instance = self.check_if_exists(unique_data)
-        if instance is not None:
-            self.instance = instance
-        super().clean()
 
-    def check_if_exists(self, unique_entry):
-        """
-        check if unique entry exists in model
-        :return: Model instance or None
-        """
-        return None
 
-    def save(self, commit=True):
-        if self.instance and self.instance.id is not None:
-            self.instance.delete()
-        instance = super().save(commit=False)
-        instance.user = self.user
-        if commit:
-            instance.save()
-            self.save_m2m()
-        return instance
+
 
 
 class BaseSendEmailForm(forms.Form):
@@ -54,11 +32,10 @@ class BaseSendEmailForm(forms.Form):
         "placeholder": "Enter content"
     }))
 
-
     def clean_template(self):
         try:
             value = CustomTemplate.objects.get(template__exact=self.cleaned_data["template"])
-        except :
+        except:
             raise ValidationError("Template doesn't exist")
         return value
 

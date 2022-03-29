@@ -8,7 +8,7 @@ from html2image import Html2Image
 from Emailer.main.models import Receiver, Email
 from django.utils import timezone
 from cloudinary.uploader import upload
-
+import shutil
 
 class Sender:
     """
@@ -75,7 +75,7 @@ class Sender:
 
     def __populate_one_entry(self, receiver: Receiver):
         (html_message, plain_message) = self.__get_raw_message(receiver)
-        return self.subject, plain_message, self.sender.email, self.recipients
+        return self.subject, html_message, self.sender.email, self.recipients
 
     @staticmethod
     def __get_all_recipients_mails(receivers) -> list:
@@ -101,17 +101,19 @@ class EmailDispatcher(Sender):
 
     def send_single_mail(self) -> None:
         html_str = super().send_single_mail()
-        screenshot_path = self.create_screenshot([html_str], self.receivers)
+        screenshot_path = self.create_screenshot([html_str], self.__generate_file_location())[0]
         email_instance = self.create_email_instance(screenshot_path, self.receivers[0])
         email_instance.save()
+        self.clean_paths()
 
     def send_mass_mail(self) -> None:
         data_tuple = super().send_mass_mail()
         html_strings = [entry[1] for entry in data_tuple]
-        file_locations = [self.__generate_file_location(receiver) for receiver in self.receivers]
+        file_locations = self.__generate_file_location()
         path_list = self.create_screenshot(html_strings, file_locations)
         email_list = [self.create_email_instance(path_list[index], entry) for index, entry in enumerate(self.receivers)]
         Email.objects.bulk_create(email_list)
+        self.clean_paths()
 
     @staticmethod
     def create_screenshot(html_strings: list, file_locations: list):
@@ -128,14 +130,22 @@ class EmailDispatcher(Sender):
 
     @staticmethod
     def save_image(path):
-        with open(path) as file:
+        with open(path, "rb") as file:
             value = upload(file, folder="Emailer")
         return value
 
-    def __generate_file_location(self, receiver):
-        receiver_id = receiver.id
-        sender_id = receiver.user.id
-        return f'{sender_id}-{receiver_id}-{self.__generate_random_id()}'
+    def __generate_file_location(self):
+        file_location_list = []
+        for receiver in self.receivers:
+            receiver_id = receiver.id
+            sender_id = receiver.user.id
+            location = f'{sender_id}-{receiver_id}-{self.__generate_random_id()}' + ".png"
+            file_location_list.append(location)
+        return file_location_list
+
+    @staticmethod
+    def clean_paths():
+        shutil.rmtree("media/screenshots")
 
     @staticmethod
     def __generate_random_id():

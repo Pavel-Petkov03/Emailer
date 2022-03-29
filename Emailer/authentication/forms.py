@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth import get_user_model, authenticate, login
 from django.core.exceptions import ValidationError
 
+from Emailer.authentication.models import CustomUserModel
+
 User = get_user_model()
 
 
@@ -53,3 +55,9 @@ class LoginForm(forms.Form):
         password = self.cleaned_data.get('password')
         user = authenticate(email=email, password=password)
         return user
+
+
+class EditProfileForm(forms.ModelForm):
+    class Meta:
+        model = CustomUserModel
+        fields = ("first_name", "last_name", "email_password")

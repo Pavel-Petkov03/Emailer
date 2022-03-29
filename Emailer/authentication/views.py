@@ -1,9 +1,7 @@
 from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.utils.decorators import method_decorator
 from django.views import View
-from Emailer.authentication.forms import LoginForm, RegisterForm
+from Emailer.authentication.forms import LoginForm, RegisterForm, EditProfileForm
 
 
 class LoginView(View):
@@ -47,3 +45,14 @@ class RegisterView(View):
         })
 
 
+class EditProfileView(View):
+    form = EditProfileForm
+
+    def get(self, request):
+        return render(request, "edit_profile.html", {"form": self.form()})
+
+    def post(self, request):
+        form = self.form(instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect("add group")
