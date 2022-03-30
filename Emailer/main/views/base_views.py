@@ -9,7 +9,7 @@ from django.views import View
 
 
 @method_decorator(login_required(login_url="login"), name="dispatch")
-class BaseManyToManyView(View , ABC):
+class BaseManyToManyView(View, ABC):
     """
     this class works only if you put Model form and if you have many to many relationship
     """

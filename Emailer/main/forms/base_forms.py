@@ -14,10 +14,6 @@ class BaseManyToManyForm(forms.ModelForm):
         fields = None
 
 
-
-
-
-
 class BaseSendEmailForm(forms.Form):
     """
     This is views form for Send email forms
@@ -34,8 +30,8 @@ class BaseSendEmailForm(forms.Form):
 
     def clean_template(self):
         try:
-            value = CustomTemplate.objects.get(template__exact=self.cleaned_data["template"])
-        except:
+            value = CustomTemplate.objects.get(name__exact=self.cleaned_data["template"])
+        except CustomTemplate.DoesNotExist:
             raise ValidationError("Template doesn't exist")
         return value
 
