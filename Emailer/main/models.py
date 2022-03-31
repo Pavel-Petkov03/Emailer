@@ -7,26 +7,31 @@ User = get_user_model()
 
 
 class CustomTemplate(models.Model):
+    NAME_MAX_LENGTH = 20
     template = models.FileField(upload_to="template/")
-    name = models.CharField(max_length=20, validators=[
+    name = models.CharField(max_length=NAME_MAX_LENGTH, validators=[
         MinLengthValidator(1)
     ])
     thumbnail = CloudinaryField("image", null=True, blank=True)
 
 
 class Preferences(models.Model):
+    HOBBY_MAX_LENGTH = 20
     hobby = models.CharField(max_length=20, unique=True, validators=[
         MinLengthValidator(1),
     ])
 
 
 class Receiver(models.Model):
+    FIRST_NAME_MAX_LENGTH = 20
+    LAST_NAME_MAX_LENGTH = 20
+
     email = models.EmailField()
-    first_name = models.CharField(max_length=20, null=True, blank=True, validators=[
+    first_name = models.CharField(max_length=FIRST_NAME_MAX_LENGTH, null=True, blank=True, validators=[
         MinLengthValidator(5),
         MaxLengthValidator(20),
     ])
-    last_name = models.CharField(max_length=20, null=True, blank=True, validators=[
+    last_name = models.CharField(max_length=LAST_NAME_MAX_LENGTH, null=True, blank=True, validators=[
         MinLengthValidator(5),
         MaxLengthValidator(20),
     ])
@@ -34,12 +39,13 @@ class Receiver(models.Model):
         MinValueValidator(1),
         MaxValueValidator(100)
     ], null=True, blank=True)
-    preferences = models.ManyToManyField(Preferences, max_length=20, null=True, blank=True)
+    preferences = models.ManyToManyField(Preferences,  null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class Group(models.Model):
-    name = models.CharField(max_length=20)
+    NAME_MAX_LENGTH = 20
+    name = models.CharField(max_length=NAME_MAX_LENGTH)
     receivers = models.ManyToManyField(Receiver)
 
 
