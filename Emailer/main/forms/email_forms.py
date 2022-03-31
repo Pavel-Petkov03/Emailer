@@ -20,7 +20,7 @@ class SendSingleEmailForm(BaseSendEmailForm):
         dispatcher.send_single_mail()
 
     def create_receiver(self, sender: CustomUserModel):
-        (receiver, created) = Receiver.objects.get_or_create(email=self.cleaned_data["email"])
+        (receiver, created) = Receiver.objects.get_or_create(email=self.cleaned_data["email"], user_id=sender.id)
         if created:
             receiver.user = sender
             receiver.save()
