@@ -7,6 +7,7 @@ from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from django.views import View
 
+from Emailer.main.models import Preferences
 
 @method_decorator(login_required(login_url="login"), name="dispatch")
 class BaseManyToManyView(View, ABC):
