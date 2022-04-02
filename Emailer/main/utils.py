@@ -77,7 +77,7 @@ class Sender:
 
     def __populate_one_entry(self, receiver: Receiver):
         (html_message, plain_message) = self.__get_raw_message(receiver)
-        return self.subject, plain_message, self.sender.email, self.recipients, html_message
+        return self.subject, plain_message, self.sender.email, [receiver], html_message
 
     @staticmethod
     def __get_all_recipients_mails(receivers) -> list:
@@ -87,6 +87,8 @@ class Sender:
         variable_names = ["first_name", "last_name", "age"]
         user_kwargs = {arg: getattr(user, arg) for arg in variable_names if getattr(user, arg) is not None}
         user_kwargs["message"] = self.message
+        user_kwargs["owner_first_name"] = self.sender.first_name
+        user_kwargs["owner_last_name"] = self.sender.last_name
         return user_kwargs
 
     def __get_raw_message(self, receiver: Receiver) -> tuple:

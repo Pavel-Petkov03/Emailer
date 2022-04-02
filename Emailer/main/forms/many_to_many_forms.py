@@ -77,7 +77,10 @@ class GroupForm(BaseManyToManyForm):
 
     def save(self, commit=True):
         try:
-            instance = Group.objects.get(name__exact=self.cleaned_data["name"], receivers__user__exact=self.user)
+            instance = Group.objects.filter(
+                name__exact=self.cleaned_data["name"],
+                receivers__user__exact=self.user
+            ).distinct()
             for receiver in instance.receivers.all():
                 instance.preferences.remove(receiver)
             instance.__dict__.update(self.cleaned_data)
