@@ -25,3 +25,9 @@ table {
     margin: 0;
     width: 100%;
 }
+
+#delete-button {
+    background: red;
+    width: 150px;
+    position: absolute;
+}

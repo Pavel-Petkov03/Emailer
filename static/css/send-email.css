@@ -40,6 +40,7 @@
 
 form {
     width: 100%;
+    height: fit-content;
 }
 
 .form-content {
@@ -63,3 +64,6 @@ textarea {
     display: flex;
     height: 35%;
 }
+
+
+
