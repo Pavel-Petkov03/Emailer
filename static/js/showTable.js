@@ -1,5 +1,4 @@
 import {endpoints, getData} from "./api.js";
-
 const i = document.createElement("i")
 i.className = "fa fa-solid fa-filter"
 

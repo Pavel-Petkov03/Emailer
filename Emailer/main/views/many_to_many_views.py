@@ -29,8 +29,8 @@ class GroupView(BaseManyToManyView):
             "filter_form": filter_form
         })
 
-    def convert_from_many_to_many_arg_to_id(self, array_of_fields):
-        return [str(receiver.id) for receiver in Receiver.objects.filter(email__in=array_of_fields)]
+    def convert_from_many_to_many_arg_to_id(self, array_of_fields, user):
+        return [str(receiver.id) for receiver in Receiver.objects.filter(email__in=array_of_fields, user_id=user)]
 
 
 class FilterForm(ReceiverForm):

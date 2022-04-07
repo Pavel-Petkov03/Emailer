@@ -18,11 +18,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+from Emailer.authentication.views import LoginView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("auth/", include("Emailer.authentication.urls")),
     path("sender/", include("Emailer.main.urls")),
-    path("api/", include("Emailer.api.urls"))
+    path("api/", include("Emailer.api.urls")),
+    path("", LoginView.as_view())
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,

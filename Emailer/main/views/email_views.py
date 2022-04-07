@@ -43,6 +43,7 @@ class Folder(View):
     def get(self, req):
         return render(req, "folder.html")
 
+
 @method_decorator(login_required(login_url="login"), name="dispatch")
 class Bin(View):
     def get(self, req):

@@ -28,7 +28,7 @@ class BaseManyToManyView(View, ABC):
     def post(self, req):
         post_data = req.POST.copy()
         post_data.setlist(self.many_to_many_argument,
-                          self.convert_from_many_to_many_arg_to_id(post_data.getlist(self.many_to_many_argument)))
+                          self.convert_from_many_to_many_arg_to_id(post_data.getlist(self.many_to_many_argument), req.user))
         form = self.form_class(post_data, user=req.user)
         if form.is_valid():
             form.save(commit=True)
@@ -39,7 +39,7 @@ class BaseManyToManyView(View, ABC):
         })
 
     @abstractmethod
-    def convert_from_many_to_many_arg_to_id(self, array_of_fields):
+    def convert_from_many_to_many_arg_to_id(self, *args):
         """
 
         :return: array with id's which will be saved via save_m2m()

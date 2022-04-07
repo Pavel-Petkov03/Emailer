@@ -16,20 +16,6 @@ class TestReceiverForm(TestCase):
         p = Preferences(hobby="a")
         p.save()
 
-
-    def test_invalid_age_input(self):
-        payload = {
-            "email": "elias@abv.bg",
-            "first_name": "Pavel12",
-            "last_name": "Petkov12",
-            "age": -10,
-            "preferences": [Preferences.objects.first().id],
-        }
-
-        form = ReceiverForm(payload)
-        for er in form.errors:
-            self.assertEqual(er, form.fields["age"].error)
-
     def test_save_non_existing_receiver(self):
         payload = {
             "email": "elias@abv.bg",
