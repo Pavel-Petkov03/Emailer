@@ -7,6 +7,9 @@ i.className = "fa fa-solid fa-filter"
 const globalDeleteButton = document.createElement("button")
 globalDeleteButton.textContent = "Delete Email"
 globalDeleteButton.id = "delete-button"
+
+
+
 async function mainTableLoader(flag) {
     console.log(1)
     let filter = localStorage.getItem("filter") || ""
@@ -21,13 +24,12 @@ async function mainTableLoader(flag) {
     })
 }
 
-function deleteRowEventListener(emailId, event) {
+function deleteRowEventListener(id, event) {
     event.preventDefault()
-    axios.delete({url: endpoints.email + emailId}).then(response => {
-        if (response.status === 200) {
-            const tr = event.target.parentNode
-            tr.delete()
-        }
+    event.stopPropagation()
+
+    getData(`${endpoints.email}/${id}`, "delete", null).then(res => {
+        event.target.parentNode.parentNode.remove()
     })
 }
 

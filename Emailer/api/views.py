@@ -1,5 +1,4 @@
-
-
+from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -34,8 +33,6 @@ class GenericFolder(ListAPIView):
         return Email.objects.filter(receiver__user=self.request.user, is_deleted=deleted).order_by(kwarg)
 
 
-
-
 class FilterEmail(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -53,3 +50,15 @@ class FilterEmail(APIView):
 
         serializer = FilterSerializer(data, many=True)
         return Response(serializer.data)
+
+
+class DeleteEmailView(APIView):
+    def delete(self, request, pk):
+        try:
+            current_email = Email.objects.get(
+                receiver__user=request.user,
+                id=pk)
+            current_email.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Email.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
