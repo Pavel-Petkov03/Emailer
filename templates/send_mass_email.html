@@ -17,7 +17,7 @@
             overflow: auto;
         }
     </style>
-    <script src="{% static "js/sendMassEmail.js" %}"></script>
+    <script src="{% static "js/sendMassEmail.js" %}" type="module"></script>
 {% endblock %}
 {% block sender_form_header %}
     <h1 id="group-name">{{ group_name }}</h1>
@@ -31,16 +31,12 @@
         <thead>
         <tr>
             <th scope="col">Email</th>
-            <th scope="col">Action</th>
         </tr>
         </thead>
         <tbody>
         {% for receiver in receivers %}
             <tr id="{{ receiver.id }}">
                 <td>{{ receiver.email }}</td>
-                <td>
-                    <button class="table-danger" onclick="window.deleteReceiver" data-id="{{ receiver.id }}">Delete</button>
-                </td>
             </tr>
         {% endfor %}
         </tbody>

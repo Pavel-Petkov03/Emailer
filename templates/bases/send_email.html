@@ -9,7 +9,7 @@
             ev.preventDefault()
             console.log(ev.target)
             console.log(ev.target.getAttribute("data-id"))
-            templateInput.value =  ev.target.getAttribute("data-id")
+            templateInput.value = ev.target.getAttribute("data-id")
         }
 
         window.onload = () => {
@@ -19,7 +19,50 @@
         }
     </script>
     {% block main_folder_scripts %}
+        <style>
+        .custom-modal {
+    width: 500px;
+    background: white;
+    border: 1px solid #ccc;
+    transition: 0.5s;
+    box-shadow: -2rem 2rem 2rem black;
+    opacity: 1;
+    visibility: visible;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.off {
+    opacity: 0;
+    visibility: hidden;
+    box-shadow: 1rem 0 0 black;
+}
 
+.modal-header {
+    border-bottom: 1px solid #ccc;
+    padding: 1rem;
+    margin: 0;
+}
+
+.modal-content {
+    padding: 1rem;
+}
+
+.modal-actions {
+  border-top: 1px solid #ccc;
+  background: #eee;
+  padding: 0.5rem 1rem;
+}
+.modal-button {
+    border: 0;
+    background: #78f89f;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    line-height: 1;
+}
+        </style>
     {% endblock %}
 
 {% endblock %}
@@ -34,7 +77,8 @@
             </div>
             <ul class="thumbnails">
                 {% for template in templates %}
-                    <li><img src="{{ template.thumbnail.url }}" data-id="{{ template.name }}" alt="image not found"/></li>
+                    <li><img src="{{ template.thumbnail.url }}" data-id="{{ template.name }}" alt="image not found"/>
+                    </li>
 
                 {% endfor %}
             </ul>
@@ -47,7 +91,22 @@
 
         {% endblock %}
     </form>
-    {{ form.errors }}
+    {% if form.errors %}
+        <div class="custom-modal" id="modal">
+            <div class="modal-content">
+                <ul>
+                    {% for key , error in form.errors.items %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+            <div class="modal-actions">
+                <button class="modal-button">OK</button>
+            </div>
+        </div>
+    {% endif %}
 
 {% endblock %}
 

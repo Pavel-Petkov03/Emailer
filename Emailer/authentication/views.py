@@ -27,7 +27,7 @@ class LoginView(View):
 
 class RegisterView(View):
     template = "registration/register.html"
-    redirect_success = "/"
+    redirect_success = "edit-profile"
     form = RegisterForm
 
     def get(self, req):

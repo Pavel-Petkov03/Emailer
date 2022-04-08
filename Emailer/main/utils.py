@@ -77,7 +77,7 @@ class Sender:
 
     def __populate_one_entry(self, receiver: Receiver):
         (html_message, plain_message) = self.__get_raw_message(receiver)
-        return self.subject, plain_message, self.sender.email, [receiver], html_message
+        return self.subject, plain_message, self.sender.email, [receiver.email], html_message
 
     @staticmethod
     def __get_all_recipients_mails(receivers) -> list:
