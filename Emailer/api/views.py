@@ -58,7 +58,22 @@ class DeleteEmailView(APIView):
             current_email = Email.objects.get(
                 receiver__user=request.user,
                 id=pk)
-            current_email.delete()
+            place = request.GET.dict()["place"]
+            if place == "folder":
+                current_email.is_deleted = True
+                current_email.save()
+            else:
+                current_email.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Email.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+class DeleteReceiverView(APIView):
+    def delete(self, request, pk):
+        try:
+            current_receiver = Receiver.objects.get(id=pk, user=request.user)
+            current_receiver.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Receiver.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)

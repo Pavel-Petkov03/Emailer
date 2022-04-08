@@ -11,7 +11,6 @@ globalDeleteButton.id = "delete-button"
 
 
 async function mainTableLoader(flag) {
-    console.log(1)
     let filter = localStorage.getItem("filter") || ""
     const endpointString = `${endpoints.folder}?kwarg=${filter}&isbin=${flag}`
     await loadRows(endpointString)
@@ -28,9 +27,15 @@ function deleteRowEventListener(id, event) {
     event.preventDefault()
     event.stopPropagation()
 
-    getData(`${endpoints.email}/${id}`, "delete", null).then(res => {
+    getData(`${endpoints.email}/${id}?place=${retrieveLocation()}`, "delete", null).then(res => {
         event.target.parentNode.parentNode.remove()
     })
+}
+
+
+function retrieveLocation(){
+    const url = window.location.href.split("/")
+    return url[url.length-1]
 }
 
 

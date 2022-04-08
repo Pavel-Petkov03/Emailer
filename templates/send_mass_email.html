@@ -1,5 +1,5 @@
 {% extends "bases/send_email.html" %}
-
+{% load static %}
 {% block main_folder_scripts %}
     <style>
         #group-name {
@@ -17,6 +17,7 @@
             overflow: auto;
         }
     </style>
+    <script src="{% static "js/sendMassEmail.js" %}"></script>
 {% endblock %}
 {% block sender_form_header %}
     <h1 id="group-name">{{ group_name }}</h1>
@@ -37,7 +38,9 @@
         {% for receiver in receivers %}
             <tr id="{{ receiver.id }}">
                 <td>{{ receiver.email }}</td>
-                <td><button class="table-danger">Delete</button></td>
+                <td>
+                    <button class="table-danger" onclick="window.deleteReceiver" data-id="{{ receiver.id }}">Delete</button>
+                </td>
             </tr>
         {% endfor %}
         </tbody>

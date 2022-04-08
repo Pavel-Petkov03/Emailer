@@ -11,8 +11,8 @@ class ReceiverView(BaseManyToManyView):
     many_to_many_argument = "preferences"
     success_url = "login"
 
-    def convert_from_many_to_many_arg_to_id(self, array_of_fields):
-        return [str(preference.id) for preference in Preferences.objects.filter(hobby__in=array_of_fields)]
+    def convert_from_many_to_many_arg_to_id(self, *args):
+        return [str(preference.id) for preference in Preferences.objects.filter(hobby__in=args[0])]
 
 
 class GroupView(BaseManyToManyView):
