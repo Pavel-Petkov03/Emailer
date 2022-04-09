@@ -3,8 +3,6 @@ from django.contrib.auth import get_user_model
 from django.core.validators import MinLengthValidator, MinValueValidator, MaxValueValidator, MaxLengthValidator
 from django.db import models
 
-from Emailer.main.validators import is_gmail_validator
-
 User = get_user_model()
 
 
@@ -28,7 +26,7 @@ class Receiver(models.Model):
     FIRST_NAME_MAX_LENGTH = 20
     LAST_NAME_MAX_LENGTH = 20
 
-    email = models.EmailField(validators=[is_gmail_validator])
+    email = models.EmailField()
     first_name = models.CharField(max_length=FIRST_NAME_MAX_LENGTH, null=True, blank=True, validators=[
         MinLengthValidator(5),
         MaxLengthValidator(20),

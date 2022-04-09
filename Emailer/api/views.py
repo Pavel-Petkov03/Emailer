@@ -34,6 +34,7 @@ class GenericFolder(ListAPIView):
 
 
 class FilterEmail(APIView):
+    """make query for receivers from filter form"""
     permission_classes = [IsAuthenticated]
 
     def post(self, req):
@@ -53,6 +54,10 @@ class FilterEmail(APIView):
 
 
 class DeleteEmailView(APIView):
+    """
+    delete email with api view
+    """
+
     def delete(self, request, pk):
         try:
             current_email = Email.objects.get(
@@ -70,6 +75,8 @@ class DeleteEmailView(APIView):
 
 
 class DeleteReceiverView(APIView):
+    """delete receiver with api view"""
+
     def delete(self, request, pk):
         try:
             current_receiver = Receiver.objects.get(id=pk, user=request.user)

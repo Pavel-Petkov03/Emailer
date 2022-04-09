@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import login
 from django.shortcuts import render, redirect
 from django.views import View
@@ -57,3 +58,7 @@ class EditProfileView(View):
             form.save()
             return redirect("add group")
         return render(request, "edit_profile.html", {"form": form})
+
+
+class LogoutView(views.LogoutView):
+    next_page = settings.LOGOUT_REDIRECT_URL

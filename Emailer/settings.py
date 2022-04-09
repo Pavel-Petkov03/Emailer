@@ -194,6 +194,9 @@ CORS_ALLOW_HEADERS = [
     "x-requested-with",
     "set-cookie"
 ]
+
+
+LOGOUT_REDIRECT_URL = "login"
 """
 var buttons = document.querySelectorAll(".toggle-button");
 var modal = document.querySelector("#modal");
