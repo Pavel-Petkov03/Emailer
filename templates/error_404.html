@@ -1,0 +1,44 @@
+<style>
+    html {
+        font-family: 'Inter', sans-serif;
+        display: grid;
+        place-content: center;
+        height: 100vh;
+        text-align: center;
+    }
+
+    .wrapper {
+        overflow: hidden;
+        position: relative;
+        background: white;
+    }
+
+    .background {
+        position: absolute;
+        top: -100px;
+        left: -100px;
+        background: url(//bassets.github.io/gradient-background.png) no-repeat white;
+        background-size: cover;
+        animation: 8s background infinite linear;
+        width: 860px;
+        height: 860px;
+        mix-blend-mode: screen;
+    }
+
+    h1 {
+        margin: 0;
+        font-size: 102px;
+        font-weight: 400;
+    }
+
+    @keyframes background {
+        to {
+            transform: rotate(1turn);
+        }
+    }
+</style>
+<div class="wrapper">
+    <div class="background"></div>
+    <h1>404</h1>
+    <a>The page you are looking for does not exist.</a>
+</div>

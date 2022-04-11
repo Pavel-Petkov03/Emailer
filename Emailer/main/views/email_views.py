@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views import View
 from Emailer.main.forms.email_forms import SendMassEmailForm, SendSingleEmailForm
@@ -21,7 +21,7 @@ class SendMassEmailView(BaseEmailView):
 
     @staticmethod
     def additional_get_kwargs(req, pk):
-        group = Group.objects.get(id=pk)
+        group = get_object_or_404(Group, id=pk)
         query = group.receivers.all()
         return {
             "receivers": query,
@@ -32,7 +32,7 @@ class SendMassEmailView(BaseEmailView):
 @method_decorator(login_required(login_url="login"), name="dispatch")
 class EmailDetailView(View):
     def get(self, req, pk):
-        current_email = Email.objects.get(receiver__user=req.user, id=pk)
+        current_email = get_object_or_404(Email, receiver__user=req.user, id=pk)
         return render(req, "email-description.html", {
             "image": current_email.screenshot
         })

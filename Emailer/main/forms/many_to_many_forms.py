@@ -61,7 +61,8 @@ class GroupForm(BaseManyToManyForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["receivers"].choices = \
-            [(choice, choice) for choice in Receiver.objects.filter(user__exact=self.user).values_list("email", flat=True)]
+            [(choice, choice) for choice in
+             Receiver.objects.filter(user__exact=self.user).values_list("email", flat=True)]
 
     class Meta(BaseManyToManyForm.Meta):
         model = Group
@@ -76,17 +77,18 @@ class GroupForm(BaseManyToManyForm):
         }
 
     def save(self, commit=True):
-        try:
-            instance = Group.objects.get(
-                name__exact=self.cleaned_data["name"],
-                receivers__user__exact=self.user
-            )
+        array_of_groups = Group.objects.filter(
+            name__exact=self.cleaned_data["name"],
+            receivers__user__exact=self.user
+        ).distinct()
+        if len(array_of_groups) == 1:
+            instance = array_of_groups[0]
             for receiver in instance.receivers.all():
                 instance.receivers.remove(receiver)
             instance.__dict__.update(self.cleaned_data)
             instance.receivers.add(*self.cleaned_data["receivers"])
             instance.save()
-        except Group.DoesNotExist:
+        else:
             many_to_many_arg = self.cleaned_data.pop("receivers")
             instance = Group(**self.cleaned_data)
             instance.save()
