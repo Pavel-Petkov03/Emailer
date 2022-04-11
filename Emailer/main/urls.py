@@ -10,5 +10,5 @@ urlpatterns = [
     path("add-receiver", ReceiverView.as_view(), name="add receiver"),
     path("add-group", GroupView.as_view(), name="add group"),
     path("send", SendSingleEmailView.as_view(), name="send-single-email"),
-    path("group/send/<int:pk>", SendMassEmailView.as_view(), name="preview group")
+    path("group/send/<int:pk>", SendMassEmailView.as_view(), name="preview group"),
 ]

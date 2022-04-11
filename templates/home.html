@@ -1,0 +1,175 @@
+{% extends "bases/base.html" %}
+{% load static %}
+{% block css_and_js_loads %}
+    <style>
+        header {
+            background: #014c9d;
+
+        }
+        h1 {
+            margin : 0
+        }
+
+        #content {
+            margin: 0;
+            width: 100%;
+        }
+
+        #header-title {
+            text-align: center;
+            width: 100%;
+            color: white;
+        }
+
+        #header-content {
+            margin-top: 10px;
+            display: flex;
+        }
+
+        #header-content-p {
+            font-size: 30px;
+            width: 70%;
+            color: white;
+        }
+
+        .image {
+            width: 30%;
+            height: 200px;
+        }
+
+        .content-article {
+            display: flex;
+            margin-top: 50px;
+            justify-content: space-between;
+            background: #ffd400;
+            color: black;
+        }
+
+        .question {
+            background: #cccccc;
+            border : 1px solid black;
+            border-radius: 1px 5px;
+            margin: 5px 5rem;
+        }
+        .question-content {
+            display: none;
+            justify-content: space-around;
+
+        }
+
+
+        #question-section {
+            background: white;
+            margin-top: 50px;
+        }
+
+        #question-section-header {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .description {
+            padding: 2rem;
+            background: white;
+            margin: 10px;
+            border: 1px solid black;
+            border-radius: 5px 1px;
+            max-width: 50%;
+        }
+        .question-header{
+            cursor: pointer;
+            margin: 0;
+            background: white;
+            border: 1px solid black;
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <header>
+        <h1 id="header-title">Email generator</h1>
+        <article id="header-content">
+            <div id="header-content-p">Simple app for generating emails and mass emails</div>
+            <img class="image"
+                 src="http://socialevo.net/wp-content/uploads/Email-Marketing-Tab-Photo1.jpg" alt="">
+        </article>
+    </header>
+    <main>
+        <article class="content-article">
+            <h1>Use templates and generate emails easily</h1>
+            <img src="https://image.shutterstock.com/image-vector/powerpoint-presentation-templates-set-use-260nw-1227377743.jpg"
+                 class="image" alt="">
+        </article>
+
+
+        <section id="question-section">
+            <h1 id="question-section-header">Most asked questions</h1>
+            <section>
+
+                <article class="question">
+                    <h1 class="question-header">How to use template?</h1>
+                    <article class="question-content">
+                        <p class="description">You can easily select templates from the right drop down menu when you send email and mass email.</p>
+                        <img class="question-image"
+                             src="{% static "img/receiver.png" %}"
+                             alt="">
+                    </article>
+                </article>
+                <article class="question">
+                    <h1  class="question-header">How to send mass email?</h1>
+                    <article class="question-content">
+                        <p class="description">First of all you must have recent email sends or add people you want to send email.
+                            Then you can add people in group. You can filter them in criteria like preferences and age.Then you can send mass email
+                        </p>
+                        <img class="question-image"
+                             src="https://image.shutterstock.com/image-vector/powerpoint-presentation-templates-set-use-260nw-1227377743.jpg"
+                             alt="">
+                    </article>
+                </article>
+                <article class="question">
+                    <h1  class="question-header">How to handle "Email password error"?</h1>
+                    <article class="question-content">
+                        <p class="description">In order to send emails from your own you must authenticate yourself with your credentials.
+                            If you don't post your password in edit profile page or post wrong password you won't be able to send emails
+                        </p>
+                        <img class="question-image"
+                             src="https://image.shutterstock.com/image-vector/powerpoint-presentation-templates-set-use-260nw-1227377743.jpg"
+                             alt="">
+                    </article>
+                </article>
+                <article class="question">
+                    <h1  class="question-header">How to edit group?</h1>
+                    <article class="question-content">
+                        <p class="description">If you want to edit group you must go to add new group and just  type the same name.
+                            This will replace the old one with new
+                        </p>
+                        <img class="question-image"
+                             src="https://image.shutterstock.com/image-vector/powerpoint-presentation-templates-set-use-260nw-1227377743.jpg"
+                             alt="">
+                    </article>
+                </article>
+                <article class="question">
+                    <h1  class="question-header">How to edit receiver?</h1>
+                    <article class="question-content">
+                        <p class="description">Same way as groups. You must just go to add receiver with the same name and will replace the old one
+                        </p>
+                        <img class="question-image"
+                             src="https://image.shutterstock.com/image-vector/powerpoint-presentation-templates-set-use-260nw-1227377743.jpg"
+                             alt="">
+                    </article>
+                </article>
+            </section>
+        </section>
+    </main>
+    <script>
+    const headers = document.querySelectorAll(".question-header")
+    Array.from(headers).forEach(el => el.addEventListener("click", (ev) => {
+        const target = ev.target
+        const article = target.parentNode.querySelector("article")
+        if(article.style.display === "flex"){
+            article.style.display = "none"
+        }else{
+            article.style.display = "flex"
+        }
+    }))
+    </script>
+{% endblock %}

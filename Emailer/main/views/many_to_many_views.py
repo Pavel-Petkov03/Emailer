@@ -36,3 +36,8 @@ class GroupView(BaseManyToManyView):
 class FilterForm(ReceiverForm):
     class Meta(ReceiverForm.Meta):
         fields = ("preferences",)
+
+
+
+def home(request):
+    return render(request, "home.html")

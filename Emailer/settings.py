@@ -197,12 +197,3 @@ CORS_ALLOW_HEADERS = [
 
 
 LOGOUT_REDIRECT_URL = "login"
-"""
-var buttons = document.querySelectorAll(".toggle-button");
-var modal = document.querySelector("#modal");
-
-[].forEach.call(buttons, function (button) {
-  button.addEventListener("click", function () {
-    modal.classList.toggle("off");
-  });
-});"""

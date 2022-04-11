@@ -1,10 +1,11 @@
+import cloudinary.uploader
 from cloudinary.models import CloudinaryField
 from django.contrib.auth import get_user_model
 from django.core.validators import MinLengthValidator, MinValueValidator, MaxValueValidator, MaxLengthValidator
 from django.db import models
-
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 User = get_user_model()
-
 
 class CustomTemplate(models.Model):
     NAME_MAX_LENGTH = 20
@@ -39,7 +40,7 @@ class Receiver(models.Model):
         MinValueValidator(1),
         MaxValueValidator(100)
     ], null=True, blank=True)
-    preferences = models.ManyToManyField(Preferences,  null=True, blank=True)
+    preferences = models.ManyToManyField(Preferences, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
@@ -61,6 +62,12 @@ class Email(models.Model):
 
     receiver = models.ForeignKey(Receiver, on_delete=models.DO_NOTHING, related_name="receiver")
     is_deleted = models.BooleanField(default=False)
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(auto_now_add=True)
     screenshot = models.URLField()
     template = models.ForeignKey(CustomTemplate, on_delete=models.DO_NOTHING)
+
+
+@receiver(post_delete, sender=Email)
+def delete_cloudinary_image(sender, instance, *args, **kwargs):
+    public_id = instance.screenshot.split("/")[-1].split(".")[0]
+    cloudinary.uploader.destroy(public_id)

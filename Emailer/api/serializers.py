@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from Emailer.main.models import Email, Receiver
 from rest_framework import serializers
@@ -19,7 +19,7 @@ class GenericFolderSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        current_date = instance.date
+        current_date = instance.date + timedelta(hours=3)
         if current_date.today() == datetime.today():
             fm = "%H:%M"
         else:
