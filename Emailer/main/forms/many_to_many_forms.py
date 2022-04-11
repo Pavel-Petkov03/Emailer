@@ -80,7 +80,7 @@ class GroupForm(BaseManyToManyForm):
             instance = Group.objects.get(
                 name__exact=self.cleaned_data["name"],
                 receivers__user__exact=self.user
-            ).distinct()
+            )
             for receiver in instance.receivers.all():
                 instance.receivers.remove(receiver)
             instance.__dict__.update(self.cleaned_data)

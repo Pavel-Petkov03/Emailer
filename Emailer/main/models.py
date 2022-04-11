@@ -9,7 +9,7 @@ User = get_user_model()
 
 class CustomTemplate(models.Model):
     NAME_MAX_LENGTH = 20
-    template = models.FileField(upload_to="template/")
+    template = models.FileField(upload_to="templates/email-templates")
     name = models.CharField(max_length=NAME_MAX_LENGTH, validators=[
         MinLengthValidator(1)
     ])

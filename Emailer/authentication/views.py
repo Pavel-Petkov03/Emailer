@@ -39,7 +39,8 @@ class RegisterView(View):
     def post(self, req):
         form = self.form(req.POST)
         if form.is_valid():
-            form.save()
+            user = form.create_profile()
+            login(req, user)
             return redirect(self.redirect_success)
         return render(req, self.template, {
             "form": form

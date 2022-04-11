@@ -10,7 +10,12 @@
 
         </div>
         <div class="modal-actions">
-            <button class="modal-button">OK</button>
+            <button class="modal-button" onclick="modelClick(event)">OK</button>
         </div>
     </div>
 {% endif %}
+<script>
+    function modelClick(ev){
+        ev.target.parentNode.parentNode.remove()
+    }
+</script>

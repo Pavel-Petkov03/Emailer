@@ -25,6 +25,9 @@ class RegisterForm(forms.ModelForm):
             raise ValidationError(confirm_password_error_message)
         super().clean()
 
+    def create_profile(self):
+        return User.objects.create_user(email=self.cleaned_data["email"], password=self.cleaned_data["password"])
+
     class Meta:
         fields = ("email", "password", "confirm_password")
         model = User
