@@ -54,6 +54,7 @@
         .question-content {
             display: none;
             justify-content: space-around;
+            overflow: scroll;
 
         }
 
@@ -74,6 +75,7 @@
             border: 1px solid black;
             border-radius: 5px 1px;
             max-width: 50%;
+            font-size: 20px;
         }
         .question-header{
             cursor: pointer;
@@ -81,6 +83,12 @@
             background: white;
             border: 1px solid black;
             text-align: center;
+        }
+
+        .question-image {
+            max-width: 500px;
+            max-height: 500px;
+            width: 50%;
         }
     </style>
 {% endblock %}
@@ -110,7 +118,7 @@
                     <article class="question-content">
                         <p class="description">You can easily select templates from the right drop down menu when you send email and mass email.</p>
                         <img class="question-image"
-                             src="{% static "img/receiver.png" %}"
+                             src="{% static "img/template.png" %}"
                              alt="">
                     </article>
                 </article>
@@ -121,7 +129,7 @@
                             Then you can add people in group. You can filter them in criteria like preferences and age.Then you can send mass email
                         </p>
                         <img class="question-image"
-                             src="https://image.shutterstock.com/image-vector/powerpoint-presentation-templates-set-use-260nw-1227377743.jpg"
+                             src="{% static "img/send-email.png" %}"
                              alt="">
                     </article>
                 </article>
@@ -132,7 +140,7 @@
                             If you don't post your password in edit profile page or post wrong password you won't be able to send emails
                         </p>
                         <img class="question-image"
-                             src="https://image.shutterstock.com/image-vector/powerpoint-presentation-templates-set-use-260nw-1227377743.jpg"
+                             src="{% static "img/email-error.png" %}"
                              alt="">
                     </article>
                 </article>
@@ -143,7 +151,7 @@
                             This will replace the old one with new
                         </p>
                         <img class="question-image"
-                             src="https://image.shutterstock.com/image-vector/powerpoint-presentation-templates-set-use-260nw-1227377743.jpg"
+                             src="{% static "img/group.png" %}"
                              alt="">
                     </article>
                 </article>
@@ -153,7 +161,7 @@
                         <p class="description">Same way as groups. You must just go to add receiver with the same name and will replace the old one
                         </p>
                         <img class="question-image"
-                             src="https://image.shutterstock.com/image-vector/powerpoint-presentation-templates-set-use-260nw-1227377743.jpg"
+                             src="{% static "img/receiver.png" %}"
                              alt="">
                     </article>
                 </article>

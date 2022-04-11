@@ -3,7 +3,7 @@
 <nav id="sidebar">
     <div class="sidebar-header">
 
-        <h3><p>Mailer</p></h3>
+        <h3><a style="color: white" href="{% url "home" %}">Mailer</a></h3>
     </div>
     <ul class="list-unstyled components">
         {% if user.is_authenticated %}
@@ -27,12 +27,11 @@
 
                     {% endfor %}
                 </ul>
-
             </li>
-        {% endif %}
     </ul>
     <div id="user-auth-content">
         <i class="fa fa-solid fa-right-from-bracket"></i>
         <a href="{% url "logout" %}">Logout</a>
     </div>
+{% endif %}
 </nav>

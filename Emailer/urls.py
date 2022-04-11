@@ -26,7 +26,7 @@ urlpatterns = [
     path("auth/", include("Emailer.authentication.urls")),
     path("sender/", include("Emailer.main.urls")),
     path("api/", include("Emailer.api.urls")),
-    path("", home)
+    path("", home, name="home")
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
