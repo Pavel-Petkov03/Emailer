@@ -8,4 +8,4 @@ class TestGenericFolder(APITestCase):
         user = User.objects.create_user(email="elias@gmail.com", password="1234567")
         self.client.force_login(user)
 
-    def test
+
