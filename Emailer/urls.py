@@ -18,8 +18,6 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.shortcuts import render
 from django.urls import path, include
-
-from Emailer.authentication.views import LoginView
 from Emailer.main.views.many_to_many_views import home
 
 urlpatterns = [
@@ -29,8 +27,12 @@ urlpatterns = [
     path("api/", include("Emailer.api.urls")),
     path("", home, name="home")
 ]
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.MEDIA_URL,
+                      document_root=settings.MEDIA_ROOT)
 
-handler404 = lambda request, exception: render(request, "error_404.html")
+
+def error_page(request):
+    return render(request, "error_404.html")
+
+
+handle404 = error_page

@@ -30,7 +30,7 @@ class GenericFolder(ListAPIView):
             kwarg = "subject"
         except ValueError:
             kwarg = "subject"
-        return Email.objects.filter(receiver__user=self.request.user, is_deleted=deleted).order_by(kwarg)
+        return Email.objects.filter(receiver__user=self.request.user, is_deleted=deleted).order_by(f"-{kwarg}")
 
 
 class FilterEmail(APIView):

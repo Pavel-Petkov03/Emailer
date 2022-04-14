@@ -10,7 +10,7 @@ class GenericFolderSerializer(serializers.ModelSerializer):
         super().__init__(*args, **kwargs)
 
     date = serializers.DateTimeField()
-    template = serializers.CharField(source="template.template")
+    template = serializers.CharField(source="template.name")
     receiver = serializers.CharField(source="receiver.email")
 
     class Meta:
@@ -20,10 +20,10 @@ class GenericFolderSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         current_date = instance.date + timedelta(hours=3)
-        if current_date.today() == datetime.today():
+        if current_date.date() == datetime.today().date():
             fm = "%H:%M"
         else:
-            fm = "%d:%m:%y"
+            fm = "%d.%m.%y"
         representation["date"] = current_date.strftime(fm)
         return representation
 
