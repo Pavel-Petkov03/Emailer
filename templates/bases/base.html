@@ -33,6 +33,7 @@
 </head>
 <div id="top-navbar">
     {% if user.is_authenticated %}
+        <a style="font-size: 20px">Hi, {{ user.email }}</a>
         <a href= {% url "add receiver" %}>Add receiver</a>
         <a href={% url "edit-profile" %}>Edit Profile</a>
         <a href="{% url "add group" %}">Create Group</a>
