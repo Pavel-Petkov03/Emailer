@@ -32,3 +32,4 @@ class FilterSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ("email",)
         model = Receiver
+

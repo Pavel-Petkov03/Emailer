@@ -9,7 +9,7 @@ class ReceiverView(BaseManyToManyView):
     form_class = ReceiverForm
     template = "add_receiver.html"
     many_to_many_argument = "preferences"
-    success_url = "login"
+    success_url = "folder"
 
     def convert_from_many_to_many_arg_to_id(self, *args):
         return [str(preference.id) for preference in Preferences.objects.filter(hobby__in=args[0])]
@@ -19,7 +19,7 @@ class GroupView(BaseManyToManyView):
     form_class = GroupForm
     template = "add_group.html"
     many_to_many_argument = "receivers"
-    success_url = "login"
+    success_url = "folder"
 
     def get(self, req):
         form = self.form_class(user=req.user)
