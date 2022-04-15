@@ -14,4 +14,5 @@ class CustomUserModel(AbstractUser):
 
     class Meta:
         unique_together = ("email", )
+        db_table = "User"
 
