@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -45,11 +45,13 @@ INSTALLED_APPS = [
     "Emailer.main",
     "cloudinary",
     'corsheaders',
-    "rest_framework"
+    "rest_framework",
+    'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -194,6 +196,5 @@ CORS_ALLOW_HEADERS = [
     "x-requested-with",
     "set-cookie"
 ]
-
 
 LOGOUT_REDIRECT_URL = "login"

@@ -31,8 +31,8 @@ urlpatterns += static(settings.MEDIA_URL,
                       document_root=settings.MEDIA_ROOT)
 
 
-def error_page(request):
+def error_page(request, exception):
     return render(request, "error_404.html")
 
 
-handle404 = error_page
+handler404 = error_page
